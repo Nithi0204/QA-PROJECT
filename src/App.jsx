@@ -1216,7 +1216,8 @@ function LoginView({ onLogin }) {
     onLogin(email, password, username);
   };
   return (
-    <div className="w-screen h-screen overflow-hidden flex items-center justify-center bg-[#EEF6FF] relative font-sans">
+    <div className="w-screen h-screen overflow-hidden flex items-center justify-center bg-[#EEF6FF] relative font-sans module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80")' }} />
       {/* Background glowing decorations */}
       <div className="absolute top-[20%] left-[20%] w-[450px] h-[450px] bg-[#38BDF8]/10 rounded-full blur-[120px] select-none pointer-events-none animate-pulse" />
       <div className="absolute bottom-[20%] right-[20%] w-[450px] h-[450px] bg-[#38BDF8]/10 rounded-full blur-[120px] select-none pointer-events-none animate-pulse" />
@@ -1372,7 +1373,8 @@ function DashboardView({
   };
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569]">
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80")' }} />
       {/* FILTER BAR DROPDOWNS */}
       <section className="p-4 px-6 rounded-2xl bg-white border border-[#BFDBFE] flex items-center justify-between flex-wrap gap-4 shadow-sm">
         <div className="flex items-center gap-3 flex-wrap">
@@ -1870,7 +1872,8 @@ function BugsView({
   };
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in text-slate-300">
+    <div className="flex flex-col gap-6 animate-fade-in text-slate-300 module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80")' }} />
       {/* Search and Filter Panel */}
       <section className="p-4 px-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-wrap gap-4 items-center justify-between shadow-sm">
         {/* Search */}
@@ -2162,7 +2165,8 @@ function RetestingView({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in text-slate-300">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in text-slate-300 module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Left side list of bugs needing retest (Spans 5 columns) */}
       <div className="lg:col-span-5 p-6 rounded-2xl glass-card flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
@@ -2330,7 +2334,8 @@ function DevelopersView({
   handleLinkToBug
 }) {
   return (
-    <div className="flex flex-col gap-8 animate-fade-in text-slate-300">
+    <div className="flex flex-col gap-8 animate-fade-in text-slate-300 module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Dev Team cards Grid */}
       <section className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -2530,7 +2535,8 @@ function ProjectsView({ bugs }) {
   }, [bugs]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in text-slate-300">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in text-slate-300 module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80")' }} />
       {projectSummaries.map((item, idx) => (
         <div key={idx} className="p-6 rounded-2xl glass-card flex flex-col justify-between gap-5 relative overflow-hidden group">
           <div className="flex justify-between items-start gap-4">
@@ -2612,7 +2618,8 @@ function ReportsView({ bugs, metrics }) {
   }, [bugs]);
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-slate-300">
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-slate-300 module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Analytics Summary */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -2764,7 +2771,8 @@ function SettingsView({ user, setUser, triggerToast }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto w-full animate-fade-in flex flex-col gap-6 text-[#475569]">
+    <div className="max-w-4xl mx-auto w-full animate-fade-in flex flex-col gap-6 text-[#475569] module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80")' }} />
       <div className="border-b border-[#BFDBFE]/60 pb-4">
         <h2 className="text-lg font-bold text-[#0F172A] font-title">Preferences</h2>
         <p className="text-xs text-[#475569] mt-1">Configure workspace API profiles, token registers, and alerts thresholds.</p>
@@ -2950,7 +2958,8 @@ function CreateBugView({
   MODULE_SUBMODULES
 }) {
   return (
-    <div className="max-w-2xl mx-auto w-full animate-fade-in text-[#475569]">
+    <div className="max-w-2xl mx-auto w-full animate-fade-in text-[#475569] module-bg-container">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80")' }} />
       <div className="border-b border-[#BFDBFE]/60 pb-4 mb-6">
         <h2 className="text-xl font-extrabold text-[#0F172A] font-title">Create New Defect</h2>
         <p className="text-xs text-[#475569] mt-1">Register high-fidelity QA bug details into active developer queues.</p>

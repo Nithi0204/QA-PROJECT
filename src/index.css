@@ -194,3 +194,22 @@
   width: 100vw;
   overflow: hidden;
 }
+
+/* Custom class for modules with background images */
+.module-bg-container {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.module-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  opacity: 0.025; /* Subtle integration for visual clarity */
+  mix-blend-mode: overlay;
+}
+
