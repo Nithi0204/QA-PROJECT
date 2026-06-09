@@ -32,7 +32,13 @@ import {
   CheckSquare,
   Folder,
   TrendingUp,
-  FileText
+  FileText,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Code,
+  Bug
 } from 'lucide-react';
 
 // Team Member configuration with avatars and colors
@@ -751,6 +757,63 @@ export default function App() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] ambient-glow-2 animate-float-glow pointer-events-none select-none" />
       <div className="absolute top-[30%] left-[40%] w-[35%] h-[35%] rounded-full blur-[130px] ambient-glow-3 pointer-events-none select-none" />
       
+      {/* Grid of Dots for Dashboard Background */}
+      <div className="absolute top-[8%] left-[20%] grid grid-cols-6 gap-2.5 opacity-[0.3] pointer-events-none z-0">
+        {[...Array(24)].map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
+        ))}
+      </div>
+      <div className="absolute bottom-[12%] right-[5%] grid grid-cols-6 gap-2.5 opacity-[0.3] pointer-events-none z-0">
+        {[...Array(24)].map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
+        ))}
+      </div>
+      <div className="absolute top-[50%] left-[50%] grid grid-cols-4 gap-2.5 opacity-[0.2] pointer-events-none z-0">
+        {[...Array(12)].map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
+        ))}
+      </div>
+
+      {/* Floating bright background outline tech icons spread across the entire dashboard pages */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Left side behind sidebar and left workspace area */}
+        <Terminal className="absolute top-[6%] left-[4%] text-[#38BDF8]/20 rotate-[-5deg] w-10 h-10" />
+        <Code className="absolute top-[12%] left-[12%] text-[#0072FF]/15 rotate-[15deg] w-11 h-11" />
+        <Shield className="absolute top-[28%] left-[2%] text-[#38BDF8]/20 rotate-[-10deg] w-9 h-9" />
+        <Bug className="absolute top-[40%] left-[14%] text-[#38BDF8]/20 rotate-[20deg] w-10 h-10" />
+        <Sliders className="absolute top-[62%] left-[3%] text-[#0072FF]/15 rotate-[-12deg] w-9 h-9" />
+        <MessageSquare className="absolute top-[78%] left-[10%] text-[#38BDF8]/20 rotate-[18deg] w-10 h-10" />
+
+        {/* Center / Workspace area */}
+        <Code className="absolute top-[10%] left-[28%] text-[#38BDF8]/25 rotate-[12deg] w-12 h-12" />
+        <Search className="absolute top-[24%] left-[22%] text-[#0072FF]/15 rotate-[-8deg] w-9 h-9" />
+        <CheckSquare className="absolute top-[32%] left-[35%] text-[#38BDF8]/25 rotate-[15deg] w-10 h-10" />
+        <Calendar className="absolute top-[48%] left-[18%] text-[#38BDF8]/25 rotate-[8deg] w-10 h-10" />
+        <Sliders className="absolute top-[54%] left-[30%] text-[#0072FF]/15 rotate-[-15deg] w-9 h-9" />
+        <Briefcase className="absolute top-[68%] left-[26%] text-[#38BDF8]/25 rotate-[5deg] w-10 h-10" />
+        <AlertCircle className="absolute top-[80%] left-[21%] text-[#0072FF]/15 rotate-[-10deg] w-11 h-11" />
+        <SettingsIcon className="absolute top-[88%] left-[32%] text-[#38BDF8]/25 rotate-[18deg] w-10 h-10" />
+
+        {/* Middle and Right side behind main content blocks */}
+        <Terminal className="absolute top-[60%] left-[45%] text-[#38BDF8]/25 rotate-[10deg] w-10 h-10" />
+        <Bug className="absolute top-[88%] left-[48%] text-[#0072FF]/15 rotate-[-15deg] w-11 h-11" />
+        <Sliders className="absolute top-[4%] left-[54%] text-[#38BDF8]/25 rotate-[-10deg] w-11 h-11" />
+        <Code className="absolute top-[16%] left-[64%] text-[#0072FF]/15 rotate-[25deg] w-12 h-12" />
+        <MessageSquare className="absolute top-[32%] left-[50%] text-[#38BDF8]/25 rotate-[-12deg] w-10 h-10" />
+        <CheckSquare className="absolute top-[42%] left-[72%] text-[#0072FF]/15 rotate-[8deg] w-10 h-10" />
+        <Calendar className="absolute top-[58%] left-[62%] text-[#38BDF8]/25 rotate-[-15deg] w-11 h-11" />
+        <Bug className="absolute top-[70%] left-[80%] text-[#0072FF]/15 rotate-[20deg] w-9 h-9" />
+        <FileText className="absolute top-[84%] left-[66%] text-[#38BDF8]/25 rotate-[5deg] w-11 h-11" />
+        <Briefcase className="absolute top-[82%] left-[85%] text-[#38BDF8]/25 rotate-[-8deg] w-10 h-10" />
+        <AlertCircle className="absolute top-[92%] left-[75%] text-[#0072FF]/15 rotate-[15deg] w-11 h-11" />
+        
+        {/* Far Right Area */}
+        <Search className="absolute top-[8%] left-[84%] text-[#38BDF8]/25 rotate-[12deg] w-10 h-10" />
+        <Shield className="absolute top-[26%] left-[92%] text-[#0072FF]/15 rotate-[-8deg] w-10 h-10" />
+        <Terminal className="absolute top-[48%] left-[88%] text-[#38BDF8]/25 rotate-[5deg] w-11 h-11" />
+        <Code className="absolute top-[64%] left-[94%] text-[#0072FF]/15 rotate-[20deg] w-11 h-11" />
+      </div>
+      
       {/* Toast Notification */}
       {successToast && (
         <div className="fixed top-6 right-6 z-50 bg-white/95 border border-[#BFDBFE] backdrop-blur-md text-[#0F172A] px-5 py-3.5 rounded-xl shadow-xl shadow-blue-100/40 flex items-center gap-3 animate-fade-in font-semibold">
@@ -1210,98 +1273,222 @@ function LoginView({ onLogin }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin(email, password, username);
   };
-  return (
-    <div className="w-screen h-screen overflow-hidden flex items-center justify-center bg-[#EEF6FF] relative font-sans module-bg-container">
-      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80")' }} />
-      {/* Background glowing decorations */}
-      <div className="absolute top-[20%] left-[20%] w-[450px] h-[450px] bg-[#38BDF8]/10 rounded-full blur-[120px] select-none pointer-events-none animate-pulse" />
-      <div className="absolute bottom-[20%] right-[20%] w-[450px] h-[450px] bg-[#38BDF8]/10 rounded-full blur-[120px] select-none pointer-events-none animate-pulse" />
 
-      {/* Login Card */}
-      <div className="w-[430px] rounded-3xl p-10 bg-white/90 backdrop-blur-xl border border-[#BFDBFE] shadow-[0_8px_30px_rgba(191,219,254,0.3)] relative z-10 flex flex-col items-center">
-        {/* Title Logo */}
-        <div className="flex items-center gap-3.5 mb-2">
-          <div className="w-11 h-11 flex-shrink-0">
+  const handleQuickAccess = (type) => {
+    if (type === 'priya') {
+      setUsername('priya');
+      setEmail('priya@qamind.io');
+      setPassword('password123');
+    } else {
+      setUsername('rahul');
+      setEmail('rahul@qamind.io');
+      setPassword('password123');
+    }
+  };
+
+  return (
+    <div className="w-screen h-screen overflow-hidden flex flex-col lg:flex-row bg-[#EEF6FF] relative font-sans select-none items-center justify-center lg:justify-between px-6 md:px-12 lg:px-20">
+      
+      {/* Background Glowing Ambient Orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-[#38BDF8]/10 animate-pulse pointer-events-none select-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-[#38BDF8]/10 animate-pulse pointer-events-none select-none" />
+
+      {/* Grid of Dots in top-left */}
+      <div className="absolute top-[5%] left-[3%] grid grid-cols-6 gap-2.5 opacity-[0.4] pointer-events-none">
+        {[...Array(24)].map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#38BDF8]" />
+        ))}
+      </div>
+
+      {/* Floating bright background outline tech icons distributed all over the page */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+        {/* Left column / side background icons */}
+        <Terminal className="absolute top-[5%] left-[7%] text-[#38BDF8]/40 rotate-[-5deg] w-11 h-11" />
+        <Code className="absolute top-[8%] left-[16%] text-[#38BDF8]/40 rotate-[12deg] w-12 h-12" />
+        <Shield className="absolute top-[20%] left-[5%] text-[#38BDF8]/40 rotate-[-8deg] w-9 h-9" />
+        <Search className="absolute top-[18%] left-[25%] text-[#0072FF]/25 rotate-[-12deg] w-9 h-9" />
+        <Bug className="absolute top-[32%] left-[23%] text-[#38BDF8]/40 rotate-[25deg] w-10 h-10" />
+        <CheckSquare className="absolute top-[26%] left-[31%] text-[#0072FF]/25 rotate-[15deg] w-10 h-10" />
+        <Calendar className="absolute top-[42%] left-[9%] text-[#38BDF8]/40 rotate-[8deg] w-10 h-10" />
+        <Sliders className="absolute top-[48%] left-[32%] text-[#38BDF8]/40 rotate-[-15deg] w-9 h-9" />
+        <MessageSquare className="absolute top-[58%] left-[20%] text-[#0072FF]/25 rotate-[-20deg] w-10 h-10" />
+        <FileText className="absolute top-[70%] left-[7%] text-[#38BDF8]/40 rotate-[12deg] w-9 h-9" />
+        <Briefcase className="absolute top-[64%] left-[29%] text-[#38BDF8]/40 rotate-[5deg] w-10 h-10" />
+        <AlertCircle className="absolute top-[76%] left-[24%] text-[#0072FF]/25 rotate-[-10deg] w-11 h-11" />
+        <SettingsIcon className="absolute top-[82%] left-[12%] text-[#38BDF8]/40 rotate-[18deg] w-10 h-10" />
+
+        {/* Center area background icons */}
+        <Code className="absolute top-[6%] left-[42%] text-[#0072FF]/25 rotate-[20deg] w-12 h-12" />
+        <Search className="absolute top-[22%] left-[50%] text-[#38BDF8]/40 rotate-[8deg] w-9 h-9" />
+        <Shield className="absolute top-[46%] left-[58%] text-[#0072FF]/25 rotate-[12deg] w-10 h-10" />
+        <Terminal className="absolute top-[70%] left-[45%] text-[#38BDF8]/40 rotate-[10deg] w-10 h-10" />
+        <Bug className="absolute top-[85%] left-[55%] text-[#0072FF]/25 rotate-[-15deg] w-11 h-11" />
+
+        {/* Right column / side background icons behind/around the card */}
+        <Sliders className="absolute top-[4%] left-[76%] text-[#38BDF8]/40 rotate-[-10deg] w-11 h-11" />
+        <Code className="absolute top-[14%] left-[88%] text-[#0072FF]/25 rotate-[25deg] w-12 h-12" />
+        <MessageSquare className="absolute top-[30%] left-[70%] text-[#38BDF8]/40 rotate-[-12deg] w-10 h-10" />
+        <CheckSquare className="absolute top-[40%] left-[90%] text-[#0072FF]/25 rotate-[8deg] w-10 h-10" />
+        <Calendar className="absolute top-[55%] left-[82%] text-[#38BDF8]/40 rotate-[-15deg] w-11 h-11" />
+        <Bug className="absolute top-[62%] left-[94%] text-[#0072FF]/25 rotate-[20deg] w-9 h-9" />
+        <FileText className="absolute top-[78%] left-[74%] text-[#38BDF8]/40 rotate-[5deg] w-11 h-11" />
+        <Briefcase className="absolute top-[88%] left-[86%] text-[#38BDF8]/40 rotate-[-8deg] w-10 h-10" />
+        <AlertCircle className="absolute top-[93%] left-[95%] text-[#0072FF]/25 rotate-[15deg] w-11 h-11" />
+      </div>
+
+      {/* LEFT COLUMN: Large branding side-by-side (Logo + Text) */}
+      <div className="hidden lg:flex flex-1 items-center justify-center p-8 z-10 h-full">
+        <div className="flex items-center gap-8 lg:gap-12 max-w-2xl">
+          {/* Large Logo */}
+          <div className="w-44 h-44 xl:w-56 xl:h-56 flex-shrink-0 drop-shadow-[0_12px_36px_rgba(56,189,248,0.18)]">
             <svg viewBox="0 0 100 100" className="w-full h-full">
               <defs>
-                <linearGradient id="loginLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#7dd3fc" />
+                <linearGradient id="largeLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#00C6FF" />
+                  <stop offset="100%" stopColor="#0072FF" />
                 </linearGradient>
               </defs>
-              <path d="M 10 47 L 10 28 L 50 5 L 90 28 L 90 47 L 74 47 L 74 38 L 50 24 L 26 38 L 26 47 Z" fill="url(#loginLogoGrad)" />
-              <path d="M 90 53 L 90 72 L 50 95 L 10 72 L 10 53 L 26 53 L 26 62 L 50 76 L 74 62 L 74 53 Z" fill="url(#loginLogoGrad)" />
+              <path d="M 10 47 L 10 28 L 50 5 L 90 28 L 90 47 L 74 47 L 74 38 L 50 24 L 26 38 L 26 47 Z" fill="url(#largeLogoGrad)" />
+              <path d="M 90 53 L 90 72 L 50 95 L 10 72 L 10 53 L 26 53 L 26 62 L 50 76 L 74 62 L 74 53 Z" fill="url(#largeLogoGrad)" />
             </svg>
           </div>
+          {/* Large Text */}
           <div className="flex flex-col">
-            <span className="font-extrabold text-2.5xl tracking-wide text-[#0F172A] font-title leading-none">QA MIND</span>
-            <span className="text-[7.5px] text-[#38BDF8] font-bold uppercase tracking-widest leading-none mt-1.5 font-mono">WHERE DEVELOPERS LOSE PEACE</span>
+            <h1 className="font-extrabold text-6xl xl:text-8xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</h1>
+            <p className="text-sm xl:text-lg text-[#0072FF] font-bold uppercase tracking-[0.2em] mt-4 font-sans">WHERE DEVELOPERS LOSE PEACE</p>
           </div>
-        </div>
-        
-        <div className="w-12 h-px bg-[#BFDBFE]/60 my-6" />
-
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Username / Full Name</label>
-            <input 
-              type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Priya Sharma"
-              required
-              autoComplete="off"
-              className="w-full h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Email Address</label>
-            <input 
-              type="email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="priya@qamind.io"
-              required
-              autoComplete="off"
-              className="w-full h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Password</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="off"
-              className="w-full h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
-            />
-          </div>
-
-          <button 
-            type="submit" 
-            className="w-full h-11 mt-2 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#7dd3fc] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 hover:shadow-sky-400/35 transition-all text-xs"
-          >
-            Authenticate Workspace
-          </button>
-        </form>
-
-        {/* Help Info text */}
-        <div className="mt-6 bg-[#F8FBFF] p-4 rounded-xl border border-[#BFDBFE] text-center w-full">
-          <p className="text-[11px] text-[#475569] leading-relaxed">
-            <span className="font-semibold text-[#0F172A]">Quick-access login:</span> Use standard email (e.g. <span className="font-semibold text-[#38BDF8]">priya@qamind.io</span> or <span className="font-semibold text-[#38BDF8]">rahul@qamind.io</span>) to test workspace capabilities.
-          </p>
         </div>
       </div>
+
+      {/* RIGHT COLUMN: Centered Login Card */}
+      <div className="w-full lg:w-[45%] flex items-center justify-center p-4 md:p-8 z-10 h-full">
+        <div className="w-full max-w-[530px] rounded-[36px] p-10 md:p-12 bg-white border border-[#E2EEFC] shadow-[0_16px_48px_rgba(191,219,254,0.2)] flex flex-col gap-8">
+          
+          {/* Card Header (Logo + Text side-by-side) */}
+          <div className="flex items-center gap-4.5">
+            {/* Small Logo */}
+            <div className="w-12 h-12 flex-shrink-0 drop-shadow-[0_2px_8px_rgba(56,189,248,0.1)]">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <defs>
+                  <linearGradient id="cardLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#00C6FF" />
+                    <stop offset="100%" stopColor="#0072FF" />
+                  </linearGradient>
+                </defs>
+                <path d="M 10 47 L 10 28 L 50 5 L 90 28 L 90 47 L 74 47 L 74 38 L 50 24 L 26 38 L 26 47 Z" fill="url(#cardLogoGrad)" />
+                <path d="M 90 53 L 90 72 L 50 95 L 10 72 L 10 53 L 26 53 L 26 62 L 50 76 L 74 62 L 74 53 Z" fill="url(#cardLogoGrad)" />
+              </svg>
+            </div>
+            {/* Header Text */}
+            <div className="flex flex-col">
+              <span className="font-extrabold text-3xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</span>
+              <span className="text-[9.5px] text-[#0072FF] font-bold uppercase tracking-[0.16em] mt-2 font-sans">WHERE DEVELOPERS LOSE PEACE</span>
+            </div>
+          </div>
+
+          <div className="w-16 h-[2px] bg-[#EEF6FF]" />
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5.5">
+            {/* Username Field */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-bold text-[#475569] pl-1">Username / Full Name</label>
+              <div className="relative w-full flex items-center">
+                <User className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
+                <input 
+                  type="text" 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="priya"
+                  required
+                  autoComplete="off"
+                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Email Field */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-bold text-[#475569] pl-1">Email Address</label>
+              <div className="relative w-full flex items-center">
+                <Mail className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="priya@qamind.io"
+                  required
+                  autoComplete="off"
+                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-bold text-[#475569] pl-1">Password</label>
+              <div className="relative w-full flex items-center">
+                <Lock className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
+                <input 
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="off"
+                  className="w-full h-14 pl-14 pr-12 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 text-slate-400 hover:text-[#0F172A] transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button 
+              type="submit" 
+              className="w-full h-14 mt-3 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white font-bold hover:brightness-105 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 transition-all text-sm tracking-wide cursor-pointer"
+            >
+              Authenticate Workspace
+            </button>
+          </form>
+
+          {/* Quick-Access Helper Box */}
+          <div className="bg-[#F6FAFF] p-5 rounded-2xl border border-[#D2E4FA] text-center w-full">
+            <p className="text-[12px] text-[#5c6f84] leading-relaxed">
+              <span className="font-bold text-[#3B4D61]">Quick-access login:</span> Use standard email (e.g.{" "}
+              <button 
+                type="button" 
+                onClick={() => handleQuickAccess('priya')}
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none"
+              >
+                priya@qamind.io
+              </button>{" "}
+              or{" "}
+              <button 
+                type="button" 
+                onClick={() => handleQuickAccess('rahul')}
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none"
+              >
+                rahul@qamind.io
+              </button>
+              ) to test workspace capabilities.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 }
