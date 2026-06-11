@@ -557,8 +557,8 @@ export default function App() {
   };
 
   // Login Handler
-  const handleLogin = (email, password, username) => {
-    let matchedName = username ? username.trim() : '';
+  const handleLogin = (email, password, username, fullName) => {
+    let matchedName = fullName ? fullName.trim() : (username ? username.trim() : '');
     let matchedEmail = email || 'priya@qamind.io';
 
     if (!matchedName) {
@@ -1271,25 +1271,58 @@ export default function App() {
 // --------------------------------
 function LoginView({ onLogin }) {
   const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(email, password, username);
+    
+    // Additional validation checks
+    if (!/^[a-zA-Z]+$/.test(username)) {
+      setError('Username must contain only alphabets.');
+      return;
+    }
+    if (username.length > 20) {
+      setError('Username must be 20 characters or less.');
+      return;
+    }
+    if (!fullName.trim()) {
+      setError('Full Name is required.');
+      return;
+    }
+    if (fullName.length > 20) {
+      setError('Full Name must be 20 characters or less.');
+      return;
+    }
+    if (email.length > 20) {
+      setError('Email must be 20 characters or less.');
+      return;
+    }
+    if (!/^\d{4}$/.test(password)) {
+      setError('Password must be exactly 4 numbers.');
+      return;
+    }
+
+    setError('');
+    onLogin(email, password, username, fullName);
   };
 
   const handleQuickAccess = (type) => {
     if (type === 'priya') {
       setUsername('priya');
+      setFullName('Priya Sharma');
       setEmail('priya@qamind.io');
-      setPassword('password123');
+      setPassword('1234');
     } else {
       setUsername('rahul');
+      setFullName('Rahul Verma');
       setEmail('rahul@qamind.io');
-      setPassword('password123');
+      setPassword('5678');
     }
+    setError('');
   };
 
   return (
@@ -1396,53 +1429,109 @@ function LoginView({ onLogin }) {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-5.5">
+            {error && (
+              <div className="bg-red-50 text-red-500 text-sm font-semibold p-3.5 rounded-xl border border-red-200 flex items-center gap-2 animate-fade-in">
+                <AlertCircle size={16} className="flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
             {/* Username Field */}
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-bold text-[#475569] pl-1">Username / Full Name</label>
+              <div className="flex justify-between items-center pl-1">
+                <label className="text-base font-bold text-[#475569]">Username</label>
+                <span className="text-xs text-slate-400 font-medium">Max 20 alphabets</span>
+              </div>
               <div className="relative w-full flex items-center">
                 <User className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
                 <input 
                   type="text" 
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^a-zA-Z]/g, '');
+                    if (val.length <= 20) {
+                      setUsername(val);
+                    }
+                  }}
                   placeholder="priya"
                   required
                   autoComplete="off"
-                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Full Name Field */}
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center pl-1">
+                <label className="text-base font-bold text-[#475569]">Full Name</label>
+                <span className="text-xs text-slate-400 font-medium">Max 20 chars</span>
+              </div>
+              <div className="relative w-full flex items-center">
+                <User className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
+                <input 
+                  type="text" 
+                  value={fullName}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val.length <= 20) {
+                      setFullName(val);
+                    }
+                  }}
+                  placeholder="Priya Sharma"
+                  required
+                  autoComplete="off"
+                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
                 />
               </div>
             </div>
 
             {/* Email Field */}
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-bold text-[#475569] pl-1">Email Address</label>
+              <div className="flex justify-between items-center pl-1">
+                <label className="text-base font-bold text-[#475569]">Email Address</label>
+                <span className="text-xs text-slate-400 font-medium">Max 20 chars</span>
+              </div>
               <div className="relative w-full flex items-center">
                 <Mail className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
                 <input 
                   type="email" 
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val.length <= 20) {
+                      setEmail(val);
+                    }
+                  }}
                   placeholder="priya@qamind.io"
                   required
                   autoComplete="off"
-                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                  className="w-full h-14 pl-14 pr-4 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div className="flex flex-col gap-2">
-              <label className="text-[13px] font-bold text-[#475569] pl-1">Password</label>
+              <div className="flex justify-between items-center pl-1">
+                <label className="text-base font-bold text-[#475569]">Password</label>
+                <span className="text-xs text-slate-400 font-medium">Exactly 4 digits</span>
+              </div>
               <div className="relative w-full flex items-center">
                 <Lock className="absolute left-5 text-slate-400 w-5 h-5 pointer-events-none" />
                 <input 
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, '');
+                    if (val.length <= 4) {
+                      setPassword(val);
+                    }
+                  }}
+                  placeholder="••••"
                   required
                   autoComplete="off"
-                  className="w-full h-14 pl-14 pr-12 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-sm font-medium placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                  className="w-full h-14 pl-14 pr-12 rounded-xl bg-white border border-[#D0E3F9] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
                 />
                 <button
                   type="button"
@@ -1457,7 +1546,7 @@ function LoginView({ onLogin }) {
             {/* Submit Button */}
             <button 
               type="submit" 
-              className="w-full h-14 mt-3 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white font-bold hover:brightness-105 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 transition-all text-sm tracking-wide cursor-pointer"
+              className="w-full h-14 mt-3 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#3b82f6] text-white font-bold hover:brightness-105 shadow-md shadow-blue-500/10 hover:shadow-blue-500/20 transition-all text-base tracking-wide cursor-pointer"
             >
               Authenticate Workspace
             </button>
@@ -1465,12 +1554,12 @@ function LoginView({ onLogin }) {
 
           {/* Quick-Access Helper Box */}
           <div className="bg-[#F6FAFF] p-5 rounded-2xl border border-[#D2E4FA] text-center w-full">
-            <p className="text-[12px] text-[#5c6f84] leading-relaxed">
+            <p className="text-sm text-[#5c6f84] leading-relaxed">
               <span className="font-bold text-[#3B4D61]">Quick-access login:</span> Use standard email (e.g.{" "}
               <button 
                 type="button" 
                 onClick={() => handleQuickAccess('priya')}
-                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none"
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm"
               >
                 priya@qamind.io
               </button>{" "}
@@ -1478,7 +1567,7 @@ function LoginView({ onLogin }) {
               <button 
                 type="button" 
                 onClick={() => handleQuickAccess('rahul')}
-                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none"
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm"
               >
                 rahul@qamind.io
               </button>
