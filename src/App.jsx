@@ -386,6 +386,13 @@ const MODULE_SUBMODULES = {
   'Query Parser': ['SQL Optimizer']
 };
 
+const INITIAL_PROJECTS = [
+  { name: 'Payment Gateway', desc: 'Core checkout transactions and invoice system integration.', iconBg: 'bg-red-500/10 border-red-500/20 text-red-400' },
+  { name: 'Mobile App', desc: 'iOS and Android client repositories for SMS onboarding/auth.', iconBg: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
+  { name: 'Web Portal', desc: 'Customer dashboard UI interface and active user analytical panels.', iconBg: 'bg-purple-500/10 border-purple-500/20 text-purple-400' },
+  { name: 'Analytics Engine', desc: 'Background SQL query optimization and parser algorithms.', iconBg: 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400' }
+];
+
 export default function App() {
   // App Session State
   const [user, setUser] = useState(null);
@@ -420,10 +427,85 @@ export default function App() {
   const [formProject, setFormProject] = useState('Payment Gateway');
   const [formModule, setFormModule] = useState('Checkout');
   const [formSubModule, setFormSubModule] = useState('UPI Payment');
+  const [formTitle, setFormTitle] = useState('');
   const [formDescription, setFormDescription] = useState('');
-  const [formPriority, setFormPriority] = useState('P2');
-  const [formSeverity, setFormSeverity] = useState('High');
-  const [formAssignedTo, setFormAssignedTo] = useState('Rahul Verma');
+  const [formPriority, setFormPriority] = useState('Medium');
+  const [formSeverity, setFormSeverity] = useState('Major');
+  const [formAssignedTo, setFormAssignedTo] = useState('');
+  const [formRemarks, setFormRemarks] = useState('');
+  const [formScreenshot, setFormScreenshot] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+
+  const [projectModules, setProjectModules] = useState(PROJECT_MODULES);
+  const [moduleSubmodules, setModuleSubmodules] = useState(MODULE_SUBMODULES);
+  const [projectsList, setProjectsList] = useState(INITIAL_PROJECTS);
+
+  // Dynamic Project Registration Handler
+  const handleAddProject = (projectName, moduleName, submoduleName) => {
+    const pName = projectName.trim();
+    const mName = moduleName.trim();
+    const sName = submoduleName.trim();
+
+    if (!pName || !mName) {
+      alert("Project and Module fields are required.");
+      return;
+    }
+
+    setProjectModules(prev => {
+      const existingModules = prev[pName] || [];
+      if (!existingModules.includes(mName)) {
+        return {
+          ...prev,
+          [pName]: [...existingModules, mName]
+        };
+      }
+      return prev;
+    });
+
+    setModuleSubmodules(prev => {
+      const existingSubs = prev[mName] || [];
+      if (sName && !existingSubs.includes(sName)) {
+        return {
+          ...prev,
+          [mName]: [...existingSubs, sName]
+        };
+      } else if (!prev[mName]) {
+        return {
+          ...prev,
+          [mName]: []
+        };
+      }
+      return prev;
+    });
+
+    setProjectsList(prev => {
+      if (!prev.some(p => p.name.toLowerCase() === pName.toLowerCase())) {
+        const colors = [
+          'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+          'bg-pink-500/10 border-pink-500/20 text-pink-400',
+          'bg-indigo-500/10 border-indigo-500/20 text-indigo-400',
+          'bg-amber-500/10 border-amber-500/20 text-amber-400'
+        ];
+        const color = colors[prev.length % colors.length];
+        return [
+          ...prev,
+          {
+            name: pName,
+            desc: `Custom registered project for active workspace QA monitoring.`,
+            iconBg: color
+          }
+        ];
+      }
+      return prev;
+    });
+
+    // Automatically select the newly created Project/Module/Sub Module in the form
+    setFormProject(pName);
+    setFormModule(mName);
+    setFormSubModule(sName || '');
+
+    triggerToast(`Successfully registered project "${pName}"!`);
+  };
 
   // Reset module when Project changes in Filters
   const handleProjectFilterChange = (project) => {
@@ -571,6 +653,7 @@ export default function App() {
     }
 
     const loginUser = {
+      username: username ? username.trim() : matchedName.toLowerCase().replace(/\s/g, ''),
       name: matchedName,
       email: matchedEmail,
       role: TEAM_MEMBERS[matchedName]?.role || 'QA Engineer',
@@ -592,8 +675,16 @@ export default function App() {
   // Create Bug Handler
   const handleCreateBug = (e) => {
     e.preventDefault();
+    if (!formTitle.trim()) {
+      alert('Please enter a title for the bug.');
+      return;
+    }
     if (!formDescription.trim()) {
       alert('Please enter a description for the bug.');
+      return;
+    }
+    if (!formAssignedTo.trim()) {
+      alert('Please specify whom this defect is assigned to.');
       return;
     }
 
@@ -602,21 +693,33 @@ export default function App() {
       return num > acc ? num : acc;
     }, 125) + 1;
 
+    const initialComments = [];
+    if (formRemarks.trim()) {
+      initialComments.push({
+        author: user.name,
+        text: `Initial Remarks: ${formRemarks.trim()}`,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      });
+    }
+
     const newBug = {
       id: `BUG-${nextIdNumber}`,
       project: formProject,
       module: formModule,
       subModule: formSubModule,
-      description: formDescription,
+      title: formTitle.trim(),
+      description: formDescription.trim(),
       priority: formPriority,
       severity: formSeverity,
-      assignedTo: formAssignedTo,
-      assignedBy: user.name,
+      assignedTo: formAssignedTo.trim(),
+      assignedBy: user.username || user.name,
       assignedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      remarks: formRemarks.trim(),
+      screenshotUrl: previewUrl || null,
       devStatus: 'Open',
       testerStatus: 'Open',
       updatedTime: 'Just now',
-      comments: []
+      comments: initialComments
     };
 
     setBugs([newBug, ...bugs]);
@@ -625,7 +728,7 @@ export default function App() {
     const newActivity = {
       id: Date.now(),
       user: user.name,
-      action: `created bug report`,
+      action: `created bug report "${newBug.title}"`,
       bugId: newBug.id,
       timestamp: 'Just now',
       status: 'Open',
@@ -634,17 +737,24 @@ export default function App() {
     setActivities([newActivity, ...activities]);
 
     // Clear form & redirect
-    setFormDescription('');
+    handleClearForm();
     setActiveTab('Dashboard');
     triggerToast(`Successfully registered defect ${newBug.id}!`);
   };
 
   // Clear bug form
   const handleClearForm = () => {
+    setFormTitle('');
     setFormDescription('');
-    setFormPriority('P2');
-    setFormSeverity('High');
-    setFormAssignedTo('Rahul Verma');
+    setFormPriority('Medium');
+    setFormSeverity('Major');
+    setFormAssignedTo('');
+    setFormRemarks('');
+    setFormScreenshot(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setPreviewUrl('');
   };
 
   // Open Status Update Side Drawer
@@ -716,7 +826,11 @@ export default function App() {
   // Visual severity class configurations matching dark neon colors
   const getSeverityBadgeClass = (severity) => {
     switch(severity) {
+      case 'Blocker': return 'bg-rose-500/25 text-rose-500 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.18)] font-black uppercase tracking-wider';
       case 'Critical': return 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
+      case 'Major': return 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_10px_rgba(249,115,22,0.1)]';
+      case 'Minor': return 'bg-slate-500/10 text-slate-400 border border-slate-500/20';
+      // Legacy compatibility mappings
       case 'High': return 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_10px_rgba(249,115,22,0.1)]';
       case 'Medium': return 'bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]';
       case 'Low': return 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]';
@@ -726,10 +840,10 @@ export default function App() {
 
   const getPriorityBadgeClass = (priority) => {
     switch(priority) {
-      case 'P1': return 'bg-red-500/15 text-red-400 border border-red-500/25';
-      case 'P2': return 'bg-orange-500/15 text-orange-400 border border-orange-500/25';
-      case 'P3': return 'bg-amber-500/15 text-amber-300 border border-amber-500/25';
-      case 'P4': return 'bg-blue-500/15 text-blue-400 border border-blue-500/25';
+      case 'High': case 'P1': return 'bg-red-500/15 text-red-400 border border-red-500/25';
+      case 'Medium': case 'P2': return 'bg-orange-500/15 text-orange-400 border border-orange-500/25';
+      case 'Low': case 'P3': return 'bg-blue-500/15 text-blue-400 border border-blue-500/25';
+      case 'P4': return 'bg-slate-500/15 text-slate-400 border border-slate-500/25';
       default: return 'bg-slate-800 text-slate-400 border border-slate-700';
     }
   };
@@ -777,41 +891,41 @@ export default function App() {
       {/* Floating bright background outline tech icons spread across the entire dashboard pages */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         {/* Left side behind sidebar and left workspace area */}
-        <Terminal className="absolute top-[6%] left-[4%] text-[#38BDF8]/20 rotate-[-5deg] w-10 h-10" />
-        <Code className="absolute top-[12%] left-[12%] text-[#0072FF]/15 rotate-[15deg] w-11 h-11" />
-        <Shield className="absolute top-[28%] left-[2%] text-[#38BDF8]/20 rotate-[-10deg] w-9 h-9" />
-        <Bug className="absolute top-[40%] left-[14%] text-[#38BDF8]/20 rotate-[20deg] w-10 h-10" />
-        <Sliders className="absolute top-[62%] left-[3%] text-[#0072FF]/15 rotate-[-12deg] w-9 h-9" />
-        <MessageSquare className="absolute top-[78%] left-[10%] text-[#38BDF8]/20 rotate-[18deg] w-10 h-10" />
+        <Terminal className="absolute top-[6%] left-[4%] text-[#38BDF8] ambient-bg-icon rotate-[-5deg] w-9 h-9" />
+        <Code className="absolute top-[12%] left-[12%] text-[#0072FF] ambient-bg-icon rotate-[15deg] w-9 h-9" />
+        <Shield className="absolute top-[28%] left-[2%] text-[#38BDF8] ambient-bg-icon rotate-[-10deg] w-8 h-8" />
+        <Bug className="absolute top-[40%] left-[14%] text-[#38BDF8] ambient-bg-icon rotate-[20deg] w-9 h-9" />
+        <Sliders className="absolute top-[62%] left-[3%] text-[#0072FF] ambient-bg-icon rotate-[-12deg] w-8 h-8" />
+        <MessageSquare className="absolute top-[78%] left-[10%] text-[#38BDF8] ambient-bg-icon rotate-[18deg] w-9 h-9" />
 
         {/* Center / Workspace area */}
-        <Code className="absolute top-[10%] left-[28%] text-[#38BDF8]/25 rotate-[12deg] w-12 h-12" />
-        <Search className="absolute top-[24%] left-[22%] text-[#0072FF]/15 rotate-[-8deg] w-9 h-9" />
-        <CheckSquare className="absolute top-[32%] left-[35%] text-[#38BDF8]/25 rotate-[15deg] w-10 h-10" />
-        <Calendar className="absolute top-[48%] left-[18%] text-[#38BDF8]/25 rotate-[8deg] w-10 h-10" />
-        <Sliders className="absolute top-[54%] left-[30%] text-[#0072FF]/15 rotate-[-15deg] w-9 h-9" />
-        <Briefcase className="absolute top-[68%] left-[26%] text-[#38BDF8]/25 rotate-[5deg] w-10 h-10" />
-        <AlertCircle className="absolute top-[80%] left-[21%] text-[#0072FF]/15 rotate-[-10deg] w-11 h-11" />
-        <SettingsIcon className="absolute top-[88%] left-[32%] text-[#38BDF8]/25 rotate-[18deg] w-10 h-10" />
+        <Code className="absolute top-[10%] left-[28%] text-[#38BDF8] ambient-bg-icon rotate-[12deg] w-10 h-10" />
+        <Search className="absolute top-[24%] left-[22%] text-[#0072FF] ambient-bg-icon rotate-[-8deg] w-8 h-8" />
+        <CheckSquare className="absolute top-[32%] left-[35%] text-[#38BDF8] ambient-bg-icon rotate-[15deg] w-9 h-9" />
+        <Calendar className="absolute top-[48%] left-[18%] text-[#38BDF8] ambient-bg-icon rotate-[8deg] w-9 h-9" />
+        <Sliders className="absolute top-[54%] left-[30%] text-[#0072FF] ambient-bg-icon rotate-[-15deg] w-8 h-8" />
+        <Briefcase className="absolute top-[68%] left-[26%] text-[#38BDF8] ambient-bg-icon rotate-[5deg] w-9 h-9" />
+        <AlertCircle className="absolute top-[80%] left-[21%] text-[#0072FF] ambient-bg-icon rotate-[-10deg] w-9 h-9" />
+        <SettingsIcon className="absolute top-[88%] left-[32%] text-[#38BDF8] ambient-bg-icon rotate-[18deg] w-9 h-9" />
 
         {/* Middle and Right side behind main content blocks */}
-        <Terminal className="absolute top-[60%] left-[45%] text-[#38BDF8]/25 rotate-[10deg] w-10 h-10" />
-        <Bug className="absolute top-[88%] left-[48%] text-[#0072FF]/15 rotate-[-15deg] w-11 h-11" />
-        <Sliders className="absolute top-[4%] left-[54%] text-[#38BDF8]/25 rotate-[-10deg] w-11 h-11" />
-        <Code className="absolute top-[16%] left-[64%] text-[#0072FF]/15 rotate-[25deg] w-12 h-12" />
-        <MessageSquare className="absolute top-[32%] left-[50%] text-[#38BDF8]/25 rotate-[-12deg] w-10 h-10" />
-        <CheckSquare className="absolute top-[42%] left-[72%] text-[#0072FF]/15 rotate-[8deg] w-10 h-10" />
-        <Calendar className="absolute top-[58%] left-[62%] text-[#38BDF8]/25 rotate-[-15deg] w-11 h-11" />
-        <Bug className="absolute top-[70%] left-[80%] text-[#0072FF]/15 rotate-[20deg] w-9 h-9" />
-        <FileText className="absolute top-[84%] left-[66%] text-[#38BDF8]/25 rotate-[5deg] w-11 h-11" />
-        <Briefcase className="absolute top-[82%] left-[85%] text-[#38BDF8]/25 rotate-[-8deg] w-10 h-10" />
-        <AlertCircle className="absolute top-[92%] left-[75%] text-[#0072FF]/15 rotate-[15deg] w-11 h-11" />
+        <Terminal className="absolute top-[60%] left-[45%] text-[#38BDF8] ambient-bg-icon rotate-[10deg] w-9 h-9" />
+        <Bug className="absolute top-[88%] left-[48%] text-[#0072FF] ambient-bg-icon rotate-[-15deg] w-9 h-9" />
+        <Sliders className="absolute top-[4%] left-[54%] text-[#38BDF8] ambient-bg-icon rotate-[-10deg] w-9 h-9" />
+        <Code className="absolute top-[16%] left-[64%] text-[#0072FF] ambient-bg-icon rotate-[25deg] w-10 h-10" />
+        <MessageSquare className="absolute top-[32%] left-[50%] text-[#38BDF8] ambient-bg-icon rotate-[-12deg] w-9 h-9" />
+        <CheckSquare className="absolute top-[42%] left-[72%] text-[#0072FF] ambient-bg-icon rotate-[8deg] w-9 h-9" />
+        <Calendar className="absolute top-[58%] left-[62%] text-[#38BDF8] ambient-bg-icon rotate-[-15deg] w-9 h-9" />
+        <Bug className="absolute top-[70%] left-[80%] text-[#0072FF] ambient-bg-icon rotate-[20deg] w-8 h-8" />
+        <FileText className="absolute top-[84%] left-[66%] text-[#38BDF8] ambient-bg-icon rotate-[5deg] w-9 h-9" />
+        <Briefcase className="absolute top-[82%] left-[85%] text-[#38BDF8] ambient-bg-icon rotate-[-8deg] w-9 h-9" />
+        <AlertCircle className="absolute top-[92%] left-[75%] text-[#0072FF] ambient-bg-icon rotate-[15deg] w-9 h-9" />
         
         {/* Far Right Area */}
-        <Search className="absolute top-[8%] left-[84%] text-[#38BDF8]/25 rotate-[12deg] w-10 h-10" />
-        <Shield className="absolute top-[26%] left-[92%] text-[#0072FF]/15 rotate-[-8deg] w-10 h-10" />
-        <Terminal className="absolute top-[48%] left-[88%] text-[#38BDF8]/25 rotate-[5deg] w-11 h-11" />
-        <Code className="absolute top-[64%] left-[94%] text-[#0072FF]/15 rotate-[20deg] w-11 h-11" />
+        <Search className="absolute top-[8%] left-[84%] text-[#38BDF8] ambient-bg-icon rotate-[12deg] w-9 h-9" />
+        <Shield className="absolute top-[26%] left-[92%] text-[#0072FF] ambient-bg-icon rotate-[-8deg] w-9 h-9" />
+        <Terminal className="absolute top-[48%] left-[88%] text-[#38BDF8] ambient-bg-icon rotate-[5deg] w-9 h-9" />
+        <Code className="absolute top-[64%] left-[94%] text-[#0072FF] ambient-bg-icon rotate-[20deg] w-9 h-9" />
       </div>
       
       {/* Toast Notification */}
@@ -823,16 +937,27 @@ export default function App() {
       )}
 
       {/* LEFT SIDEBAR NAVIGATION */}
-      <aside className="w-64 glass-sidebar flex flex-col justify-between py-6 px-5 flex-shrink-0 z-10 relative">
-        <div className="flex flex-col gap-6">
+      <aside className="w-64 glass-sidebar flex flex-col justify-between py-6 px-5 flex-shrink-0 z-10 relative overflow-y-auto max-h-screen">
+        {/* Sidebar Background Subtle Outline Icons */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0 opacity-[0.28]">
+          <Terminal className="absolute top-[14%] right-[8%] rotate-[15deg] w-7 h-7 text-[#38BDF8]" />
+          <Code className="absolute top-[28%] left-[10%] rotate-[-15deg] w-8 h-8 text-[#0072FF]" />
+          <Bug className="absolute top-[42%] right-[12%] rotate-[20deg] w-7 h-7 text-[#a78bfa]" />
+          <Sliders className="absolute top-[52%] left-[15%] rotate-[-12deg] w-8 h-8 text-[#38BDF8]" />
+          <Shield className="absolute top-[64%] right-[8%] rotate-[-10deg] w-7 h-7 text-[#0072FF]" />
+          <MessageSquare className="absolute top-[75%] left-[12%] rotate-[18deg] w-7 h-7 text-[#a78bfa]" />
+          <Clock className="absolute top-[85%] right-[15%] rotate-[-8deg] w-8 h-8 text-[#38BDF8]" />
+        </div>
+
+        <div className="flex flex-col gap-6 relative z-10">
           {/* Logo container */}
           <div className="flex items-center gap-3 px-2">
-            <div className="w-8 h-8 flex-shrink-0">
+            <div className="w-11 h-11 flex-shrink-0 drop-shadow-[0_2px_8px_rgba(2,132,199,0.15)]">
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
                   <linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#7dd3fc" />
+                    <stop offset="0%" stopColor="#0284c7" />
+                    <stop offset="100%" stopColor="#38bdf8" />
                   </linearGradient>
                 </defs>
                 <path d="M 10 47 L 10 28 L 50 5 L 90 28 L 90 47 L 74 47 L 74 38 L 50 24 L 26 38 L 26 47 Z" fill="url(#sidebarLogoGrad)" />
@@ -840,8 +965,8 @@ export default function App() {
               </svg>
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-sm tracking-wider text-[#0F172A] font-title leading-tight">QA MIND</span>
-              <span className="text-[6.5px] text-[#38BDF8] font-bold uppercase tracking-widest leading-none mt-1 font-mono">WHERE DEVELOPERS LOSE PEACE</span>
+              <span className="font-extrabold text-lg tracking-wider text-[#0F172A] font-title leading-tight">QA MIND</span>
+              <span className="text-[9px] text-[#0284c7] font-bold uppercase tracking-widest leading-none mt-1 font-mono">WHERE DEVELOPERS LOSE PEACE</span>
             </div>
           </div>
 
@@ -850,6 +975,7 @@ export default function App() {
             {[
               { name: 'Dashboard', icon: LayoutDashboard },
               { name: 'Create Bug', icon: PlusCircle },
+              { name: 'Projects', icon: Folder },
               { name: 'Settings', icon: SettingsIcon }
             ].map(tab => {
               const Icon = tab.icon;
@@ -858,16 +984,16 @@ export default function App() {
                 <button 
                   key={tab.name}
                   onClick={() => setActiveTab(tab.name)}
-                  className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 relative border ${
+                  className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 relative border ${
                     isActive 
-                      ? 'bg-[#E0F2FE] border-[#BFDBFE] text-[#0F172A] shadow-[0_2px_10px_rgba(56,189,248,0.1)] font-medium' 
-                      : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#E0F2FE]/50 hover:border-[#BFDBFE]/30 border-transparent'
+                      ? 'bg-[#bae6fd] border-[#38bdf8] text-[#0369a1] shadow-[0_3px_12px_rgba(56,189,248,0.18)] font-semibold' 
+                      : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 hover:border-[#BFDBFE]/50 border-transparent'
                   }`}
                 >
-                  <Icon size={17} className={isActive ? 'text-[#38BDF8]' : 'text-[#475569] transition-colors'} />
+                  <Icon size={20} className={isActive ? 'text-[#0284c7]' : 'text-[#475569] transition-colors'} />
                   <span>{tab.name}</span>
                   {isActive && (
-                    <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-[#38BDF8] glow-sky" />
+                    <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-[#0284c7] glow-sky" />
                   )}
                 </button>
               );
@@ -876,7 +1002,7 @@ export default function App() {
         </div>
 
         {/* User profile section */}
-        <div className="flex flex-col gap-4 border-t border-[#BFDBFE]/60 pt-5">
+        <div className="flex flex-col gap-4 border-t border-[#BFDBFE]/60 pt-5 relative z-10">
           <div className="flex items-center gap-3 px-1">
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt={user.name} className="w-10 h-10 rounded-full object-cover border border-[#BFDBFE] shadow-sm" />
@@ -913,19 +1039,19 @@ export default function App() {
           <div className="flex items-center gap-4">
             {/* Logo on Left of Navbar */}
             <div className="flex items-center gap-2 md:hidden">
-              <div className="w-6 h-6 flex-shrink-0">
+              <div className="w-9 h-9 flex-shrink-0 drop-shadow-[0_2px_6px_rgba(2,132,199,0.15)]">
                 <svg viewBox="0 0 100 100" className="w-full h-full">
                   <defs>
                     <linearGradient id="mobileLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#38bdf8" />
-                      <stop offset="100%" stopColor="#7dd3fc" />
+                      <stop offset="0%" stopColor="#0284c7" />
+                      <stop offset="100%" stopColor="#38bdf8" />
                     </linearGradient>
                   </defs>
                   <path d="M 10 47 L 10 28 L 50 5 L 90 28 L 90 47 L 74 47 L 74 38 L 50 24 L 26 38 L 26 47 Z" fill="url(#mobileLogoGrad)" />
                   <path d="M 90 53 L 90 72 L 50 95 L 10 72 L 10 53 L 26 53 L 26 62 L 50 76 L 74 62 L 74 53 Z" fill="url(#mobileLogoGrad)" />
                 </svg>
               </div>
-              <span className="font-extrabold text-sm text-[#0F172A] font-title leading-none">QA MIND</span>
+              <span className="font-extrabold text-base text-[#0F172A] font-title leading-none">QA MIND</span>
             </div>
             
             <div className="hidden md:flex items-center gap-3 text-xs font-semibold select-none">
@@ -1033,7 +1159,7 @@ export default function App() {
         </header>
 
         {/* TAB WORKSPACES CONTENT */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col gap-6 md:gap-8">
+        <main className="h-[calc(100vh-5rem)] overflow-y-auto p-6 md:p-8 flex flex-col gap-6 md:gap-8">
           {activeTab === 'Dashboard' && (
             <DashboardView 
               bugs={bugs}
@@ -1056,6 +1182,8 @@ export default function App() {
                 setActiveTab('Developers');
               }}
               onLinkToBug={handleLinkToBug}
+              PROJECT_MODULES={projectModules}
+              MODULE_SUBMODULES={moduleSubmodules}
             />
           )}
 
@@ -1108,9 +1236,11 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'Projects' && (
+           {activeTab === 'Projects' && (
             <ProjectsView 
               bugs={bugs}
+              projectsList={projectsList}
+              PROJECT_MODULES={projectModules}
             />
           )}
 
@@ -1137,18 +1267,33 @@ export default function App() {
               setFormModule={setFormModule}
               formSubModule={formSubModule}
               setFormSubModule={setFormSubModule}
-              formAssignedTo={formAssignedTo}
-              setFormAssignedTo={setFormAssignedTo}
+              formTitle={formTitle}
+              setFormTitle={setFormTitle}
+              formDescription={formDescription}
+              setFormDescription={setFormDescription}
               formPriority={formPriority}
               setFormPriority={setFormPriority}
               formSeverity={formSeverity}
               setFormSeverity={setFormSeverity}
-              formDescription={formDescription}
-              setFormDescription={setFormDescription}
+              formAssignedTo={formAssignedTo}
+              setFormAssignedTo={setFormAssignedTo}
+              formRemarks={formRemarks}
+              setFormRemarks={setFormRemarks}
+              formScreenshot={formScreenshot}
+              setFormScreenshot={setFormScreenshot}
+              previewUrl={previewUrl}
+              setPreviewUrl={setPreviewUrl}
+              nextBugId={`BUG-${bugs.reduce((acc, curr) => { const num = parseInt(curr.id.split('-')[1]); return num > acc ? num : acc; }, 125) + 1}`}
+              loggedInUser={user.username || user.name}
               onSubmit={handleCreateBug}
               onClear={handleClearForm}
-              PROJECT_MODULES={PROJECT_MODULES}
-              MODULE_SUBMODULES={MODULE_SUBMODULES}
+              onCancel={() => {
+                handleClearForm();
+                setActiveTab('Dashboard');
+              }}
+              PROJECT_MODULES={projectModules}
+              MODULE_SUBMODULES={moduleSubmodules}
+              onAddProject={handleAddProject}
             />
           )}
         </main>
@@ -1161,7 +1306,7 @@ export default function App() {
             className="absolute inset-0"
             onClick={() => setUpdateBugId(null)}
           />
-          <div className="relative w-[500px] h-full shadow-2xl bg-[#0b0e1f]/95 border-l border-white/10 flex flex-col justify-between py-8 px-6 animate-slide-in">
+          <div className="relative w-[500px] h-full shadow-2xl bg-[#0b0e1f]/95 border-l border-white/10 flex flex-col justify-between py-8 px-6 animate-slide-in overflow-y-auto">
             <div className="flex flex-col gap-6">
               <div className="flex justify-between items-center">
                 <div>
@@ -1326,7 +1471,7 @@ function LoginView({ onLogin }) {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden flex flex-col lg:flex-row bg-[#EEF6FF] relative font-sans select-none items-center justify-center lg:justify-between px-6 md:px-12 lg:px-20">
+    <div className="w-screen min-h-screen overflow-y-auto flex flex-col lg:flex-row bg-[#EEF6FF] relative font-sans select-none items-center justify-center lg:justify-between px-6 md:px-12 lg:px-20 py-10 lg:py-0">
       
       {/* Background Glowing Ambient Orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-[#38BDF8]/10 animate-pulse pointer-events-none select-none" />
@@ -1342,48 +1487,48 @@ function LoginView({ onLogin }) {
       {/* Floating bright background outline tech icons distributed all over the page */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
         {/* Left column / side background icons */}
-        <Terminal className="absolute top-[5%] left-[7%] text-[#38BDF8]/40 rotate-[-5deg] w-11 h-11" />
-        <Code className="absolute top-[8%] left-[16%] text-[#38BDF8]/40 rotate-[12deg] w-12 h-12" />
-        <Shield className="absolute top-[20%] left-[5%] text-[#38BDF8]/40 rotate-[-8deg] w-9 h-9" />
-        <Search className="absolute top-[18%] left-[25%] text-[#0072FF]/25 rotate-[-12deg] w-9 h-9" />
-        <Bug className="absolute top-[32%] left-[23%] text-[#38BDF8]/40 rotate-[25deg] w-10 h-10" />
-        <CheckSquare className="absolute top-[26%] left-[31%] text-[#0072FF]/25 rotate-[15deg] w-10 h-10" />
-        <Calendar className="absolute top-[42%] left-[9%] text-[#38BDF8]/40 rotate-[8deg] w-10 h-10" />
-        <Sliders className="absolute top-[48%] left-[32%] text-[#38BDF8]/40 rotate-[-15deg] w-9 h-9" />
-        <MessageSquare className="absolute top-[58%] left-[20%] text-[#0072FF]/25 rotate-[-20deg] w-10 h-10" />
-        <FileText className="absolute top-[70%] left-[7%] text-[#38BDF8]/40 rotate-[12deg] w-9 h-9" />
-        <Briefcase className="absolute top-[64%] left-[29%] text-[#38BDF8]/40 rotate-[5deg] w-10 h-10" />
-        <AlertCircle className="absolute top-[76%] left-[24%] text-[#0072FF]/25 rotate-[-10deg] w-11 h-11" />
-        <SettingsIcon className="absolute top-[82%] left-[12%] text-[#38BDF8]/40 rotate-[18deg] w-10 h-10" />
+        <Terminal className="absolute top-[5%] left-[7%] text-[#38BDF8] ambient-bg-icon rotate-[-5deg] w-9 h-9" />
+        <Code className="absolute top-[8%] left-[16%] text-[#38BDF8] ambient-bg-icon rotate-[12deg] w-10 h-10" />
+        <Shield className="absolute top-[20%] left-[5%] text-[#38BDF8] ambient-bg-icon rotate-[-8deg] w-8 h-8" />
+        <Search className="absolute top-[18%] left-[25%] text-[#0072FF] ambient-bg-icon rotate-[-12deg] w-8 h-8" />
+        <Bug className="absolute top-[32%] left-[23%] text-[#38BDF8] ambient-bg-icon rotate-[25deg] w-9 h-9" />
+        <CheckSquare className="absolute top-[26%] left-[31%] text-[#0072FF] ambient-bg-icon rotate-[15deg] w-9 h-9" />
+        <Calendar className="absolute top-[42%] left-[9%] text-[#38BDF8] ambient-bg-icon rotate-[8deg] w-9 h-9" />
+        <Sliders className="absolute top-[48%] left-[32%] text-[#38BDF8] ambient-bg-icon rotate-[-15deg] w-8 h-8" />
+        <MessageSquare className="absolute top-[58%] left-[20%] text-[#0072FF] ambient-bg-icon rotate-[-20deg] w-9 h-9" />
+        <FileText className="absolute top-[70%] left-[7%] text-[#38BDF8] ambient-bg-icon rotate-[12deg] w-8 h-8" />
+        <Briefcase className="absolute top-[64%] left-[29%] text-[#38BDF8] ambient-bg-icon rotate-[5deg] w-9 h-9" />
+        <AlertCircle className="absolute top-[76%] left-[24%] text-[#0072FF] ambient-bg-icon rotate-[-10deg] w-9 h-9" />
+        <SettingsIcon className="absolute top-[82%] left-[12%] text-[#38BDF8] ambient-bg-icon rotate-[18deg] w-9 h-9" />
 
         {/* Center area background icons */}
-        <Code className="absolute top-[6%] left-[42%] text-[#0072FF]/25 rotate-[20deg] w-12 h-12" />
-        <Search className="absolute top-[22%] left-[50%] text-[#38BDF8]/40 rotate-[8deg] w-9 h-9" />
-        <Shield className="absolute top-[46%] left-[58%] text-[#0072FF]/25 rotate-[12deg] w-10 h-10" />
-        <Terminal className="absolute top-[70%] left-[45%] text-[#38BDF8]/40 rotate-[10deg] w-10 h-10" />
-        <Bug className="absolute top-[85%] left-[55%] text-[#0072FF]/25 rotate-[-15deg] w-11 h-11" />
+        <Code className="absolute top-[6%] left-[42%] text-[#0072FF] ambient-bg-icon rotate-[20deg] w-10 h-10" />
+        <Search className="absolute top-[22%] left-[50%] text-[#38BDF8] ambient-bg-icon rotate-[8deg] w-8 h-8" />
+        <Shield className="absolute top-[46%] left-[58%] text-[#0072FF] ambient-bg-icon rotate-[12deg] w-9 h-9" />
+        <Terminal className="absolute top-[70%] left-[45%] text-[#38BDF8] ambient-bg-icon rotate-[10deg] w-9 h-9" />
+        <Bug className="absolute top-[85%] left-[55%] text-[#0072FF] ambient-bg-icon rotate-[-15deg] w-9 h-9" />
 
         {/* Right column / side background icons behind/around the card */}
-        <Sliders className="absolute top-[4%] left-[76%] text-[#38BDF8]/40 rotate-[-10deg] w-11 h-11" />
-        <Code className="absolute top-[14%] left-[88%] text-[#0072FF]/25 rotate-[25deg] w-12 h-12" />
-        <MessageSquare className="absolute top-[30%] left-[70%] text-[#38BDF8]/40 rotate-[-12deg] w-10 h-10" />
-        <CheckSquare className="absolute top-[40%] left-[90%] text-[#0072FF]/25 rotate-[8deg] w-10 h-10" />
-        <Calendar className="absolute top-[55%] left-[82%] text-[#38BDF8]/40 rotate-[-15deg] w-11 h-11" />
-        <Bug className="absolute top-[62%] left-[94%] text-[#0072FF]/25 rotate-[20deg] w-9 h-9" />
-        <FileText className="absolute top-[78%] left-[74%] text-[#38BDF8]/40 rotate-[5deg] w-11 h-11" />
-        <Briefcase className="absolute top-[88%] left-[86%] text-[#38BDF8]/40 rotate-[-8deg] w-10 h-10" />
-        <AlertCircle className="absolute top-[93%] left-[95%] text-[#0072FF]/25 rotate-[15deg] w-11 h-11" />
+        <Sliders className="absolute top-[4%] left-[76%] text-[#38BDF8] ambient-bg-icon rotate-[-10deg] w-9 h-9" />
+        <Code className="absolute top-[14%] left-[88%] text-[#0072FF] ambient-bg-icon rotate-[25deg] w-10 h-10" />
+        <MessageSquare className="absolute top-[30%] left-[70%] text-[#38BDF8] ambient-bg-icon rotate-[-12deg] w-9 h-9" />
+        <CheckSquare className="absolute top-[40%] left-[90%] text-[#0072FF] ambient-bg-icon rotate-[8deg] w-9 h-9" />
+        <Calendar className="absolute top-[55%] left-[82%] text-[#38BDF8] ambient-bg-icon rotate-[-15deg] w-9 h-9" />
+        <Bug className="absolute top-[62%] left-[94%] text-[#0072FF] ambient-bg-icon rotate-[20deg] w-9 h-9" />
+        <FileText className="absolute top-[78%] left-[74%] text-[#38BDF8] ambient-bg-icon rotate-[5deg] w-9 h-9" />
+        <Briefcase className="absolute top-[88%] left-[86%] text-[#38BDF8] ambient-bg-icon rotate-[-8deg] w-9 h-9" />
+        <AlertCircle className="absolute top-[93%] left-[95%] text-[#0072FF] ambient-bg-icon rotate-[15deg] w-9 h-9" />
       </div>
 
       {/* LEFT COLUMN: Large branding side-by-side (Logo + Text) */}
       <div className="hidden lg:flex flex-1 items-center justify-center p-8 z-10 h-full">
         <div className="flex items-center gap-8 lg:gap-12 max-w-2xl">
           {/* Large Logo */}
-          <div className="w-44 h-44 xl:w-56 xl:h-56 flex-shrink-0 drop-shadow-[0_12px_36px_rgba(56,189,248,0.18)]">
+          <div className="w-52 h-52 xl:w-64 xl:h-64 flex-shrink-0 drop-shadow-[0_12px_36px_rgba(2,132,199,0.22)]">
             <svg viewBox="0 0 100 100" className="w-full h-full">
               <defs>
                 <linearGradient id="largeLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00C6FF" />
+                  <stop offset="0%" stopColor="#0284c7" />
                   <stop offset="100%" stopColor="#0072FF" />
                 </linearGradient>
               </defs>
@@ -1393,8 +1538,8 @@ function LoginView({ onLogin }) {
           </div>
           {/* Large Text */}
           <div className="flex flex-col">
-            <h1 className="font-extrabold text-6xl xl:text-8xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</h1>
-            <p className="text-sm xl:text-lg text-[#0072FF] font-bold uppercase tracking-[0.2em] mt-4 font-sans">WHERE DEVELOPERS LOSE PEACE</p>
+            <h1 className="font-extrabold text-7xl xl:text-9xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</h1>
+            <p className="text-base xl:text-xl text-[#0072FF] font-bold uppercase tracking-[0.2em] mt-4 font-sans">WHERE DEVELOPERS LOSE PEACE</p>
           </div>
         </div>
       </div>
@@ -1406,11 +1551,11 @@ function LoginView({ onLogin }) {
           {/* Card Header (Logo + Text side-by-side) */}
           <div className="flex items-center gap-4.5">
             {/* Small Logo */}
-            <div className="w-12 h-12 flex-shrink-0 drop-shadow-[0_2px_8px_rgba(56,189,248,0.1)]">
+            <div className="w-15 h-15 flex-shrink-0 drop-shadow-[0_4px_12px_rgba(2,132,199,0.18)]">
               <svg viewBox="0 0 100 100" className="w-full h-full">
                 <defs>
                   <linearGradient id="cardLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#00C6FF" />
+                    <stop offset="0%" stopColor="#0284c7" />
                     <stop offset="100%" stopColor="#0072FF" />
                   </linearGradient>
                 </defs>
@@ -1420,8 +1565,8 @@ function LoginView({ onLogin }) {
             </div>
             {/* Header Text */}
             <div className="flex flex-col">
-              <span className="font-extrabold text-3xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</span>
-              <span className="text-[9.5px] text-[#0072FF] font-bold uppercase tracking-[0.16em] mt-2 font-sans">WHERE DEVELOPERS LOSE PEACE</span>
+              <span className="font-extrabold text-4xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</span>
+              <span className="text-[11px] text-[#0072FF] font-bold uppercase tracking-[0.16em] mt-2 font-sans">WHERE DEVELOPERS LOSE PEACE</span>
             </div>
           </div>
 
@@ -1601,7 +1746,9 @@ function DashboardView({
   getStatusBadgeClass,
   teamMembers,
   onSelectDeveloper,
-  onLinkToBug
+  onLinkToBug,
+  PROJECT_MODULES,
+  MODULE_SUBMODULES
 }) {
   
   // Custom Donut Chart Arc Segment Generator
@@ -1658,24 +1805,23 @@ function DashboardView({
           <select 
             value={selectedProject}
             onChange={(e) => onProjectChange(e.target.value)}
-            className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20"
+            className="h-10 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
           >
-            <option value="All" className="bg-white">All Projects</option>
-            <option value="Payment Gateway" className="bg-white">Payment Gateway</option>
-            <option value="Mobile App" className="bg-white">Mobile App</option>
-            <option value="Web Portal" className="bg-white">Web Portal</option>
-            <option value="Analytics Engine" className="bg-white">Analytics Engine</option>
+            <option value="All" className="bg-white text-[#0F172A]">All Projects</option>
+            {Object.keys(PROJECT_MODULES).map(proj => (
+              <option key={proj} value={proj} className="bg-white text-[#0F172A]">{proj}</option>
+            ))}
           </select>
 
           {/* Module Dropdown */}
           <select 
             value={selectedModule}
             onChange={(e) => onModuleChange(e.target.value)}
-            className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20"
+            className="h-10 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
           >
-            <option value="All" className="bg-white">All Modules</option>
+            <option value="All" className="bg-white text-[#0F172A]">All Modules</option>
             {selectedProject !== 'All' && PROJECT_MODULES[selectedProject]?.map(mod => (
-              <option key={mod} value={mod} className="bg-white">{mod}</option>
+              <option key={mod} value={mod} className="bg-white text-[#0F172A]">{mod}</option>
             ))}
           </select>
 
@@ -1683,11 +1829,11 @@ function DashboardView({
           <select 
             value={selectedSubModule}
             onChange={(e) => onSubModuleChange(e.target.value)}
-            className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20"
+            className="h-10 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
           >
-            <option value="All" className="bg-white">All Sub Modules</option>
+            <option value="All" className="bg-white text-[#0F172A]">All Sub Modules</option>
             {selectedModule !== 'All' && MODULE_SUBMODULES[selectedModule]?.map(sub => (
-              <option key={sub} value={sub} className="bg-white">{sub}</option>
+              <option key={sub} value={sub} className="bg-white text-[#0F172A]">{sub}</option>
             ))}
           </select>
 
@@ -2034,7 +2180,7 @@ function DashboardView({
                         {bug.id}
                       </td>
                       <td className="py-4 px-3">
-                        <span className="font-bold text-[#0F172A] block">{bug.project}</span>
+                        <span className="font-bold text-[#0F172A] block truncate max-w-[200px]" title={bug.title || bug.project}>{bug.title || bug.project}</span>
                         <span className="text-[10px] text-[#475569] font-semibold block mt-0.5">{bug.module} • {bug.subModule}</span>
                       </td>
                       <td className="py-4 px-3">
@@ -2224,7 +2370,7 @@ function BugsView({
                       {bug.id}
                     </span>
                     <div className="flex flex-col min-w-0">
-                      <span className="font-bold text-white text-sm truncate font-title">{bug.project}</span>
+                      <span className="font-bold text-white text-sm truncate font-title" title={bug.title || bug.project}>{bug.title || bug.project}</span>
                       <span className="text-xs text-slate-400 truncate font-semibold mt-0.5">{bug.module} • {bug.subModule}</span>
                     </div>
                   </div>
@@ -2735,7 +2881,7 @@ function DevelopersView({
                           {bug.id}
                         </span>
                         <div>
-                          <span className="text-xs font-bold text-slate-200 block truncate max-w-[150px]">{bug.project}</span>
+                          <span className="text-xs font-bold text-slate-200 block truncate max-w-[150px]" title={bug.title || bug.project}>{bug.title || bug.project}</span>
                           <span className="text-[10px] text-slate-450 block truncate max-w-[150px] mt-0.5">{bug.module}</span>
                         </div>
                       </div>
@@ -2782,17 +2928,10 @@ function DevelopersView({
 // --------------------------------
 // PROJECTS VIEW COMPONENT
 // --------------------------------
-function ProjectsView({ bugs }) {
+function ProjectsView({ bugs, projectsList, PROJECT_MODULES }) {
   // Project list
   const projectSummaries = useMemo(() => {
-    const projs = [
-      { name: 'Payment Gateway', desc: 'Core checkout transactions and invoice system integration.', iconBg: 'bg-red-500/10 border-red-500/20 text-red-400' },
-      { name: 'Mobile App', desc: 'iOS and Android client repositories for SMS onboarding/auth.', iconBg: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
-      { name: 'Web Portal', desc: 'Customer dashboard UI interface and active user analytical panels.', iconBg: 'bg-purple-500/10 border-purple-500/20 text-purple-400' },
-      { name: 'Analytics Engine', desc: 'Background SQL query optimization and parser algorithms.', iconBg: 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400' }
-    ];
-
-    return projs.map(proj => {
+    return projectsList.map(proj => {
       const projBugs = bugs.filter(b => b.project === proj.name);
       const total = projBugs.length;
       const active = projBugs.filter(b => b.testerStatus !== 'Closed').length;
@@ -2808,7 +2947,7 @@ function ProjectsView({ bugs }) {
         modules: PROJECT_MODULES[proj.name] || []
       };
     });
-  }, [bugs]);
+  }, [bugs, projectsList, PROJECT_MODULES]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in text-slate-300 module-bg-container">
@@ -3220,179 +3359,522 @@ function CreateBugView({
   setFormModule,
   formSubModule,
   setFormSubModule,
-  formAssignedTo,
-  setFormAssignedTo,
+  formTitle,
+  setFormTitle,
+  formDescription,
+  setFormDescription,
   formPriority,
   setFormPriority,
   formSeverity,
   setFormSeverity,
-  formDescription,
-  setFormDescription,
+  formAssignedTo,
+  setFormAssignedTo,
+  formRemarks,
+  setFormRemarks,
+  formScreenshot,
+  setFormScreenshot,
+  previewUrl,
+  setPreviewUrl,
+  nextBugId,
+  loggedInUser,
   onSubmit,
   onClear,
+  onCancel,
   PROJECT_MODULES,
-  MODULE_SUBMODULES
+  MODULE_SUBMODULES,
+  onAddProject
 }) {
+  const fileInputRef = React.useRef(null);
+  const [showAddProjectModal, setShowAddProjectModal] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newModuleName, setNewModuleName] = useState('');
+  const [newSubModuleName, setNewSubModuleName] = useState('');
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormScreenshot(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setFormScreenshot(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFormScreenshot(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setPreviewUrl('');
+  };
+
+  const currentDate = new Date().toLocaleDateString('en-US', { 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+
   return (
-    <div className="max-w-2xl mx-auto w-full animate-fade-in text-[#475569] module-bg-container">
+    <div className="max-w-6xl mx-auto w-full animate-fade-in text-[#475569] module-bg-container pb-10">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80")' }} />
-      <div className="border-b border-[#BFDBFE]/60 pb-4 mb-6">
-        <h2 className="text-xl font-extrabold text-[#0F172A] font-title">Create New Defect</h2>
-        <p className="text-xs text-[#475569] mt-1">Register high-fidelity QA bug details into active developer queues.</p>
+      <div className="border-b border-[#BFDBFE]/60 pb-4 mb-8 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 className="text-2xl font-extrabold text-[#0F172A] font-title">Create New Defect</h2>
+          <p className="text-xs text-[#475569] mt-1">Register high-fidelity QA bug details into active developer queues.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowAddProjectModal(true)}
+          className="h-11 px-6 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-xs flex items-center gap-2 cursor-pointer border-transparent"
+        >
+          <PlusCircle size={15} />
+          <span>Add Project</span>
+        </button>
       </div>
 
-      <form 
-        onSubmit={onSubmit}
-        className="glass-card rounded-3xl p-8 flex flex-col gap-6"
-      >
-        {/* Form grid info */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Project Selection */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Project Workspace</label>
-            <select 
-              value={formProject}
-              onChange={(e) => {
-                const proj = e.target.value;
-                setFormProject(proj);
-                const avMods = PROJECT_MODULES[proj] || [];
-                if (avMods.length > 0) {
-                  setFormModule(avMods[0]);
-                  const avSubs = MODULE_SUBMODULES[avMods[0]] || [];
-                  setFormSubModule(avSubs[0] || '');
-                }
-              }}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              <option value="Payment Gateway" className="bg-white">Payment Gateway</option>
-              <option value="Mobile App" className="bg-white">Mobile App</option>
-              <option value="Web Portal" className="bg-white">Web Portal</option>
-              <option value="Analytics Engine" className="bg-white">Analytics Engine</option>
-            </select>
-          </div>
-
-          {/* Module selection */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Target Module</label>
-            <select 
-              value={formModule}
-              onChange={(e) => {
-                const mod = e.target.value;
-                setFormModule(mod);
-                const avSubs = MODULE_SUBMODULES[mod] || [];
-                setFormSubModule(avSubs[0] || '');
-              }}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              {PROJECT_MODULES[formProject]?.map(mod => (
-                <option key={mod} value={mod} className="bg-white">{mod}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Sub-module */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Sub Module Sub-system</label>
-            <select 
-              value={formSubModule}
-              onChange={(e) => setFormSubModule(e.target.value)}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              {MODULE_SUBMODULES[formModule]?.map(sub => (
-                <option key={sub} value={sub} className="bg-white">{sub}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Developer assignment */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Assign Developer</label>
-            <select 
-              value={formAssignedTo}
-              onChange={(e) => setFormAssignedTo(e.target.value)}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              <option value="Rahul Verma" className="bg-white">Rahul Verma (Senior Dev)</option>
-              <option value="Arun Kumar" className="bg-white">Arun Kumar (Full Stack)</option>
-              <option value="Dev Nair" className="bg-white">Dev Nair (Backend Dev)</option>
-              <option value="Priya Sharma" className="bg-white">Priya Sharma (QA Lead)</option>
-            </select>
-          </div>
-
-          {/* Priority */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Queue Priority</label>
-            <select 
-              value={formPriority}
-              onChange={(e) => setFormPriority(e.target.value)}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              <option value="P1" className="bg-white">P1 - Critical Hotfix</option>
-              <option value="P2" className="bg-white">P2 - High Priority</option>
-              <option value="P3" className="bg-white">P3 - Medium Priority</option>
-              <option value="P4" className="bg-white">P4 - Low Priority</option>
-            </select>
-          </div>
-
-          {/* Severity */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Technical Severity</label>
-            <select 
-              value={formSeverity}
-              onChange={(e) => setFormSeverity(e.target.value)}
-              className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] cursor-pointer focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
-            >
-              <option value="Critical" className="bg-white">Critical (System Crash/Security)</option>
-              <option value="High" className="bg-white">High (Core Flow Broken)</option>
-              <option value="Medium" className="bg-white">Medium (Feature Bug)</option>
-              <option value="Low" className="bg-white">Low (Visual/UX issue)</option>
-            </select>
-          </div>
-
-          {/* Description */}
-          <div className="flex flex-col gap-1.5 sm:col-span-2">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Description / Reproduction Steps</label>
-            <textarea 
-              value={formDescription}
-              onChange={(e) => setFormDescription(e.target.value)}
-              placeholder="Provide detailed description, actual vs expected results, and environment coordinates..."
-              className="w-full min-h-[120px] max-h-[220px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:bg-white focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors"
-              required
-            />
-          </div>
-
-          {/* Mock Upload attachments zone */}
-          <div className="flex flex-col gap-1.5 sm:col-span-2">
-            <label className="text-xs font-semibold text-[#475569] pl-1">Attachments (Screenshots / Logs)</label>
-            <div className="border-2 border-dashed border-[#BFDBFE] hover:border-[#38BDF8] bg-[#F8FBFF] hover:bg-[#E0F2FE]/30 rounded-xl p-6 flex flex-col items-center justify-center gap-2 transition-all cursor-pointer group">
-              <div className="w-10 h-10 rounded-full bg-[#E0F2FE] flex items-center justify-center text-[#38BDF8] group-hover:scale-110 transition-transform">
-                <PlusCircle size={20} />
+      <form onSubmit={onSubmit} className="flex flex-col gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          {/* LEFT COLUMN: Main Form details */}
+          <div className="flex flex-col gap-8">
+            
+            {/* CARD 1: PROJECT DETAILS */}
+            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+              <div className="pb-3 border-b border-[#BFDBFE]/60 flex items-center justify-between">
+                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                  PROJECT DETAILS
+                </h3>
+                <span className="text-[10px] text-red-500 font-bold">* Required fields</span>
               </div>
-              <div className="text-center">
-                <span className="text-xs font-bold text-[#0F172A] block">Drag & drop files here, or <span className="text-[#38BDF8] underline">browse</span></span>
-                <span className="text-[10px] text-[#94A3B8] block mt-1">Supports PNG, JPG, GIF, PDF, TXT, LOG up to 10MB</span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Project */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Project <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    value={formProject}
+                    onChange={(e) => {
+                      const proj = e.target.value;
+                      setFormProject(proj);
+                      const avMods = PROJECT_MODULES[proj] || [];
+                      if (avMods.length > 0) {
+                        setFormModule(avMods[0]);
+                        const avSubs = MODULE_SUBMODULES[avMods[0]] || [];
+                        setFormSubModule(avSubs[0] || '');
+                      }
+                    }}
+                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                  >
+                    {Object.keys(PROJECT_MODULES).map(proj => (
+                      <option key={proj} value={proj}>{proj}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Module */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Module <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    value={formModule}
+                    onChange={(e) => {
+                      const mod = e.target.value;
+                      setFormModule(mod);
+                      const avSubs = MODULE_SUBMODULES[mod] || [];
+                      setFormSubModule(avSubs[0] || '');
+                    }}
+                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                  >
+                    {PROJECT_MODULES[formProject]?.map(mod => (
+                      <option key={mod} value={mod}>{mod}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Sub Module */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Sub Module <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    value={formSubModule}
+                    onChange={(e) => setFormSubModule(e.target.value)}
+                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                  >
+                    {MODULE_SUBMODULES[formModule]?.map(sub => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
+
+            {/* CARD 2: BUG DETAILS */}
+            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+              <div className="pb-3 border-b border-[#BFDBFE]/60">
+                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                  BUG DETAILS
+                </h3>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {/* Bug ID & Title */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <div className="flex flex-col gap-1.5 sm:col-span-1">
+                    <label className="text-xs font-bold text-[#475569]">Bug ID</label>
+                    <input 
+                      type="text" 
+                      value={nextBugId} 
+                      disabled
+                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-slate-500 text-xs font-mono font-bold cursor-not-allowed outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:col-span-3">
+                    <label className="text-xs font-bold text-[#475569]">
+                      Title <span className="text-red-500">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      value={formTitle}
+                      onChange={(e) => setFormTitle(e.target.value)}
+                      placeholder="e.g. Checkout gateway crashes on Android UPI callbacks"
+                      className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Description <span className="text-red-500">*</span>
+                  </label>
+                  <textarea 
+                    value={formDescription}
+                    onChange={(e) => setFormDescription(e.target.value)}
+                    placeholder="Enter detailed bug description, steps to reproduce, actual vs expected results..."
+                    className="w-full min-h-[140px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* CARD 3: CLASSIFICATION */}
+            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+              <div className="pb-3 border-b border-[#BFDBFE]/60">
+                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                  CLASSIFICATION
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Severity */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Severity <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    value={formSeverity}
+                    onChange={(e) => setFormSeverity(e.target.value)}
+                    className="h-10 px-3 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                  >
+                    <option value="Blocker">Blocker</option>
+                    <option value="Critical">Critical</option>
+                    <option value="Major">Major</option>
+                    <option value="Minor">Minor</option>
+                  </select>
+                </div>
+
+                {/* Priority */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Priority <span className="text-red-500">*</span>
+                  </label>
+                  <select 
+                    value={formPriority}
+                    onChange={(e) => setFormPriority(e.target.value)}
+                    className="h-10 px-3 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                  >
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
           </div>
+
+          {/* RIGHT COLUMN: Assignment & Attachments */}
+          <div className="flex flex-col gap-8">
+            
+            {/* CARD 4: ASSIGNMENT DETAILS */}
+            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+              <div className="pb-3 border-b border-[#BFDBFE]/60">
+                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                  ASSIGNMENT DETAILS
+                </h3>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {/* Assigned By & Date */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-[#475569]">Assigned By</label>
+                    <input 
+                      type="text" 
+                      value={loggedInUser}
+                      disabled
+                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs font-bold cursor-not-allowed outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-[#475569]">Assigned Date</label>
+                    <input 
+                      type="text" 
+                      value={currentDate}
+                      disabled
+                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs font-bold cursor-not-allowed outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Assigned To */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">
+                    Assigned To <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    value={formAssignedTo}
+                    onChange={(e) => setFormAssignedTo(e.target.value)}
+                    placeholder="Enter developer's full name (e.g. Rahul Verma)"
+                    className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* CARD 5: ADDITIONAL INFORMATION */}
+            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+              <div className="pb-3 border-b border-[#BFDBFE]/60">
+                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                  ADDITIONAL INFORMATION
+                </h3>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {/* Remarks */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">Remarks</label>
+                  <textarea 
+                    value={formRemarks}
+                    onChange={(e) => setFormRemarks(e.target.value)}
+                    placeholder="Provide initial troubleshooting context, logs snippets, or environment parameters..."
+                    className="w-full min-h-[90px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                  />
+                </div>
+
+                {/* Screenshot Upload Drag-and-Drop */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-[#475569]">Screenshot Upload</label>
+                  
+                  {!previewUrl ? (
+                    <div 
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-[#BFDBFE] hover:border-[#38BDF8] bg-[#F8FBFF] hover:bg-[#E0F2FE]/30 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 transition-all cursor-pointer group"
+                    >
+                      <input 
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                      />
+                      <div className="w-10 h-10 rounded-full bg-[#E0F2FE] flex items-center justify-center text-[#38BDF8] group-hover:scale-110 transition-transform">
+                        <PlusCircle size={20} />
+                      </div>
+                      <div className="text-center select-none">
+                        <span className="text-xs font-bold text-[#0F172A] block">
+                          Drag & drop image here, or <span className="text-[#38BDF8] underline">browse files</span>
+                        </span>
+                        <span className="text-[10px] text-[#94A3B8] block mt-1">Supports PNG, JPG, JPEG, GIF up to 5MB</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="border border-[#BFDBFE] rounded-2xl p-4 bg-[#F8FBFF] flex flex-col gap-3 relative animate-scale-up">
+                      <div className="flex items-center justify-between text-xs pb-2 border-b border-[#BFDBFE]/60">
+                        <span className="font-semibold text-[#0f172a] truncate max-w-[80%]">
+                          {formScreenshot ? formScreenshot.name : 'Screenshot Attachment'}
+                        </span>
+                        <button 
+                          type="button"
+                          onClick={handleRemoveFile}
+                          className="text-red-500 hover:text-red-600 font-bold transition-colors cursor-pointer text-xs"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div className="relative rounded-xl overflow-hidden border border-[#BFDBFE] bg-slate-900 flex items-center justify-center h-48 select-none">
+                        <img 
+                          src={previewUrl} 
+                          alt="Screenshot Attachment Preview" 
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-        {/* Buttons */}
-        <div className="flex gap-3 pt-4 border-t border-[#BFDBFE]/60 justify-end mt-2">
+        {/* FORM BUTTONS */}
+        <div className="flex gap-4 pt-6 border-t border-[#BFDBFE]/60 justify-end mt-4">
+          <button 
+            type="button"
+            onClick={onCancel}
+            className="h-11 px-6 rounded-xl text-slate-500 font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-xs bg-white cursor-pointer"
+          >
+            Cancel
+          </button>
           <button 
             type="button"
             onClick={onClear}
-            className="h-11 px-5 rounded-xl text-[#475569] font-bold border border-[#BFDBFE] hover:bg-[#E0F2FE]/50 hover:text-[#0F172A] transition-all text-xs bg-white"
+            className="h-11 px-6 rounded-xl text-[#0369a1] font-bold border border-[#bae6fd] hover:bg-[#bae6fd]/30 transition-all text-xs bg-[#f0f9ff] cursor-pointer"
           >
-            Clear Form
+            Reset
           </button>
           <button 
             type="submit"
-            className="h-11 px-7 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 hover:shadow-sky-400/35 transition-all text-xs"
+            className="h-11 px-8 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 hover:shadow-sky-400/35 transition-all text-xs cursor-pointer"
           >
-            Submit Bug Report
+            Create Bug
           </button>
         </div>
       </form>
+
+      {/* ADD NEW PROJECT MODAL */}
+      {showAddProjectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div 
+            className="absolute inset-0"
+            onClick={() => setShowAddProjectModal(false)}
+          />
+          <div className="relative w-full max-w-[520px] p-8 bg-white border border-[#E2EEFC] rounded-[28px] shadow-[0_16px_48px_rgba(191,219,254,0.25)] flex flex-col gap-6 animate-scale-up z-10 text-[#0F172A]">
+            <div className="flex justify-between items-center pb-2 border-b border-[#BFDBFE]/50">
+              <div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-[#0F172A] font-title">Add New Project</h3>
+                <p className="text-sm text-slate-500 mt-1">Define project scope and module layers.</p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setShowAddProjectModal(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all border border-transparent hover:border-slate-200"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {/* Project Input */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-[#475569] pl-0.5">Project Name <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                  placeholder="e.g. IoT Dashboard"
+                  className="h-11 px-4 rounded-md bg-white border border-blue-300 text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Module Input */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-[#475569] pl-0.5">New Module <span className="text-red-500">*</span></label>
+                <input 
+                  type="text" 
+                  value={newModuleName}
+                  onChange={(e) => setNewModuleName(e.target.value)}
+                  placeholder="e.g. Sensors"
+                  className="h-11 px-4 rounded-md bg-white border border-blue-300 text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Sub Module Input */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-[#475569] pl-0.5">New Sub Module <span className="text-slate-400 font-medium">(Optional)</span></label>
+                <input 
+                  type="text" 
+                  value={newSubModuleName}
+                  onChange={(e) => setNewSubModuleName(e.target.value)}
+                  placeholder="e.g. Telemetry"
+                  className="h-11 px-4 rounded-md bg-white border border-blue-300 text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 outline-none transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4 border-t border-[#BFDBFE]/50">
+              <button 
+                type="button"
+                onClick={() => setShowAddProjectModal(false)}
+                className="flex-1 h-12 rounded-xl text-slate-500 font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-sm bg-white cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button"
+                onClick={() => {
+                  const p = newProjectName.trim();
+                  const m = newModuleName.trim();
+                  const s = newSubModuleName.trim();
+                  if (!p || !m) {
+                    alert("Please fill in all required fields (Project Name and New Module).");
+                    return;
+                  }
+                  onAddProject(p, m, s);
+                  // Reset fields & close
+                  setNewProjectName('');
+                  setNewModuleName('');
+                  setNewSubModuleName('');
+                  setShowAddProjectModal(false);
+                }}
+                className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-105 shadow-md shadow-sky-400/10 transition-all text-sm cursor-pointer border-transparent"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
