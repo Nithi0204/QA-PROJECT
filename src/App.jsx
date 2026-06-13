@@ -38,7 +38,8 @@ import {
   Eye,
   EyeOff,
   Code,
-  Bug
+  Bug,
+  Sparkles
 } from 'lucide-react';
 
 // Team Member configuration with avatars and colors
@@ -675,16 +676,8 @@ export default function App() {
   // Create Bug Handler
   const handleCreateBug = (e) => {
     e.preventDefault();
-    if (!formTitle.trim()) {
-      alert('Please enter a title for the bug.');
-      return;
-    }
-    if (!formDescription.trim()) {
-      alert('Please enter a description for the bug.');
-      return;
-    }
-    if (!formAssignedTo.trim()) {
-      alert('Please specify whom this defect is assigned to.');
+    if (!formTitle.trim() || !formDescription.trim() || !formAssignedTo.trim()) {
+      alert('please fill the mandatory fields');
       return;
     }
 
@@ -966,7 +959,7 @@ export default function App() {
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-lg tracking-wider text-[#0F172A] font-title leading-tight">QA MIND</span>
-              <span className="text-[9px] text-[#0284c7] font-bold uppercase tracking-widest leading-none mt-1 font-mono">WHERE DEVELOPERS LOSE PEACE</span>
+              <span className="text-[11px] text-[#0284c7] font-bold uppercase tracking-wider leading-none mt-1 font-mono">WHERE DEVELOPERS LOSE PEACE</span>
             </div>
           </div>
 
@@ -1175,6 +1168,7 @@ export default function App() {
               filteredBugs={dashboardFilteredBugs}
               getSeverityBadgeClass={getSeverityBadgeClass}
               getStatusBadgeClass={getStatusBadgeClass}
+              getPriorityBadgeClass={getPriorityBadgeClass}
               teamMembers={TEAM_MEMBERS}
               onSelectDeveloper={(name) => {
                 setSelectedWorkloadMember(name);
@@ -1184,6 +1178,8 @@ export default function App() {
               onLinkToBug={handleLinkToBug}
               PROJECT_MODULES={projectModules}
               MODULE_SUBMODULES={moduleSubmodules}
+              onAddProject={handleAddProject}
+              setActiveTab={setActiveTab}
             />
           )}
 
@@ -1237,12 +1233,19 @@ export default function App() {
           )}
 
            {activeTab === 'Projects' && (
-            <ProjectsView 
-              bugs={bugs}
-              projectsList={projectsList}
-              PROJECT_MODULES={projectModules}
-            />
-          )}
+             <ProjectsView 
+               bugs={bugs}
+               projectsList={projectsList}
+               PROJECT_MODULES={projectModules}
+               MODULE_SUBMODULES={moduleSubmodules}
+               onAddProject={handleAddProject}
+               getSeverityBadgeClass={getSeverityBadgeClass}
+               getStatusBadgeClass={getStatusBadgeClass}
+               getPriorityBadgeClass={getPriorityBadgeClass}
+               onLinkToBug={handleLinkToBug}
+               setActiveTab={setActiveTab}
+             />
+           )}
 
           {activeTab === 'Reports' && (
             <ReportsView 
@@ -1306,17 +1309,17 @@ export default function App() {
             className="absolute inset-0"
             onClick={() => setUpdateBugId(null)}
           />
-          <div className="relative w-[500px] h-full shadow-2xl bg-[#0b0e1f]/95 border-l border-white/10 flex flex-col justify-between py-8 px-6 animate-slide-in overflow-y-auto">
+          <div className="relative w-[600px] h-full shadow-2xl bg-[#0b0e1f]/95 border-l border-white/10 flex flex-col justify-between py-8 px-6 animate-slide-in overflow-y-auto">
             <div className="flex flex-col gap-6">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2 font-title">
+                  <h2 className="text-xl font-bold text-white flex items-center gap-2 font-title">
                     <span>Update Status</span>
                     <span className="font-mono text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
                       {updateBugId}
                     </span>
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">Set Developer resolution metrics and comments.</p>
+                  <p className="text-sm text-slate-400 mt-1">Set Developer resolution metrics and comments.</p>
                 </div>
                 <button 
                   onClick={() => setUpdateBugId(null)}
@@ -1365,11 +1368,11 @@ export default function App() {
               {/* Input section */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-slate-400">Developer Status</label>
+                  <label className="text-sm font-semibold text-slate-400">Developer Status</label>
                   <select 
                     value={editDevStatus}
                     onChange={(e) => setEditDevStatus(e.target.value)}
-                    className="w-full h-11 px-4 text-xs rounded-xl bg-white/5 border border-white/5 text-slate-200 cursor-pointer focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                    className="w-full h-11 px-4 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-200 cursor-pointer focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
                   >
                     <option value="Open" className="bg-[#111827]">Open</option>
                     <option value="In Progress" className="bg-[#111827]">In Progress</option>
@@ -1378,12 +1381,12 @@ export default function App() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-semibold text-slate-400">Comment / Resolution Notes</label>
+                  <label className="text-sm font-semibold text-slate-400">Comment / Resolution Notes</label>
                   <textarea 
                     value={editComment}
                     onChange={(e) => setEditComment(e.target.value)}
                     placeholder="Provide details on the fix, troubleshooting, or current blocker status..."
-                    className="w-full min-h-[120px] max-h-[160px] p-4 text-xs rounded-xl bg-white/5 border border-white/5 text-slate-250 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                    className="w-full min-h-[120px] max-h-[160px] p-4 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-255 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
                   />
                 </div>
               </div>
@@ -1393,20 +1396,20 @@ export default function App() {
             <div className="flex gap-3 pt-6 border-t border-white/5">
               <button 
                 onClick={() => setUpdateBugId(null)}
-                className="flex-1 h-12 rounded-xl text-slate-400 font-bold border border-white/5 hover:bg-white/5 hover:text-white transition-all text-xs"
+                className="flex-1 h-12 rounded-xl text-slate-400 font-bold border border-white/5 hover:bg-white/5 hover:text-white transition-all text-sm"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleSaveStatusUpdate}
-                className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#22d3ee] text-black font-bold hover:brightness-110 transition-all text-xs shadow-lg shadow-sky-600/20"
+                className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#22d3ee] text-black font-bold hover:brightness-110 transition-all text-sm shadow-lg shadow-sky-600/20"
               >
                 Save Update
               </button>
             </div>
           </div>
         </div>
-        )}
+      )}
     </div>
   );
 }
@@ -2710,16 +2713,16 @@ function RetestingView({
 
               {/* FAIL RETEST FORM */}
               <form onSubmit={(e) => handleFailRetest(e, selectedBug.id)} className="flex flex-col gap-3">
-                <label className="text-xs font-semibold text-slate-400">Reopen Reason / Failure Notes</label>
+                <label className="text-sm font-semibold text-slate-400">Reopen Reason / Failure Notes</label>
                 <textarea 
                   value={testerComment}
                   onChange={(e) => setTesterComment(e.target.value)}
                   placeholder="Explain exactly why verification failed, logs collected, or reproduction details..."
-                  className="w-full h-24 p-3 text-xs rounded-xl bg-white/5 border border-white/5 text-slate-200 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                  className="w-full h-24 p-3 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-200 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
                 />
                 <button 
                   type="submit"
-                  className="py-3 px-4 rounded-xl border border-red-500/20 hover:border-red-500/35 bg-red-500/10 text-red-400 hover:text-red-300 text-xs font-bold transition-all flex items-center justify-center gap-2"
+                  className="py-3 px-4 rounded-xl border border-red-500/20 hover:border-red-500/35 bg-red-500/10 text-red-400 hover:text-red-300 text-sm font-bold transition-all flex items-center justify-center gap-2"
                 >
                   <AlertCircle size={14} />
                   <span>Fail Retest & Reopen Ticket</span>
@@ -2928,8 +2931,28 @@ function DevelopersView({
 // --------------------------------
 // PROJECTS VIEW COMPONENT
 // --------------------------------
-function ProjectsView({ bugs, projectsList, PROJECT_MODULES }) {
-  // Project list
+function ProjectsView({ 
+  bugs, 
+  projectsList, 
+  PROJECT_MODULES, 
+  MODULE_SUBMODULES, 
+  onAddProject, 
+  getSeverityBadgeClass, 
+  getStatusBadgeClass, 
+  getPriorityBadgeClass,
+  onLinkToBug,
+  setActiveTab
+}) {
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [selectedSubModule, setSelectedSubModule] = useState(null);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newModuleName, setNewModuleName] = useState('');
+  const [newSubModuleName, setNewSubModuleName] = useState('');
+
+  // 1. Projects level mapping
   const projectSummaries = useMemo(() => {
     return projectsList.map(proj => {
       const projBugs = bugs.filter(b => b.project === proj.name);
@@ -2949,56 +2972,521 @@ function ProjectsView({ bugs, projectsList, PROJECT_MODULES }) {
     });
   }, [bugs, projectsList, PROJECT_MODULES]);
 
+  // 2. Modules level mapping
+  const moduleSummaries = useMemo(() => {
+    if (!selectedProject) return [];
+    const modules = PROJECT_MODULES[selectedProject] || [];
+    return modules.map(mod => {
+      const modBugs = bugs.filter(b => b.project === selectedProject && b.module === mod);
+      const total = modBugs.length;
+      const active = modBugs.filter(b => b.testerStatus !== 'Closed').length;
+      const critical = modBugs.filter(b => b.severity === 'Critical' && b.testerStatus !== 'Closed').length;
+      const closed = modBugs.filter(b => b.testerStatus === 'Closed').length;
+
+      return {
+        name: mod,
+        total,
+        active,
+        critical,
+        closed,
+        submodules: MODULE_SUBMODULES[mod] || []
+      };
+    });
+  }, [bugs, selectedProject, PROJECT_MODULES, MODULE_SUBMODULES]);
+
+  // 3. Sub Modules level mapping
+  const subModuleSummaries = useMemo(() => {
+    if (!selectedModule) return [];
+    const subs = MODULE_SUBMODULES[selectedModule] || [];
+    return subs.map(sub => {
+      const subBugs = bugs.filter(b => b.project === selectedProject && b.module === selectedModule && b.subModule === sub);
+      const total = subBugs.length;
+      const active = subBugs.filter(b => b.testerStatus !== 'Closed').length;
+      const critical = subBugs.filter(b => b.severity === 'Critical' && b.testerStatus !== 'Closed').length;
+      const closed = subBugs.filter(b => b.testerStatus === 'Closed').length;
+
+      return {
+        name: sub,
+        total,
+        active,
+        critical,
+        closed
+      };
+    });
+  }, [bugs, selectedProject, selectedModule, MODULE_SUBMODULES]);
+
+  // 4. Bugs under selected Sub Module for Level 4
+  const selectedBugsList = useMemo(() => {
+    if (!selectedSubModule) return [];
+    return bugs.filter(b => b.project === selectedProject && b.module === selectedModule && b.subModule === selectedSubModule);
+  }, [bugs, selectedProject, selectedModule, selectedSubModule]);
+
+  const handleOpenAddModal = () => {
+    setNewProjectName(selectedProject || '');
+    setNewModuleName(selectedModule || '');
+    setNewSubModuleName('');
+    setShowAddModal(true);
+  };
+
+  const handleModalSubmit = (e) => {
+    e.preventDefault();
+    const p = newProjectName.trim();
+    const m = newModuleName.trim();
+    const s = newSubModuleName.trim();
+
+    if (!p || !m) {
+      alert("Project Name and Module Name are required.");
+      return;
+    }
+
+    onAddProject(p, m, s);
+    setNewProjectName('');
+    setNewModuleName('');
+    setNewSubModuleName('');
+    setShowAddModal(false);
+
+    // Auto navigate focus
+    setSelectedProject(p);
+    setSelectedModule(m);
+    if (s) {
+      setSelectedSubModule(s);
+    } else {
+      setSelectedSubModule(null);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in text-slate-300 module-bg-container">
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container pb-10">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80")' }} />
-      {projectSummaries.map((item, idx) => (
-        <div key={idx} className="p-6 rounded-2xl glass-card flex flex-col justify-between gap-5 relative overflow-hidden group">
-          <div className="flex justify-between items-start gap-4">
-            <div className="flex flex-col gap-1 min-w-0">
-              <span className="font-extrabold text-white text-base font-title truncate">{item.name}</span>
-              <p className="text-xs text-slate-400 leading-relaxed font-semibold mt-1">{item.desc}</p>
-            </div>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center border font-bold flex-shrink-0 ${item.iconBg}`}>
-              {item.name[0]}
-            </div>
-          </div>
+      
+      {/* BREADCRUMBS & TOP BAR */}
+      <div className="flex justify-between items-center flex-wrap gap-4 border-b border-[#BFDBFE]/60 pb-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-3xl font-extrabold text-[#0F172A] font-title">
+            {selectedSubModule ? 'Sub Module Details' : selectedModule ? 'Module Details' : selectedProject ? 'Project Details' : 'Projects Directory'}
+          </h2>
+          
+          <div className="flex items-center gap-2 mt-2 text-xs font-bold uppercase tracking-wider text-[#475569] select-none flex-wrap">
+            <button 
+              onClick={() => {
+                setSelectedProject(null);
+                setSelectedModule(null);
+                setSelectedSubModule(null);
+              }}
+              className={`hover:text-[#0284c7] transition-colors ${!selectedProject ? 'text-[#0284c7] font-extrabold' : ''}`}
+            >
+              Projects
+            </button>
+            
+            {selectedProject && (
+              <>
+                <ChevronRight size={12} className="text-[#BFDBFE]" />
+                <button 
+                  onClick={() => {
+                    setSelectedModule(null);
+                    setSelectedSubModule(null);
+                  }}
+                  className={`hover:text-[#0284c7] transition-colors ${!selectedModule ? 'text-[#0284c7] font-extrabold' : 'text-[#0F172A]'}`}
+                >
+                  {selectedProject}
+                </button>
+              </>
+            )}
 
-          {/* Module labels */}
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] text-slate-500 uppercase font-bold font-mono tracking-wider">Registered Modules</span>
-            <div className="flex gap-2 flex-wrap">
-              {item.modules.map((m, i) => (
-                <span key={i} className="px-2.5 py-1 text-[10px] font-bold rounded-lg bg-white/5 border border-white/5 text-slate-300">
-                  {m}
+            {selectedModule && (
+              <>
+                <ChevronRight size={12} className="text-[#BFDBFE]" />
+                <button 
+                  onClick={() => {
+                    setSelectedSubModule(null);
+                  }}
+                  className={`hover:text-[#0284c7] transition-colors ${!selectedSubModule ? 'text-[#0284c7] font-extrabold' : 'text-[#0F172A]'}`}
+                >
+                  {selectedModule}
+                </button>
+              </>
+            )}
+
+            {selectedSubModule && (
+              <>
+                <ChevronRight size={12} className="text-[#BFDBFE]" />
+                <span className="text-[#0284c7] font-extrabold font-mono normal-case">
+                  {selectedSubModule}
                 </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="my-2 h-px bg-white/5" />
-
-          {/* Metrics breakdown */}
-          <div className="grid grid-cols-4 gap-2 text-center text-xs">
-            <div>
-              <span className="text-[9px] text-slate-500 block uppercase font-bold">Total Bugs</span>
-              <span className="text-white font-extrabold block mt-0.5 font-mono">{item.total}</span>
-            </div>
-            <div>
-              <span className="text-[9px] text-slate-500 block uppercase font-bold">Active</span>
-              <span className="text-indigo-400 font-extrabold block mt-0.5 font-mono">{item.active}</span>
-            </div>
-            <div>
-              <span className="text-[9px] text-slate-500 block uppercase font-bold text-red-400">Critical</span>
-              <span className="text-red-400 font-extrabold block mt-0.5 font-mono">{item.critical}</span>
-            </div>
-            <div>
-              <span className="text-[9px] text-slate-500 block uppercase font-bold text-emerald-400">Closed</span>
-              <span className="text-emerald-400 font-extrabold block mt-0.5 font-mono">{item.closed}</span>
-            </div>
+              </>
+            )}
           </div>
         </div>
-      ))}
+
+        {!selectedProject && (
+          <button
+            type="button"
+            onClick={handleOpenAddModal}
+            className="h-12 px-6 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-sm flex items-center gap-2 cursor-pointer border-transparent"
+          >
+            <PlusCircle size={16} />
+            <span>Add Project / Module</span>
+          </button>
+        )}
+      </div>
+
+      {/* RENDER CONTENT DIRECTORY */}
+      {/* 1. Projects List View */}
+      {!selectedProject && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-scale-up">
+          {projectSummaries.map((item, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => setSelectedProject(item.name)}
+              className="p-6 rounded-3xl bg-white border border-[#BFDBFE] hover:border-[#38BDF8] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer flex flex-col justify-between gap-5 relative overflow-hidden group min-h-[220px]"
+            >
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <span className="font-extrabold text-[#0F172A] text-xl font-title truncate group-hover:text-[#0284c7] transition-colors">{item.name}</span>
+                  <p className="text-sm text-[#475569] leading-relaxed mt-1 font-semibold line-clamp-2">{item.desc}</p>
+                </div>
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border font-extrabold text-xl flex-shrink-0 ${item.iconBg || 'bg-blue-500/10 border-blue-500/20 text-blue-400'}`}>
+                  {item.name[0]}
+                </div>
+              </div>
+
+              {/* Module counts */}
+              <div className="flex flex-col gap-2">
+                <span className="text-xs text-slate-400 uppercase font-extrabold font-mono tracking-wider">Modules ({item.modules.length})</span>
+                <div className="flex gap-2 flex-wrap">
+                  {item.modules.length > 0 ? (
+                    item.modules.slice(0, 2).map((m, i) => (
+                      <span key={i} className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#E0F2FE] border border-[#BFDBFE]/65 text-[#0284c7]">
+                        {m}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-slate-450 italic font-semibold">No modules registered</span>
+                  )}
+                  {item.modules.length > 2 && (
+                    <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 border border-slate-200 text-slate-500">
+                      +{item.modules.length - 2} more
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="h-px bg-[#BFDBFE]/40" />
+
+              {/* Metrics breakdown */}
+              <div className="grid grid-cols-4 gap-2 text-center text-sm font-semibold">
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Total</span>
+                  <span className="text-[#0F172A] text-base font-extrabold block mt-1 font-mono">{item.total}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Active</span>
+                  <span className="text-[#0284c7] text-base font-extrabold block mt-1 font-mono">{item.active}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-red-500 block uppercase font-bold">Critical</span>
+                  <span className="text-red-600 text-base font-extrabold block mt-1 font-mono">{item.critical}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-emerald-500 block uppercase font-bold">Closed</span>
+                  <span className="text-emerald-600 text-base font-extrabold block mt-1 font-mono">{item.closed}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 2. Modules List View */}
+      {selectedProject && !selectedModule && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-scale-up">
+          {moduleSummaries.map((item, idx) => (
+            <div 
+              key={idx}
+              onClick={() => setSelectedModule(item.name)}
+              className="p-6 rounded-3xl bg-white border border-[#BFDBFE] hover:border-[#38BDF8] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer flex flex-col justify-between gap-5 relative overflow-hidden group min-h-[200px]"
+            >
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <span className="font-extrabold text-[#0F172A] text-xl font-title truncate group-hover:text-[#0284c7] transition-colors">{item.name}</span>
+                  <span className="text-sm text-[#0284c7] font-bold mt-1 font-mono uppercase tracking-wider">MODULE</span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[#0284c7] font-bold">
+                  {item.name[0]}
+                </div>
+              </div>
+
+              {/* Submodule counts */}
+              <div className="flex flex-col gap-2">
+                <span className="text-xs text-slate-400 uppercase font-extrabold font-mono tracking-wider">Sub Modules ({item.submodules.length})</span>
+                <div className="flex gap-2 flex-wrap">
+                  {item.submodules.length > 0 ? (
+                    item.submodules.slice(0, 2).map((sub, i) => (
+                      <span key={i} className="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#F0FDF4] border border-[#BBF7D0] text-[#166534]">
+                        {sub}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-slate-450 italic font-semibold">No sub-modules registered</span>
+                  )}
+                  {item.submodules.length > 2 && (
+                    <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 border border-slate-200 text-slate-500">
+                      +{item.submodules.length - 2} more
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="h-px bg-[#BFDBFE]/40" />
+
+              {/* Metrics */}
+              <div className="grid grid-cols-4 gap-2 text-center text-sm font-semibold">
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Total</span>
+                  <span className="text-[#0F172A] text-base font-extrabold block mt-1 font-mono">{item.total}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Active</span>
+                  <span className="text-[#0284c7] text-base font-extrabold block mt-1 font-mono">{item.active}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-red-500 block uppercase font-bold">Critical</span>
+                  <span className="text-red-600 text-base font-extrabold block mt-1 font-mono">{item.critical}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-emerald-500 block uppercase font-bold">Closed</span>
+                  <span className="text-emerald-600 text-base font-extrabold block mt-1 font-mono">{item.closed}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        </div>
+      )}
+
+      {/* 3. Sub Modules List View */}
+      {selectedProject && selectedModule && !selectedSubModule && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-scale-up">
+          {subModuleSummaries.map((item, idx) => (
+            <div 
+              key={idx}
+              onClick={() => setSelectedSubModule(item.name)}
+              className="p-6 rounded-3xl bg-white border border-[#BFDBFE] hover:border-[#38BDF8] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer flex flex-col justify-between gap-5 relative overflow-hidden group min-h-[160px]"
+            >
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <span className="font-extrabold text-[#0F172A] text-xl font-title truncate group-hover:text-[#0284c7] transition-colors">{item.name}</span>
+                  <span className="text-sm text-emerald-600 font-bold mt-1 font-mono uppercase tracking-wider">SUB MODULE</span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-emerald-55 border border-emerald-100 flex items-center justify-center text-[#166534] font-bold">
+                  {item.name[0]}
+                </div>
+              </div>
+
+              <div className="h-px bg-[#BFDBFE]/40" />
+
+              {/* Metrics */}
+              <div className="grid grid-cols-4 gap-2 text-center text-sm font-semibold">
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Total</span>
+                  <span className="text-[#0F172A] text-base font-extrabold block mt-1 font-mono">{item.total}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-slate-400 block uppercase font-bold">Active</span>
+                  <span className="text-[#0284c7] text-base font-extrabold block mt-1 font-mono">{item.active}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-red-500 block uppercase font-bold">Critical</span>
+                  <span className="text-red-600 text-base font-extrabold block mt-1 font-mono">{item.critical}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-emerald-500 block uppercase font-bold">Closed</span>
+                  <span className="text-emerald-600 text-base font-extrabold block mt-1 font-mono">{item.closed}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        </div>
+      )}
+
+      {/* 4. Bugs Table View */}
+      {selectedProject && selectedModule && selectedSubModule && (
+        <div className="glass-card rounded-3xl p-6 bg-white border border-[#BFDBFE] shadow-sm animate-scale-up overflow-hidden">
+          <div className="flex justify-between items-center flex-wrap gap-4 pb-4 border-b border-[#BFDBFE]/60 mb-5">
+            <div>
+              <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
+                Registered Defects ({selectedBugsList.length})
+              </h3>
+              <p className="text-xs text-slate-450 mt-0.5">Defects matching project: {selectedProject} ➜ {selectedModule} ➜ {selectedSubModule}</p>
+            </div>
+            {selectedBugsList.length > 0 && (
+              <button 
+                onClick={() => {
+                  setActiveTab('Create Bug');
+                }}
+                className="h-10 px-5 rounded-xl border border-[#38bdf8] text-[#0284c7] font-bold text-xs bg-[#f0f9ff] hover:bg-[#bae6fd]/30 transition-all cursor-pointer"
+              >
+                + Register Defect
+              </button>
+            )}
+          </div>
+
+          {selectedBugsList.length > 0 ? (
+            <div className="w-full overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-[#BFDBFE]/60 text-[#475569] text-xs font-bold font-title bg-slate-50/50">
+                    <th className="py-3.5 px-4">Bug ID</th>
+                    <th className="py-3.5 px-4">Title</th>
+                    <th className="py-3.5 px-4">Severity</th>
+                    <th className="py-3.5 px-4">Priority</th>
+                    <th className="py-3.5 px-4">Assigned To</th>
+                    <th className="py-3.5 px-4">Dev Status</th>
+                    <th className="py-3.5 px-4">Tester Status</th>
+                    <th className="py-3.5 px-4">Assigned Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedBugsList.map(bug => (
+                    <tr key={bug.id} className="border-b border-[#BFDBFE]/30 hover:bg-[#EEF6FF]/20 transition-colors text-xs text-[#475569] font-semibold">
+                      <td className="py-4 px-4 font-bold font-mono">
+                        <button 
+                          onClick={() => onLinkToBug(bug.id)}
+                          className="text-[#0284c7] hover:underline font-bold text-left cursor-pointer outline-none"
+                        >
+                          {bug.id}
+                        </button>
+                      </td>
+                      <td className="py-4 px-4 text-[#0F172A] font-bold max-w-xs truncate" title={bug.title}>{bug.title}</td>
+                      <td className="py-4 px-4">
+                        <span className={`badge px-2 py-0.5 rounded-full text-[10px] font-bold ${getSeverityBadgeClass(bug.severity)}`}>
+                          {bug.severity}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`badge px-2 py-0.5 rounded-full text-[10px] font-bold ${getPriorityBadgeClass(bug.priority)}`}>
+                          {bug.priority}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 text-[#0F172A]">{bug.assignedTo}</td>
+                      <td className="py-4 px-4">
+                        <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(bug.devStatus)}`}>
+                          {bug.devStatus}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(bug.testerStatus)}`}>
+                          {bug.testerStatus}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 font-mono text-[11px] text-slate-450">{bug.assignedDate}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="py-16 text-center bg-[#F8FBFF] border-2 border-dashed border-[#BFDBFE]/70 rounded-2xl flex flex-col items-center justify-center p-6 text-slate-450 animate-scale-up">
+              <Sliders size={32} className="text-[#38BDF8] mb-2" />
+              <h4 className="font-bold text-[#0F172A] font-title text-sm">No defects found</h4>
+              <p className="text-xs text-slate-450 mt-1 max-w-xs leading-relaxed">No defects are currently registered under this sub-module layer.</p>
+              <button 
+                onClick={() => {
+                  setActiveTab('Create Bug');
+                }}
+                className="mt-4 h-10 px-5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold text-xs hover:brightness-105 shadow-sm transition-all cursor-pointer border-transparent"
+              >
+                + Register First Defect
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ADD NEW PROJECT/STRUCTURE MODAL */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div 
+            className="absolute inset-0"
+            onClick={() => setShowAddModal(false)}
+          />
+          <div className="relative w-full max-w-[520px] p-8 bg-white border border-[#E2EEFC] rounded-[28px] shadow-[0_16px_48px_rgba(191,219,254,0.25)] flex flex-col gap-6 animate-scale-up z-10 text-[#0F172A]">
+            <div className="flex justify-between items-center pb-2 border-b border-[#BFDBFE]/50">
+              <div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-[#0F172A] font-title">Add Project Structure</h3>
+                <p className="text-sm text-slate-500 mt-1">Define project, module, and sub-module layers.</p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all border border-transparent hover:border-slate-200 cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleModalSubmit} className="flex flex-col gap-5">
+              <div className="flex flex-col gap-4">
+                {/* Project Input */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-bold text-[#475569] pl-0.5">Project Name <span className="text-red-500">*</span></label>
+                  <input 
+                    type="text" 
+                    value={newProjectName}
+                    onChange={(e) => setNewProjectName(e.target.value)}
+                    placeholder="e.g. IoT Dashboard"
+                    className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
+
+                {/* Module Input */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-bold text-[#475569] pl-0.5">New Module <span className="text-red-500">*</span></label>
+                  <input 
+                    type="text" 
+                    value={newModuleName}
+                    onChange={(e) => setNewModuleName(e.target.value)}
+                    placeholder="e.g. Sensors"
+                    className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
+
+                {/* Sub Module Input */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-bold text-[#475569] pl-0.5">New Sub Module <span className="text-slate-400 font-medium">(Optional)</span></label>
+                  <input 
+                    type="text" 
+                    value={newSubModuleName}
+                    onChange={(e) => setNewSubModuleName(e.target.value)}
+                    placeholder="e.g. Telemetry"
+                    className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-[#BFDBFE]/50">
+                <button 
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 h-12 rounded-xl text-slate-500 font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-sm bg-white cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-110 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-sm cursor-pointer border-transparent"
+                >
+                  Save Structure
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -3186,7 +3674,7 @@ function SettingsView({ user, setUser, triggerToast }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto w-full animate-fade-in flex flex-col gap-6 text-[#475569] module-bg-container">
+    <div className="max-w-[1440px] mx-auto w-full animate-fade-in flex flex-col gap-6 text-[#475569] module-bg-container">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80")' }} />
       <div className="border-b border-[#BFDBFE]/60 pb-4">
         <h2 className="text-lg font-bold text-[#0F172A] font-title">Preferences</h2>
@@ -3194,7 +3682,7 @@ function SettingsView({ user, setUser, triggerToast }) {
       </div>
 
       {/* Sub tabs list */}
-      <section className="flex gap-2 border-b border-[#BFDBFE]/60 pb-px text-xs font-bold uppercase tracking-wider font-title">
+      <section className="flex gap-2 border-b border-[#BFDBFE]/60 pb-px text-sm font-bold uppercase tracking-wider font-title">
         {['Profile', 'Workspace', 'Alerts', 'Security'].map(tab => (
           <button
             key={tab}
@@ -3202,7 +3690,7 @@ function SettingsView({ user, setUser, triggerToast }) {
             className={`px-5 py-2.5 transition-all border-b-2 -mb-px ${
               activeSubTab === tab 
                 ? 'border-[#38BDF8] text-[#38BDF8]' 
-                : 'border-transparent text-[#475569] hover:text-[#0F172A]'
+                 : 'border-transparent text-[#475569] hover:text-[#0F172A]'
             }`}
           >
             {tab}
@@ -3213,7 +3701,7 @@ function SettingsView({ user, setUser, triggerToast }) {
       {/* Action panel workspace */}
       <section className="mt-4">
         {activeSubTab === 'Profile' && (
-          <form onSubmit={handleSaveProfile} className="flex flex-col gap-5 max-w-lg">
+          <form onSubmit={handleSaveProfile} className="flex flex-col gap-5 max-w-2xl">
             <div className="flex items-center gap-4 pb-2">
               {user.avatarUrl ? (
                 <img src={user.avatarUrl} alt={name} className="w-14 h-14 rounded-xl object-cover border border-[#BFDBFE] shadow-sm" />
@@ -3232,23 +3720,23 @@ function SettingsView({ user, setUser, triggerToast }) {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#475569] pl-1">Full Display Name</label>
+              <label className="text-sm font-semibold text-[#475569] pl-1">Full Display Name</label>
               <input 
                 type="text" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-all"
+                className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-all"
                 required
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#475569] pl-1">API Mail Address</label>
+              <label className="text-sm font-semibold text-[#475569] pl-1">API Mail Address</label>
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-all"
+                className="h-11 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-all"
                 required
               />
             </div>
@@ -3256,7 +3744,7 @@ function SettingsView({ user, setUser, triggerToast }) {
             <div className="pt-2">
               <button 
                 type="submit" 
-                className="h-11 px-7 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 transition-all text-xs"
+                className="h-11 px-7 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 transition-all text-sm"
               >
                 Save Profile Configuration
               </button>
@@ -3265,54 +3753,54 @@ function SettingsView({ user, setUser, triggerToast }) {
         )}
 
         {activeSubTab === 'Workspace' && (
-          <div className="flex flex-col gap-5 max-w-lg">
+          <div className="flex flex-col gap-5 max-w-2xl">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#475569] pl-1">Organization Tenant</label>
+              <label className="text-sm font-semibold text-[#475569] pl-1">Organization Tenant</label>
               <input 
                 type="text" 
                 defaultValue="QA MIND Systems Ltd"
                 disabled
-                className="h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs cursor-not-allowed"
+                className="h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm cursor-not-allowed"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#475569] pl-1">Workspace Tenant ID</label>
+              <label className="text-sm font-semibold text-[#475569] pl-1">Workspace Tenant ID</label>
               <input 
                 type="text" 
                 defaultValue="qamind.io/global-production-workspace-node-1"
                 disabled
-                className="h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs cursor-not-allowed"
+                className="h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm cursor-not-allowed"
               />
             </div>
-            <p className="text-[#94A3B8] text-[10px] italic">* Global variables locks administered via tenant config controls.</p>
+            <p className="text-[#94A3B8] text-xs italic">* Global variables locks administered via tenant config controls.</p>
           </div>
         )}
 
         {activeSubTab === 'Alerts' && (
-          <div className="flex flex-col gap-4 max-w-lg bg-white p-5 rounded-2xl border border-[#BFDBFE] shadow-sm">
-            <h3 className="text-xs font-bold text-[#0F172A] font-title mb-2 uppercase tracking-wider">Alert Notification Thresholds</h3>
+          <div className="flex flex-col gap-4 max-w-2xl bg-white p-5 rounded-2xl border border-[#BFDBFE] shadow-sm">
+            <h3 className="text-sm font-bold text-[#0F172A] font-title mb-2 uppercase tracking-wider">Alert Notification Thresholds</h3>
             
             <div className="flex items-center justify-between py-2 border-b border-[#BFDBFE]/50">
               <div>
-                <span className="text-xs font-semibold text-[#0F172A] block">Immediate Hotfix Toast Alerts</span>
-                <span className="text-[10px] text-[#94A3B8] block mt-0.5">Display UI notification immediately when P1 bug is reported.</span>
+                <span className="text-sm font-semibold text-[#0F172A] block">Immediate Hotfix Toast Alerts</span>
+                <span className="text-xs text-[#94A3B8] block mt-0.5">Display UI notification immediately when P1 bug is reported.</span>
               </div>
               <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#38BDF8] text-white border border-[#BFDBFE] rounded focus:ring-0 cursor-pointer" />
             </div>
 
             <div className="flex items-center justify-between py-2 border-b border-[#BFDBFE]/50">
               <div>
-                <span className="text-xs font-semibold text-[#0F172A] block">Defect Assigned Email Notifications</span>
-                <span className="text-[10px] text-[#94A3B8] block mt-0.5">Send a workspace mail check digest to developer instantly.</span>
+                <span className="text-sm font-semibold text-[#0F172A] block">Defect Assigned Email Notifications</span>
+                <span className="text-xs text-[#94A3B8] block mt-0.5">Send a workspace mail check digest to developer instantly.</span>
               </div>
               <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#38BDF8] text-white border border-[#BFDBFE] rounded focus:ring-0 cursor-pointer" />
             </div>
 
             <div className="flex items-center justify-between py-2">
               <div>
-                <span className="text-xs font-semibold text-[#0F172A] block">Weekly Sprint Velocity Summaries</span>
-                <span className="text-[10px] text-[#94A3B8] block mt-0.5">Compile resolution stats to email digest.</span>
+                <span className="text-sm font-semibold text-[#0F172A] block">Weekly Sprint Velocity Summaries</span>
+                <span className="text-xs text-[#94A3B8] block mt-0.5">Compile resolution stats to email digest.</span>
               </div>
               <input type="checkbox" className="w-4 h-4 accent-[#38BDF8] text-white border border-[#BFDBFE] rounded focus:ring-0 cursor-pointer" />
             </div>
@@ -3320,26 +3808,26 @@ function SettingsView({ user, setUser, triggerToast }) {
         )}
 
         {activeSubTab === 'Security' && (
-          <div className="flex flex-col gap-5 max-w-lg">
+          <div className="flex flex-col gap-5 max-w-2xl">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-[#475569] pl-1">QA MIND API Integration Token Key</label>
+              <label className="text-sm font-semibold text-[#475569] pl-1">QA MIND API Integration Token Key</label>
               <div className="flex gap-2">
                 <input 
                   type="password" 
                   defaultValue="••••••••••••••••••••••••••••••••••••"
                   disabled
-                  className="flex-1 h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs cursor-not-allowed font-mono"
+                  className="flex-1 h-11 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm cursor-not-allowed font-mono"
                 />
                 <button 
                   type="button" 
                   onClick={() => triggerToast('Security Integration Client Key copied!')}
-                  className="h-11 px-4 rounded-xl border border-[#BFDBFE] bg-white text-[#475569] hover:bg-[#E0F2FE]/50 hover:text-[#0F172A] transition-all text-xs font-bold"
+                  className="h-11 px-4 rounded-xl border border-[#BFDBFE] bg-white text-[#475569] hover:bg-[#E0F2FE]/50 hover:text-[#0F172A] transition-all text-sm font-bold"
                 >
                   Copy Key
                 </button>
               </div>
             </div>
-            <p className="text-[#94A3B8] text-[10px] leading-relaxed">
+            <p className="text-[#94A3B8] text-xs leading-relaxed">
               API integration token provides full read/write programmatic REST integration scopes to client JIRA synchronization portals. Keep credentials secure.
             </p>
           </div>
@@ -3389,6 +3877,76 @@ function CreateBugView({
   const [newProjectName, setNewProjectName] = useState('');
   const [newModuleName, setNewModuleName] = useState('');
   const [newSubModuleName, setNewSubModuleName] = useState('');
+  const [validationError, setValidationError] = useState('');
+  const [isEnhancing, setIsEnhancing] = useState(false);
+
+  const handleEnhanceDescription = () => {
+    if (!formDescription.trim()) return;
+    setIsEnhancing(true);
+    setTimeout(() => {
+      let text = formDescription.trim();
+      let enhanced = text;
+      const normalizedInput = text.toLowerCase().replace(/[\s\.\,\-\_]+/g, ' ').trim();
+      if (normalizedInput === "user click login button but page not redirect and error not showing") {
+        enhanced = "The Login button does not redirect the user after being clicked. The page remains on the same screen, and no error message is displayed.";
+      } else {
+        let rules = [
+          { pattern: /user click (\w+)/i, replacement: "the user clicks the $1 button" },
+          { pattern: /click (\w+)/i, replacement: "clicking the $1 button" },
+          { pattern: /button not work/i, replacement: "button does not function as expected" },
+          { pattern: /page not redirect/i, replacement: "the page fails to redirect" },
+          { pattern: /error not showing/i, replacement: "no error message is displayed" },
+          { pattern: /api error/i, replacement: "an API response error occurs" },
+          { pattern: /app crash/i, replacement: "the application crashes unexpectedly" },
+          { pattern: /page crash/i, replacement: "the page crashes unexpectedly" },
+          { pattern: /auth fail/i, replacement: "authentication fails" },
+          { pattern: /login fail/i, replacement: "login attempt fails" },
+          { pattern: /not loading/i, replacement: "fails to load correctly" }
+        ];
+        rules.forEach(rule => {
+          enhanced = enhanced.replace(rule.pattern, rule.replacement);
+        });
+        enhanced = enhanced.split(/[.!?]\s+/).map(sentence => {
+          let s = sentence.trim();
+          if (!s) return "";
+          s = s.charAt(0).toUpperCase() + s.slice(1);
+          return s;
+        }).join(". ");
+        if (enhanced && !/[.!?]$/.test(enhanced)) {
+          enhanced += ".";
+        }
+      }
+      setFormDescription(enhanced);
+      setIsEnhancing(false);
+    }, 1200);
+  };
+
+  React.useEffect(() => {
+    if (formTitle.trim() && formDescription.trim() && formAssignedTo.trim()) {
+      setValidationError('');
+    }
+  }, [formTitle, formDescription, formAssignedTo]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formTitle.trim() || !formDescription.trim() || !formAssignedTo.trim()) {
+      setValidationError('please fill the mandatory fields');
+      alert('please fill the mandatory fields');
+      return;
+    }
+    setValidationError('');
+    onSubmit(e);
+  };
+
+  const handleClear = () => {
+    setValidationError('');
+    onClear();
+  };
+
+  const handleCancel = () => {
+    setValidationError('');
+    onCancel();
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -3426,24 +3984,31 @@ function CreateBugView({
   });
 
   return (
-    <div className="max-w-6xl mx-auto w-full animate-fade-in text-[#475569] module-bg-container pb-10">
+    <div className="max-w-[1440px] mx-auto w-full animate-fade-in text-[#475569] module-bg-container pb-10">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80")' }} />
       <div className="border-b border-[#BFDBFE]/60 pb-4 mb-8 flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-[#0F172A] font-title">Create New Defect</h2>
-          <p className="text-xs text-[#475569] mt-1">Register high-fidelity QA bug details into active developer queues.</p>
+          <h2 className="text-3xl font-extrabold text-[#0F172A] font-title">Create New Defect</h2>
+          <p className="text-sm text-[#475569] mt-1">Register high-fidelity QA bug details into active developer queues.</p>
         </div>
         <button
           type="button"
           onClick={() => setShowAddProjectModal(true)}
-          className="h-11 px-6 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-xs flex items-center gap-2 cursor-pointer border-transparent"
+          className="h-12 px-6 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-sm flex items-center gap-2 cursor-pointer border-transparent"
         >
-          <PlusCircle size={15} />
+          <PlusCircle size={16} />
           <span>Add Project</span>
         </button>
       </div>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-8">
+      {validationError && (
+        <div className="p-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-[#991B1B] text-sm font-bold flex items-center gap-3 animate-fade-in mb-6">
+          <AlertCircle className="text-[#EF4444] flex-shrink-0" size={20} />
+          <span>{validationError}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* LEFT COLUMN: Main Form details */}
@@ -3452,17 +4017,17 @@ function CreateBugView({
             {/* CARD 1: PROJECT DETAILS */}
             <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60 flex items-center justify-between">
-                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
-                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   PROJECT DETAILS
                 </h3>
-                <span className="text-[10px] text-red-500 font-bold">* Required fields</span>
+                <span className="text-xs text-red-500 font-bold">* Required fields</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Project */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Project <span className="text-red-500">*</span>
                   </label>
                   <select 
@@ -3477,7 +4042,7 @@ function CreateBugView({
                         setFormSubModule(avSubs[0] || '');
                       }
                     }}
-                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
                   >
                     {Object.keys(PROJECT_MODULES).map(proj => (
                       <option key={proj} value={proj}>{proj}</option>
@@ -3487,7 +4052,7 @@ function CreateBugView({
 
                 {/* Module */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Module <span className="text-red-500">*</span>
                   </label>
                   <select 
@@ -3498,7 +4063,7 @@ function CreateBugView({
                       const avSubs = MODULE_SUBMODULES[mod] || [];
                       setFormSubModule(avSubs[0] || '');
                     }}
-                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
                   >
                     {PROJECT_MODULES[formProject]?.map(mod => (
                       <option key={mod} value={mod}>{mod}</option>
@@ -3508,13 +4073,13 @@ function CreateBugView({
 
                 {/* Sub Module */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Sub Module <span className="text-red-500">*</span>
                   </label>
                   <select 
                     value={formSubModule}
                     onChange={(e) => setFormSubModule(e.target.value)}
-                    className="h-10 px-3 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-xs font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
                   >
                     {MODULE_SUBMODULES[formModule]?.map(sub => (
                       <option key={sub} value={sub}>{sub}</option>
@@ -3527,8 +4092,8 @@ function CreateBugView({
             {/* CARD 2: BUG DETAILS */}
             <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
-                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   BUG DETAILS
                 </h3>
               </div>
@@ -3537,16 +4102,16 @@ function CreateBugView({
                 {/* Bug ID & Title */}
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label className="text-xs font-bold text-[#475569]">Bug ID</label>
+                    <label className="text-sm font-bold text-[#475569]">Bug ID</label>
                     <input 
                       type="text" 
                       value={nextBugId} 
                       disabled
-                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-slate-500 text-xs font-mono font-bold cursor-not-allowed outline-none"
+                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-slate-500 text-sm font-mono font-bold cursor-not-allowed outline-none"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5 sm:col-span-3">
-                    <label className="text-xs font-bold text-[#475569]">
+                    <label className="text-sm font-bold text-[#475569]">
                       Title <span className="text-red-500">*</span>
                     </label>
                     <input 
@@ -3554,7 +4119,7 @@ function CreateBugView({
                       value={formTitle}
                       onChange={(e) => setFormTitle(e.target.value)}
                       placeholder="e.g. Checkout gateway crashes on Android UPI callbacks"
-                      className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                      className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
                       required
                     />
                   </div>
@@ -3562,16 +4127,36 @@ function CreateBugView({
 
                 {/* Description */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Description <span className="text-red-500">*</span>
                   </label>
                   <textarea 
                     value={formDescription}
                     onChange={(e) => setFormDescription(e.target.value)}
                     placeholder="Enter detailed bug description, steps to reproduce, actual vs expected results..."
-                    className="w-full min-h-[140px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    className="w-full min-h-[140px] p-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
                     required
                   />
+                  <div className="flex justify-end mt-2">
+                    <button
+                      type="button"
+                      disabled={isEnhancing || !formDescription.trim()}
+                      onClick={handleEnhanceDescription}
+                      className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 border-transparent"
+                    >
+                      {isEnhancing ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                          <span>✨ Enhancing description...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={13} className="text-white flex-shrink-0" />
+                          <span>✨ Polish This Bug</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3579,8 +4164,8 @@ function CreateBugView({
             {/* CARD 3: CLASSIFICATION */}
             <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
-                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   CLASSIFICATION
                 </h3>
               </div>
@@ -3588,13 +4173,13 @@ function CreateBugView({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Severity */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Severity <span className="text-red-500">*</span>
                   </label>
                   <select 
                     value={formSeverity}
                     onChange={(e) => setFormSeverity(e.target.value)}
-                    className="h-10 px-3 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-sm text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     <option value="Blocker">Blocker</option>
                     <option value="Critical">Critical</option>
@@ -3605,13 +4190,13 @@ function CreateBugView({
 
                 {/* Priority */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Priority <span className="text-red-500">*</span>
                   </label>
                   <select 
                     value={formPriority}
                     onChange={(e) => setFormPriority(e.target.value)}
-                    className="h-10 px-3 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-sm text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
@@ -3629,8 +4214,8 @@ function CreateBugView({
             {/* CARD 4: ASSIGNMENT DETAILS */}
             <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
-                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   ASSIGNMENT DETAILS
                 </h3>
               </div>
@@ -3639,28 +4224,28 @@ function CreateBugView({
                 {/* Assigned By & Date */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-[#475569]">Assigned By</label>
+                    <label className="text-sm font-bold text-[#475569]">Assigned By</label>
                     <input 
                       type="text" 
                       value={loggedInUser}
                       disabled
-                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs font-bold cursor-not-allowed outline-none"
+                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm font-bold cursor-not-allowed outline-none"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-[#475569]">Assigned Date</label>
+                    <label className="text-sm font-bold text-[#475569]">Assigned Date</label>
                     <input 
                       type="text" 
                       value={currentDate}
                       disabled
-                      className="h-10 px-3 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-xs font-bold cursor-not-allowed outline-none"
+                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm font-bold cursor-not-allowed outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Assigned To */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">
+                  <label className="text-sm font-bold text-[#475569]">
                     Assigned To <span className="text-red-500">*</span>
                   </label>
                   <input 
@@ -3668,7 +4253,7 @@ function CreateBugView({
                     value={formAssignedTo}
                     onChange={(e) => setFormAssignedTo(e.target.value)}
                     placeholder="Enter developer's full name (e.g. Rahul Verma)"
-                    className="h-10 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-xs font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
                     required
                   />
                 </div>
@@ -3678,8 +4263,8 @@ function CreateBugView({
             {/* CARD 5: ADDITIONAL INFORMATION */}
             <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-sm font-extrabold text-[#0F172A] font-title flex items-center gap-2">
-                  <span className="w-1.5 h-3 rounded bg-[#38bdf8]" />
+                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                  <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   ADDITIONAL INFORMATION
                 </h3>
               </div>
@@ -3687,18 +4272,18 @@ function CreateBugView({
               <div className="flex flex-col gap-4">
                 {/* Remarks */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">Remarks</label>
+                  <label className="text-sm font-bold text-[#475569]">Remarks</label>
                   <textarea 
                     value={formRemarks}
                     onChange={(e) => setFormRemarks(e.target.value)}
                     placeholder="Provide initial troubleshooting context, logs snippets, or environment parameters..."
-                    className="w-full min-h-[90px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    className="w-full min-h-[90px] p-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
                   />
                 </div>
 
                 {/* Screenshot Upload Drag-and-Drop */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-[#475569]">Screenshot Upload</label>
+                  <label className="text-sm font-bold text-[#475569]">Screenshot Upload</label>
                   
                   {!previewUrl ? (
                     <div 
@@ -3718,22 +4303,22 @@ function CreateBugView({
                         <PlusCircle size={20} />
                       </div>
                       <div className="text-center select-none">
-                        <span className="text-xs font-bold text-[#0F172A] block">
+                        <span className="text-sm font-bold text-[#0F172A] block">
                           Drag & drop image here, or <span className="text-[#38BDF8] underline">browse files</span>
                         </span>
-                        <span className="text-[10px] text-[#94A3B8] block mt-1">Supports PNG, JPG, JPEG, GIF up to 5MB</span>
+                        <span className="text-xs text-[#94A3B8] block mt-1">Supports PNG, JPG, JPEG, GIF up to 5MB</span>
                       </div>
                     </div>
                   ) : (
                     <div className="border border-[#BFDBFE] rounded-2xl p-4 bg-[#F8FBFF] flex flex-col gap-3 relative animate-scale-up">
-                      <div className="flex items-center justify-between text-xs pb-2 border-b border-[#BFDBFE]/60">
+                      <div className="flex items-center justify-between text-sm pb-2 border-b border-[#BFDBFE]/60">
                         <span className="font-semibold text-[#0f172a] truncate max-w-[80%]">
                           {formScreenshot ? formScreenshot.name : 'Screenshot Attachment'}
                         </span>
                         <button 
                           type="button"
                           onClick={handleRemoveFile}
-                          className="text-red-500 hover:text-red-600 font-bold transition-colors cursor-pointer text-xs"
+                          className="text-red-500 hover:text-red-600 font-bold transition-colors cursor-pointer text-sm"
                         >
                           Remove
                         </button>
@@ -3756,24 +4341,24 @@ function CreateBugView({
         </div>
 
         {/* FORM BUTTONS */}
-        <div className="flex gap-4 pt-6 border-t border-[#BFDBFE]/60 justify-end mt-4">
+        <div className="flex items-center gap-4 pt-6 border-t border-[#BFDBFE]/60 justify-end mt-4">
           <button 
             type="button"
-            onClick={onCancel}
-            className="h-11 px-6 rounded-xl text-slate-500 font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-xs bg-white cursor-pointer"
+            onClick={handleCancel}
+            className="h-12 w-36 flex items-center justify-center rounded-xl text-black font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-sm bg-white cursor-pointer"
           >
             Cancel
           </button>
           <button 
             type="button"
-            onClick={onClear}
-            className="h-11 px-6 rounded-xl text-[#0369a1] font-bold border border-[#bae6fd] hover:bg-[#bae6fd]/30 transition-all text-xs bg-[#f0f9ff] cursor-pointer"
+            onClick={handleClear}
+            className="h-12 w-36 flex items-center justify-center rounded-xl text-black font-bold border border-[#bae6fd] hover:bg-[#bae6fd]/30 transition-all text-sm bg-[#f0f9ff] cursor-pointer"
           >
             Reset
           </button>
           <button 
             type="submit"
-            className="h-11 px-8 rounded-xl bg-gradient-to-r from-[#38BDF8] to-[#7DD3FC] text-[#0F172A] font-bold hover:brightness-110 shadow-lg shadow-sky-400/20 hover:shadow-sky-400/35 transition-all text-xs cursor-pointer"
+            className="h-12 w-36 flex items-center justify-center rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-sm cursor-pointer border-transparent"
           >
             Create Bug
           </button>
