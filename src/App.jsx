@@ -39,7 +39,8 @@ import {
   EyeOff,
   Code,
   Bug,
-  Sparkles
+  Sparkles,
+  UploadCloud
 } from 'lucide-react';
 
 // Team Member configuration with avatars and colors
@@ -440,6 +441,11 @@ export default function App() {
   const [projectModules, setProjectModules] = useState(PROJECT_MODULES);
   const [moduleSubmodules, setModuleSubmodules] = useState(MODULE_SUBMODULES);
   const [projectsList, setProjectsList] = useState(INITIAL_PROJECTS);
+
+  // Projects View Navigation States (lifted from ProjectsView)
+  const [projectTabProject, setProjectTabProject] = useState(null);
+  const [projectTabModule, setProjectTabModule] = useState(null);
+  const [projectTabSubModule, setProjectTabSubModule] = useState(null);
 
   // Dynamic Project Registration Handler
   const handleAddProject = (projectName, moduleName, submoduleName) => {
@@ -1051,12 +1057,31 @@ export default function App() {
               <span className="text-[#475569] hover:text-[#0F172A] transition-colors cursor-pointer" onClick={() => setActiveTab('Dashboard')}>QA MIND</span>
               <span className="text-[#BFDBFE]">/</span>
               <span className="text-[#0F172A] font-bold">{activeTab}</span>
+              {activeTab === 'Projects' && projectTabProject && (
+                <>
+                  <span className="text-[#BFDBFE]">/</span>
+                  <button 
+                    onClick={() => {
+                      if (projectTabSubModule) {
+                        setProjectTabSubModule(null);
+                      } else if (projectTabModule) {
+                        setProjectTabModule(null);
+                      } else if (projectTabProject) {
+                        setProjectTabProject(null);
+                      }
+                    }}
+                    className="ml-2 px-2.5 py-1 rounded-lg bg-[#E0F2FE] border border-[#BFDBFE] text-[10px] text-[#38BDF8] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 transition-all font-bold uppercase tracking-wider cursor-pointer"
+                  >
+                    ← Back
+                  </button>
+                </>
+              )}
               {activeTab !== 'Dashboard' && activeTab !== 'Create Bug' && activeTab !== 'Settings' && (
                 <>
                   <span className="text-[#BFDBFE]">/</span>
                   <button 
                     onClick={() => setActiveTab('Dashboard')}
-                    className="ml-2 px-2.5 py-1 rounded-lg bg-[#E0F2FE] border border-[#BFDBFE] text-[10px] text-[#38BDF8] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 transition-all font-bold uppercase tracking-wider"
+                    className="ml-2 px-2.5 py-1 rounded-lg bg-[#E0F2FE] border border-[#BFDBFE] text-[10px] text-[#38BDF8] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 transition-all font-bold uppercase tracking-wider cursor-pointer"
                   >
                     ← Back to Dashboard
                   </button>
@@ -1244,6 +1269,12 @@ export default function App() {
                getPriorityBadgeClass={getPriorityBadgeClass}
                onLinkToBug={handleLinkToBug}
                setActiveTab={setActiveTab}
+                selectedProject={projectTabProject}
+                setSelectedProject={setProjectTabProject}
+                selectedModule={projectTabModule}
+                setSelectedModule={setProjectTabModule}
+                selectedSubModule={projectTabSubModule}
+                setSelectedSubModule={setProjectTabSubModule}
              />
            )}
 
@@ -1542,7 +1573,7 @@ function LoginView({ onLogin }) {
           {/* Large Text */}
           <div className="flex flex-col">
             <h1 className="font-extrabold text-7xl xl:text-9xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</h1>
-            <p className="text-base xl:text-xl text-[#0072FF] font-bold uppercase tracking-[0.2em] mt-4 font-sans">WHERE DEVELOPERS LOSE PEACE</p>
+            <p className="text-base xl:text-xl text-[#0072FF] font-bold uppercase tracking-[0.2em] mt-4 font-sans whitespace-nowrap">WHERE DEVELOPERS LOSE PEACE</p>
           </div>
         </div>
       </div>
@@ -1569,7 +1600,7 @@ function LoginView({ onLogin }) {
             {/* Header Text */}
             <div className="flex flex-col">
               <span className="font-extrabold text-4xl tracking-wide text-[#0C1B3D] font-title leading-none uppercase">QA MIND</span>
-              <span className="text-[11px] text-[#0072FF] font-bold uppercase tracking-[0.16em] mt-2 font-sans">WHERE DEVELOPERS LOSE PEACE</span>
+              <span className="text-[11px] text-[#0072FF] font-bold uppercase tracking-[0.16em] mt-2 font-sans whitespace-nowrap">WHERE DEVELOPERS LOSE PEACE</span>
             </div>
           </div>
 
@@ -2941,11 +2972,14 @@ function ProjectsView({
   getStatusBadgeClass, 
   getPriorityBadgeClass,
   onLinkToBug,
-  setActiveTab
+  setActiveTab,
+  selectedProject,
+  setSelectedProject,
+  selectedModule,
+  setSelectedModule,
+  selectedSubModule,
+  setSelectedSubModule
 }) {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [selectedModule, setSelectedModule] = useState(null);
-  const [selectedSubModule, setSelectedSubModule] = useState(null);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
@@ -3879,9 +3913,48 @@ function CreateBugView({
   const [newSubModuleName, setNewSubModuleName] = useState('');
   const [validationError, setValidationError] = useState('');
   const [isEnhancing, setIsEnhancing] = useState(false);
+  const [aiSuggestedSeverity, setAiSuggestedSeverity] = useState(null);
+  const [aiSuggestedPriority, setAiSuggestedPriority] = useState(null);
+
+  const analyzeBug = (description) => {
+    const descLower = description.toLowerCase();
+    
+    // Indicator words for critical/high priority issues
+    const criticalKeywords = [
+      'crash', 'freeze', 'hang', 'fatal', 'blocker', 'leak', 'security', 'vulnerability', 
+      'login', 'log in', 'checkout', 'payment', 'transaction', 'gateway', 'charge', 
+      'auth', 'authenticate', 'unusable', 'broken', 'not working', 'down', 'fail', 'error 500'
+    ];
+    
+    // Indicator words for minor/low priority issues
+    const minorKeywords = [
+      'alignment', 'misaligned', 'typo', 'spelling', 'grammar', 'overflow', 'color', 
+      'ui', 'visual', 'icon', 'margin', 'padding', 'border', 'spacing', 'overlap', 
+      'footer', 'header', 'text', 'font', 'dark mode', 'theme', 'cosmetic', 'glitch'
+    ];
+    
+    let severity = 'Major';
+    let priority = 'Medium';
+    
+    const hasCritical = criticalKeywords.some(keyword => descLower.includes(keyword));
+    const hasMinor = minorKeywords.some(keyword => descLower.includes(keyword));
+    
+    if (hasCritical) {
+      severity = 'Critical';
+      priority = 'High';
+    } else if (hasMinor) {
+      severity = 'Minor';
+      priority = 'Low';
+    }
+    
+    return { severity, priority };
+  };
 
   const handleEnhanceDescription = () => {
-    if (!formDescription.trim()) return;
+    if (!formDescription.trim()) {
+      setValidationError("Please enter a bug description first.");
+      return;
+    }
     setIsEnhancing(true);
     setTimeout(() => {
       let text = formDescription.trim();
@@ -3889,6 +3962,8 @@ function CreateBugView({
       const normalizedInput = text.toLowerCase().replace(/[\s\.\,\-\_]+/g, ' ').trim();
       if (normalizedInput === "user click login button but page not redirect and error not showing") {
         enhanced = "The Login button does not redirect the user after being clicked. The page remains on the same screen, and no error message is displayed.";
+      } else if (normalizedInput === "login button not working user cant login" || normalizedInput === "login button not working user can t login" || normalizedInput === "login button not working user cant log in" || normalizedInput === "login button not working user can t log in") {
+        enhanced = "The Login button is not functioning as expected. Users are unable to log in after clicking the Login button.";
       } else {
         let rules = [
           { pattern: /user click (\w+)/i, replacement: "the user clicks the $1 button" },
@@ -3917,6 +3992,14 @@ function CreateBugView({
         }
       }
       setFormDescription(enhanced);
+      
+      const analysis = analyzeBug(text);
+      setFormSeverity(analysis.severity);
+      setFormPriority(analysis.priority);
+      setAiSuggestedSeverity(analysis.severity);
+      setAiSuggestedPriority(analysis.priority);
+      
+      setValidationError('');
       setIsEnhancing(false);
     }, 1200);
   };
@@ -3924,8 +4007,10 @@ function CreateBugView({
   React.useEffect(() => {
     if (formTitle.trim() && formDescription.trim() && formAssignedTo.trim()) {
       setValidationError('');
+    } else if (formDescription.trim() && validationError === "Please enter a bug description first.") {
+      setValidationError('');
     }
-  }, [formTitle, formDescription, formAssignedTo]);
+  }, [formTitle, formDescription, formAssignedTo, validationError]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -3935,16 +4020,22 @@ function CreateBugView({
       return;
     }
     setValidationError('');
+    setAiSuggestedSeverity(null);
+    setAiSuggestedPriority(null);
     onSubmit(e);
   };
 
   const handleClear = () => {
     setValidationError('');
+    setAiSuggestedSeverity(null);
+    setAiSuggestedPriority(null);
     onClear();
   };
 
   const handleCancel = () => {
     setValidationError('');
+    setAiSuggestedSeverity(null);
+    setAiSuggestedPriority(null);
     onCancel();
   };
 
@@ -4015,9 +4106,9 @@ function CreateBugView({
           <div className="flex flex-col gap-8">
             
             {/* CARD 1: PROJECT DETAILS */}
-            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+            <div className="glass-card rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60 flex items-center justify-between">
-                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   PROJECT DETAILS
                 </h3>
@@ -4027,7 +4118,7 @@ function CreateBugView({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Project */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
+                  <label className="text-base font-bold text-[#475569]">
                     Project <span className="text-red-500">*</span>
                   </label>
                   <select 
@@ -4042,7 +4133,7 @@ function CreateBugView({
                         setFormSubModule(avSubs[0] || '');
                       }
                     }}
-                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     {Object.keys(PROJECT_MODULES).map(proj => (
                       <option key={proj} value={proj}>{proj}</option>
@@ -4052,7 +4143,7 @@ function CreateBugView({
 
                 {/* Module */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
+                  <label className="text-base font-bold text-[#475569]">
                     Module <span className="text-red-500">*</span>
                   </label>
                   <select 
@@ -4063,7 +4154,7 @@ function CreateBugView({
                       const avSubs = MODULE_SUBMODULES[mod] || [];
                       setFormSubModule(avSubs[0] || '');
                     }}
-                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     {PROJECT_MODULES[formProject]?.map(mod => (
                       <option key={mod} value={mod}>{mod}</option>
@@ -4073,13 +4164,13 @@ function CreateBugView({
 
                 {/* Sub Module */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
+                  <label className="text-base font-bold text-[#475569]">
                     Sub Module <span className="text-red-500">*</span>
                   </label>
                   <select 
                     value={formSubModule}
                     onChange={(e) => setFormSubModule(e.target.value)}
-                    className="h-12 px-4 rounded-xl bg-[#f0f9ff] border border-[#38bdf8] text-[#0369a1] text-sm font-semibold cursor-pointer outline-none focus:border-[#0284c7] focus:ring-2 focus:ring-[#0284c7]/20 transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     {MODULE_SUBMODULES[formModule]?.map(sub => (
                       <option key={sub} value={sub}>{sub}</option>
@@ -4090,9 +4181,9 @@ function CreateBugView({
             </div>
 
             {/* CARD 2: BUG DETAILS */}
-            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+            <div className="glass-card rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   BUG DETAILS
                 </h3>
@@ -4102,16 +4193,16 @@ function CreateBugView({
                 {/* Bug ID & Title */}
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                   <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label className="text-sm font-bold text-[#475569]">Bug ID</label>
+                    <label className="text-base font-bold text-[#475569]">Bug ID</label>
                     <input 
                       type="text" 
                       value={nextBugId} 
                       disabled
-                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-slate-500 text-sm font-mono font-bold cursor-not-allowed outline-none"
+                      className="h-14 px-5 rounded-xl bg-slate-50 border border-[#BFDBFE] text-slate-500 text-base font-mono font-bold cursor-not-allowed outline-none"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5 sm:col-span-3">
-                    <label className="text-sm font-bold text-[#475569]">
+                    <label className="text-base font-bold text-[#475569]">
                       Title <span className="text-red-500">*</span>
                     </label>
                     <input 
@@ -4119,7 +4210,7 @@ function CreateBugView({
                       value={formTitle}
                       onChange={(e) => setFormTitle(e.target.value)}
                       placeholder="e.g. Checkout gateway crashes on Android UPI callbacks"
-                      className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                      className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
                       required
                     />
                   </div>
@@ -4127,22 +4218,26 @@ function CreateBugView({
 
                 {/* Description */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
+                  <label className="text-base font-bold text-[#475569]">
                     Description <span className="text-red-500">*</span>
                   </label>
                   <textarea 
                     value={formDescription}
-                    onChange={(e) => setFormDescription(e.target.value)}
+                    onChange={(e) => setFormDescription(e.target.value.slice(0, 1000))}
                     placeholder="Enter detailed bug description, steps to reproduce, actual vs expected results..."
-                    className="w-full min-h-[140px] p-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    className="w-full min-h-[160px] p-4 text-base rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    maxLength={1000}
                     required
                   />
-                  <div className="flex justify-end mt-2">
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-xs text-[#94A3B8] font-bold">
+                      {formDescription.length} / 1000 Characters
+                    </span>
                     <button
                       type="button"
-                      disabled={isEnhancing || !formDescription.trim()}
+                      disabled={isEnhancing}
                       onClick={handleEnhanceDescription}
-                      className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 border-transparent"
+                      className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 cursor-pointer select-none bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 border-transparent"
                     >
                       {isEnhancing ? (
                         <>
@@ -4151,7 +4246,7 @@ function CreateBugView({
                         </>
                       ) : (
                         <>
-                          <Sparkles size={13} className="text-white flex-shrink-0" />
+                          <Sparkles size={15} className="text-[#e0f2fe] flex-shrink-0" />
                           <span>✨ Polish This Bug</span>
                         </>
                       )}
@@ -4162,9 +4257,9 @@ function CreateBugView({
             </div>
 
             {/* CARD 3: CLASSIFICATION */}
-            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+            <div className="glass-card rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   CLASSIFICATION
                 </h3>
@@ -4173,13 +4268,19 @@ function CreateBugView({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Severity */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
-                    Severity <span className="text-red-500">*</span>
+                  <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
+                    <span>Severity <span className="text-red-500">*</span></span>
+                    {formSeverity === aiSuggestedSeverity && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E0F2FE] text-[#0369a1] border border-[#38bdf8]/30 shadow-sm animate-fade-in">
+                        <Sparkles size={11} className="text-[#38bdf8] fill-[#38bdf8]/20" />
+                        AI Suggested
+                      </span>
+                    )}
                   </label>
                   <select 
                     value={formSeverity}
                     onChange={(e) => setFormSeverity(e.target.value)}
-                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-sm text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-base text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     <option value="Blocker">Blocker</option>
                     <option value="Critical">Critical</option>
@@ -4190,13 +4291,19 @@ function CreateBugView({
 
                 {/* Priority */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
-                    Priority <span className="text-red-500">*</span>
+                  <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
+                    <span>Priority <span className="text-red-500">*</span></span>
+                    {formPriority === aiSuggestedPriority && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E0F2FE] text-[#0369a1] border border-[#38bdf8]/30 shadow-sm animate-fade-in">
+                        <Sparkles size={11} className="text-[#38bdf8] fill-[#38bdf8]/20" />
+                        AI Suggested
+                      </span>
+                    )}
                   </label>
                   <select 
                     value={formPriority}
                     onChange={(e) => setFormPriority(e.target.value)}
-                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-sm text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-base text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
                   >
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
@@ -4212,9 +4319,9 @@ function CreateBugView({
           <div className="flex flex-col gap-8">
             
             {/* CARD 4: ASSIGNMENT DETAILS */}
-            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+            <div className="glass-card rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   ASSIGNMENT DETAILS
                 </h3>
@@ -4224,28 +4331,31 @@ function CreateBugView({
                 {/* Assigned By & Date */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-bold text-[#475569]">Assigned By</label>
+                    <label className="text-base font-bold text-[#475569]">Assigned By</label>
                     <input 
                       type="text" 
                       value={loggedInUser}
                       disabled
-                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm font-bold cursor-not-allowed outline-none"
+                      className="h-14 px-5 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-base font-bold cursor-not-allowed outline-none"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-bold text-[#475569]">Assigned Date</label>
-                    <input 
-                      type="text" 
-                      value={currentDate}
-                      disabled
-                      className="h-12 px-4 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-sm font-bold cursor-not-allowed outline-none"
-                    />
+                    <label className="text-base font-bold text-[#475569]">Assigned Date</label>
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        value={currentDate}
+                        disabled
+                        className="h-14 pl-5 pr-10 rounded-xl bg-slate-50 border border-[#BFDBFE] text-[#94A3B8] text-base font-bold cursor-not-allowed w-full outline-none"
+                      />
+                      <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8]" size={18} />
+                    </div>
                   </div>
                 </div>
 
                 {/* Assigned To */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">
+                  <label className="text-base font-bold text-[#475569]">
                     Assigned To <span className="text-red-500">*</span>
                   </label>
                   <input 
@@ -4253,7 +4363,7 @@ function CreateBugView({
                     value={formAssignedTo}
                     onChange={(e) => setFormAssignedTo(e.target.value)}
                     placeholder="Enter developer's full name (e.g. Rahul Verma)"
-                    className="h-12 px-4 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-sm font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
                     required
                   />
                 </div>
@@ -4261,9 +4371,9 @@ function CreateBugView({
             </div>
 
             {/* CARD 5: ADDITIONAL INFORMATION */}
-            <div className="glass-card rounded-3xl p-6 flex flex-col gap-5 shadow-sm">
+            <div className="glass-card rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
               <div className="pb-3 border-b border-[#BFDBFE]/60">
-                <h3 className="text-base font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
                   <span className="w-1.5 h-3.5 rounded bg-[#38bdf8]" />
                   ADDITIONAL INFORMATION
                 </h3>
@@ -4272,18 +4382,18 @@ function CreateBugView({
               <div className="flex flex-col gap-4">
                 {/* Remarks */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">Remarks</label>
+                  <label className="text-base font-bold text-[#475569]">Remarks</label>
                   <textarea 
                     value={formRemarks}
                     onChange={(e) => setFormRemarks(e.target.value)}
                     placeholder="Provide initial troubleshooting context, logs snippets, or environment parameters..."
-                    className="w-full min-h-[90px] p-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
+                    className="w-full min-h-[110px] p-4 text-base rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none resize-y transition-colors leading-relaxed"
                   />
                 </div>
 
                 {/* Screenshot Upload Drag-and-Drop */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-[#475569]">Screenshot Upload</label>
+                  <label className="text-base font-bold text-[#475569]">Screenshot Upload</label>
                   
                   {!previewUrl ? (
                     <div 
@@ -4299,8 +4409,8 @@ function CreateBugView({
                         accept="image/*"
                         className="hidden"
                       />
-                      <div className="w-10 h-10 rounded-full bg-[#E0F2FE] flex items-center justify-center text-[#38BDF8] group-hover:scale-110 transition-transform">
-                        <PlusCircle size={20} />
+                      <div className="w-12 h-12 rounded-full bg-[#E0F2FE] flex items-center justify-center text-[#38bdf8] group-hover:scale-110 transition-transform">
+                        <UploadCloud size={24} />
                       </div>
                       <div className="text-center select-none">
                         <span className="text-sm font-bold text-[#0F172A] block">
@@ -4335,33 +4445,33 @@ function CreateBugView({
                 </div>
               </div>
             </div>
+            
+            {/* FORM BUTTONS */}
+            <div className="flex items-center gap-4 pt-6 border-t border-[#BFDBFE]/60 justify-center mt-4">
+              <button 
+                type="button"
+                onClick={handleCancel}
+                className="h-14 w-44 flex items-center justify-center rounded-xl text-black font-extrabold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-base bg-white cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button"
+                onClick={handleClear}
+                className="h-14 w-44 flex items-center justify-center rounded-xl text-black font-extrabold border border-[#bae6fd] hover:bg-[#bae6fd]/30 transition-all text-base bg-[#f0f9ff] cursor-pointer"
+              >
+                Reset
+              </button>
+              <button 
+                type="submit"
+                className="h-14 w-44 flex items-center justify-center rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-extrabold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-base cursor-pointer border-transparent"
+              >
+                Create Bug
+              </button>
+            </div>
 
           </div>
 
-        </div>
-
-        {/* FORM BUTTONS */}
-        <div className="flex items-center gap-4 pt-6 border-t border-[#BFDBFE]/60 justify-end mt-4">
-          <button 
-            type="button"
-            onClick={handleCancel}
-            className="h-12 w-36 flex items-center justify-center rounded-xl text-black font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-sm bg-white cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button 
-            type="button"
-            onClick={handleClear}
-            className="h-12 w-36 flex items-center justify-center rounded-xl text-black font-bold border border-[#bae6fd] hover:bg-[#bae6fd]/30 transition-all text-sm bg-[#f0f9ff] cursor-pointer"
-          >
-            Reset
-          </button>
-          <button 
-            type="submit"
-            className="h-12 w-36 flex items-center justify-center rounded-xl bg-gradient-to-r from-[#0284c7] to-[#38bdf8] text-white font-bold hover:brightness-105 shadow-md shadow-sky-500/10 hover:shadow-sky-500/20 transition-all text-sm cursor-pointer border-transparent"
-          >
-            Create Bug
-          </button>
         </div>
       </form>
 
