@@ -59,6 +59,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Checkout',
     subModule: 'UPI Payment',
+    title: 'UPI transactions failing during high latency peaks',
     description: 'UPI transactions failing on Android devices during high network latency peaks. Returns null transaction ID from vendor API.',
     priority: 'P1',
     severity: 'Critical',
@@ -66,8 +67,9 @@ const INITIAL_BUGS = [
     assignedBy: 'Priya Sharma',
     assignedDate: 'Jun 3, 2026',
     devStatus: 'In Progress',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '10 min ago',
+    screenshotUrl: 'https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=600',
     comments: [
       { author: 'Priya Sharma', text: 'Reproduced on real device testing. Occurs 3 out of 10 times.', date: 'Jun 3, 2026' }
     ]
@@ -77,6 +79,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Billing',
     subModule: 'Credit Card',
+    title: 'Subscription billing system charging customers 24h early',
     description: 'Subscription billing system charging customers 24 hours prior to actual cycle end date.',
     priority: 'P2',
     severity: 'High',
@@ -84,7 +87,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Priya Sharma',
     assignedDate: 'Jun 4, 2026',
     devStatus: 'Fixed',
-    testerStatus: 'Retest',
+    testerStatus: 'Retesting',
     updatedTime: '1 hr ago',
     comments: [
       { author: 'Arun Kumar', text: 'Fixed the timezone offset checking in billing cron job.', date: 'Jun 4, 2026' }
@@ -95,6 +98,7 @@ const INITIAL_BUGS = [
     project: 'Mobile App',
     module: 'Onboarding',
     subModule: 'SMS Verification',
+    title: 'Resend OTP button remains disabled after cooldown timer',
     description: 'Resend OTP button remains disabled after the 65-second cooldown timer expires.',
     priority: 'P3',
     severity: 'Medium',
@@ -102,7 +106,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Sneha Patel',
     assignedDate: 'Jun 4, 2026',
     devStatus: 'Open',
-    testerStatus: 'Retest',
+    testerStatus: 'Assigned',
     updatedTime: '2 hr ago',
     comments: []
   },
@@ -111,13 +115,14 @@ const INITIAL_BUGS = [
     project: 'Web Portal',
     module: 'Dashboard',
     subModule: 'Analytics Charts',
+    title: 'Line graph renders with overlapping X-axis labels',
     description: 'Line graph renders with overlapping X-axis labels when device orientation changes to landscape.',
     priority: 'P4',
     severity: 'Low',
     assignedTo: 'Priya Sharma',
     assignedBy: 'Sneha Patel',
     assignedDate: 'Jun 5, 2026',
-    devStatus: 'In Progress',
+    devStatus: 'Fixed',
     testerStatus: 'Closed',
     fixedDate: 'Jun 5, 2026',
     updatedTime: '3 hr ago',
@@ -130,6 +135,7 @@ const INITIAL_BUGS = [
     project: 'Mobile App',
     module: 'Profile',
     subModule: 'Account Settings',
+    title: 'Avatar upload fails when image dimensions exceed 1000px',
     description: 'User avatar upload fails when image dimensions exceed 1000px width/height, despite size being under 1MB.',
     priority: 'P2',
     severity: 'High',
@@ -137,7 +143,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Priya Sharma',
     assignedDate: 'Jun 5, 2026',
     devStatus: 'Open',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '4 hr ago',
     comments: []
   },
@@ -146,6 +152,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Checkout',
     subModule: 'Credit Card',
+    title: 'Checkout page crashes on iOS Safari card verification failure',
     description: 'Checkout page crashes on iOS Safari when card verification fails three consecutive times.',
     priority: 'P1',
     severity: 'Critical',
@@ -163,6 +170,7 @@ const INITIAL_BUGS = [
     project: 'Mobile App',
     module: 'Profile',
     subModule: 'Account Settings',
+    title: 'Dark mode settings toggle resets upon terminating the app',
     description: 'Dark mode settings toggle resets to default light mode upon terminating the app memory container.',
     priority: 'P3',
     severity: 'Medium',
@@ -170,7 +178,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Sneha Patel',
     assignedDate: 'May 30, 2026',
     devStatus: 'In Progress',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '6 hr ago',
     comments: []
   },
@@ -179,6 +187,7 @@ const INITIAL_BUGS = [
     project: 'Web Portal',
     module: 'Dashboard',
     subModule: 'Analytics Charts',
+    title: 'Data fetch timeout occurs when query range exceeds 30 days',
     description: 'Data fetch timeout occurs when query range exceeds 30 days on active billing reports panel.',
     priority: 'P2',
     severity: 'High',
@@ -196,6 +205,7 @@ const INITIAL_BUGS = [
     project: 'Mobile App',
     module: 'Onboarding',
     subModule: 'SMS Verification',
+    title: 'OTP autofill fails to capture SMS tokens on Android API 33',
     description: 'OTP autofill fails to capture SMS tokens on Android devices running API level 33.',
     priority: 'P2',
     severity: 'High',
@@ -203,7 +213,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Priya Sharma',
     assignedDate: 'Jun 2, 2026',
     devStatus: 'Fixed',
-    testerStatus: 'Retest',
+    testerStatus: 'Retesting',
     updatedTime: '1 day ago',
     comments: []
   },
@@ -212,6 +222,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Billing',
     subModule: 'Subscription Billing',
+    title: 'Invoice PDFs fail to generate, rendering syntax errors',
     description: 'Invoice PDFs fail to generate, throwing background rendering syntax errors.',
     priority: 'P2',
     severity: 'High',
@@ -219,7 +230,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Sneha Patel',
     assignedDate: 'Jun 3, 2026',
     devStatus: 'Open',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '2 days ago',
     comments: []
   },
@@ -228,6 +239,7 @@ const INITIAL_BUGS = [
     project: 'Web Portal',
     module: 'Dashboard',
     subModule: 'Analytics Charts',
+    title: 'Hover tooltips display incorrect coordinates in light mode',
     description: 'Hover tooltips on analytics maps display incorrect geographical coordinates in light mode.',
     priority: 'P4',
     severity: 'Low',
@@ -245,6 +257,7 @@ const INITIAL_BUGS = [
     project: 'Web Portal',
     module: 'Dashboard',
     subModule: 'Analytics Charts',
+    title: 'WebSocket disconnect retry loops lock up active users counter',
     description: 'Real-time active users counter locks up during WebSocket disconnect retry loops.',
     priority: 'P1',
     severity: 'Critical',
@@ -252,7 +265,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Priya Sharma',
     assignedDate: 'Jun 4, 2026',
     devStatus: 'Open',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '3 days ago',
     comments: []
   },
@@ -261,6 +274,7 @@ const INITIAL_BUGS = [
     project: 'Analytics Engine',
     module: 'Query Parser',
     subModule: 'SQL Optimizer',
+    title: 'Database joins on nested queries take longer than 3.5s',
     description: 'Database joins on nested queries take longer than 3.5 seconds, stalling background threads.',
     priority: 'P2',
     severity: 'High',
@@ -268,7 +282,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Sneha Patel',
     assignedDate: 'Jun 4, 2026',
     devStatus: 'In Progress',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '3 days ago',
     comments: []
   },
@@ -277,6 +291,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Billing',
     subModule: 'Subscription Billing',
+    title: 'Webhook verification returns 401 signature mismatches',
     description: 'Webhook verification returns 401 signature mismatches for Stripe callbacks in test environments.',
     priority: 'P1',
     severity: 'Critical',
@@ -294,6 +309,7 @@ const INITIAL_BUGS = [
     project: 'Mobile App',
     module: 'Onboarding',
     subModule: 'SMS Verification',
+    title: 'Country code select dropdown displays empty results',
     description: 'Country code select dropdown displays empty results when locale is set to US.',
     priority: 'P3',
     severity: 'Medium',
@@ -301,7 +317,7 @@ const INITIAL_BUGS = [
     assignedBy: 'Sneha Patel',
     assignedDate: 'Jun 3, 2026',
     devStatus: 'Open',
-    testerStatus: 'Open',
+    testerStatus: 'Assigned',
     updatedTime: '4 days ago',
     comments: []
   },
@@ -310,6 +326,7 @@ const INITIAL_BUGS = [
     project: 'Payment Gateway',
     module: 'Checkout',
     subModule: 'UPI Payment',
+    title: 'Auto-retry checkout attempts lock user balances',
     description: 'Auto-retry checkout attempts lock user balances during merchant response delays.',
     priority: 'P1',
     severity: 'Critical',
@@ -349,7 +366,7 @@ const INITIAL_ACTIVITIES = [
     action: 'retest failed in billing module',
     bugId: 'BUG-123',
     timestamp: '1 hr ago',
-    status: 'Retest',
+    status: 'Reassigned',
     avatarType: 'sync'
   },
   {
@@ -357,7 +374,7 @@ const INITIAL_ACTIVITIES = [
     user: 'Sneha Patel',
     action: 'marked bug as closed',
     bugId: 'BUG-122',
-    timestamp: '2 hr ago',
+    timestamp: '2.5 hr ago',
     status: 'Closed',
     avatarType: 'check'
   },
@@ -401,6 +418,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [bugs, setBugs] = useState(INITIAL_BUGS);
   const [activities, setActivities] = useState(INITIAL_ACTIVITIES);
+  const [teamMembers, setTeamMembers] = useState(TEAM_MEMBERS);
 
   // Filters State
   const [selectedProject, setSelectedProject] = useState('All');
@@ -529,18 +547,28 @@ export default function App() {
 
   // Filtered bugs matching dashboard selections
   const dashboardFilteredBugs = useMemo(() => {
-    return bugs.filter(bug => {
+    const baseBugs = user && user.userRole === 'Developer' ? bugs.filter(b => b.assignedTo === user.name) : bugs;
+    return baseBugs.filter(bug => {
       const matchProj = selectedProject === 'All' || bug.project === selectedProject;
       const matchMod = selectedModule === 'All' || bug.module === selectedModule;
       const matchSub = selectedSubModule === 'All' || bug.subModule === selectedSubModule;
       return matchProj && matchMod && matchSub;
     });
-  }, [bugs, selectedProject, selectedModule, selectedSubModule]);
+  }, [bugs, selectedProject, selectedModule, selectedSubModule, user]);
 
   // Dynamic Metrics derived from current database count
   const metrics = useMemo(() => {
+    if (user && user.userRole === 'Developer') {
+      const myBugs = bugs.filter(b => b.assignedTo === user.name);
+      return {
+        open: myBugs.filter(b => b.devStatus === 'Open').length,
+        inProgress: myBugs.filter(b => b.devStatus === 'In Progress').length,
+        fixed: myBugs.filter(b => b.devStatus === 'Fixed').length,
+        critical: myBugs.filter(b => b.assignedTo === user.name && (b.severity === 'Critical' || b.severity === 'Blocker') && b.testerStatus !== 'Closed').length
+      };
+    }
     const activeBugsCount = bugs.filter(b => b.testerStatus !== 'Closed').length;
-    const retestBugsCount = bugs.filter(b => b.testerStatus === 'Retest').length;
+    const retestBugsCount = bugs.filter(b => b.testerStatus === 'Retesting').length;
     const toFixCount = bugs.filter(b => b.devStatus === 'Open' || b.devStatus === 'In Progress').length;
     const closedCount = bugs.filter(b => b.testerStatus === 'Closed').length;
 
@@ -550,7 +578,7 @@ export default function App() {
       toFix: toFixCount,
       closed: closedCount
     };
-  }, [bugs]);
+  }, [bugs, user]);
 
   // Team Workload derived list using baseline offsets
   const workloadData = useMemo(() => {
@@ -588,7 +616,7 @@ export default function App() {
 
       return {
         name,
-        role: TEAM_MEMBERS[name]?.role || 'Developer',
+        role: teamMembers[name]?.role || 'Developer',
         active: Math.max(0, base.active + offsetActive),
         toFix: Math.max(0, base.toFix + offsetToFix),
         fixed: Math.max(0, base.fixed + offsetFixed),
@@ -597,7 +625,7 @@ export default function App() {
         max: 20
       };
     });
-  }, [bugs]);
+  }, [bugs, teamMembers]);
 
   const workloadMemberBugs = useMemo(() => {
     if (!selectedWorkloadMember) return [];
@@ -646,7 +674,7 @@ export default function App() {
   };
 
   // Login Handler
-  const handleLogin = (email, password, username, fullName) => {
+  const handleLogin = (email, password, username, fullName, selectedRole) => {
     let matchedName = fullName ? fullName.trim() : (username ? username.trim() : '');
     let matchedEmail = email || 'priya@qamind.io';
 
@@ -659,15 +687,35 @@ export default function App() {
       else if (normalizedEmail.includes('sneha')) matchedName = 'Sneha Patel';
     }
 
+    const baseRole = teamMembers[matchedName]?.role || (selectedRole === 'Developer' ? 'Software Developer' : 'QA Engineer');
+    const userRole = selectedRole || (baseRole.toLowerCase().includes('dev') || baseRole.toLowerCase().includes('full stack') ? 'Developer' : 'QA Engineer');
+
     const loginUser = {
       username: username ? username.trim() : matchedName.toLowerCase().replace(/\s/g, ''),
       name: matchedName,
       email: matchedEmail,
-      role: TEAM_MEMBERS[matchedName]?.role || 'QA Engineer',
-      avatarColor: TEAM_MEMBERS[matchedName]?.color || '#8b5cf6',
-      initials: TEAM_MEMBERS[matchedName] ? TEAM_MEMBERS[matchedName].initials : matchedName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase(),
-      avatarUrl: TEAM_MEMBERS[matchedName]?.avatarUrl || null
+      role: baseRole,
+      userRole: userRole,
+      avatarColor: teamMembers[matchedName]?.color || '#8b5cf6',
+      initials: teamMembers[matchedName] ? teamMembers[matchedName].initials : matchedName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase(),
+      avatarUrl: teamMembers[matchedName]?.avatarUrl || null
     };
+
+    // Dynamically register logged in user into the teamMembers list
+    setTeamMembers(prev => {
+      if (prev[matchedName]) return prev;
+      return {
+        ...prev,
+        [matchedName]: {
+          initials: loginUser.initials,
+          color: loginUser.avatarColor,
+          email: loginUser.email,
+          role: loginUser.role,
+          username: loginUser.username,
+          avatarUrl: loginUser.avatarUrl
+        }
+      };
+    });
 
     setUser(loginUser);
     triggerToast(`Welcome back to QA MIND, ${loginUser.name}!`);
@@ -971,12 +1019,20 @@ export default function App() {
 
           {/* Navigation Menu */}
           <nav className="flex flex-col gap-1.5 mt-2">
-            {[
-              { name: 'Dashboard', icon: LayoutDashboard },
-              { name: 'Create Bug', icon: PlusCircle },
-              { name: 'Projects', icon: Folder },
-              { name: 'Settings', icon: SettingsIcon }
-            ].map(tab => {
+            {(user.userRole === 'Developer' 
+              ? [
+                  { name: 'Dashboard', icon: LayoutDashboard },
+                  { name: 'My Assigned Bugs', icon: Bug },
+                  { name: 'Projects', icon: Folder },
+                  { name: 'Settings', icon: SettingsIcon }
+                ]
+              : [
+                  { name: 'Dashboard', icon: LayoutDashboard },
+                  { name: 'Create Bug', icon: PlusCircle },
+                  { name: 'Projects', icon: Folder },
+                  { name: 'Settings', icon: SettingsIcon }
+                ]
+            ).map(tab => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.name;
               return (
@@ -1017,7 +1073,7 @@ export default function App() {
               <span className="text-sm font-bold text-[#0F172A] truncate leading-snug">{user.name}</span>
               <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider leading-none flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Active QA</span>
+                <span>{user.userRole === 'Developer' ? 'Active Developer' : 'Active QA'}</span>
               </span>
             </div>
           </div>
@@ -1076,14 +1132,14 @@ export default function App() {
                   </button>
                 </>
               )}
-              {activeTab !== 'Dashboard' && activeTab !== 'Create Bug' && activeTab !== 'Settings' && (
+              {activeTab !== 'Dashboard' && activeTab !== 'Create Bug' && activeTab !== 'My Assigned Bugs' && activeTab !== 'Settings' && (
                 <>
                   <span className="text-[#BFDBFE]">/</span>
                   <button 
-                    onClick={() => setActiveTab('Dashboard')}
+                    onClick={() => setActiveTab(activeTab === 'Bug Detail' ? 'My Assigned Bugs' : 'Dashboard')}
                     className="ml-2 px-2.5 py-1 rounded-lg bg-[#E0F2FE] border border-[#BFDBFE] text-[10px] text-[#38BDF8] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 transition-all font-bold uppercase tracking-wider cursor-pointer"
                   >
-                    ← Back to Dashboard
+                    {activeTab === 'Bug Detail' ? '← Back to Bugs' : '← Back to Dashboard'}
                   </button>
                 </>
               )}
@@ -1194,7 +1250,7 @@ export default function App() {
               getSeverityBadgeClass={getSeverityBadgeClass}
               getStatusBadgeClass={getStatusBadgeClass}
               getPriorityBadgeClass={getPriorityBadgeClass}
-              teamMembers={TEAM_MEMBERS}
+              teamMembers={teamMembers}
               onSelectDeveloper={(name) => {
                 setSelectedWorkloadMember(name);
                 setWorkloadFilterTab('All');
@@ -1205,6 +1261,7 @@ export default function App() {
               MODULE_SUBMODULES={moduleSubmodules}
               onAddProject={handleAddProject}
               setActiveTab={setActiveTab}
+              user={user}
             />
           )}
 
@@ -1223,7 +1280,7 @@ export default function App() {
               getSeverityBadgeClass={getSeverityBadgeClass}
               getPriorityBadgeClass={getPriorityBadgeClass}
               getStatusBadgeClass={getStatusBadgeClass}
-              teamMembers={TEAM_MEMBERS}
+              teamMembers={teamMembers}
             />
           )}
 
@@ -1236,7 +1293,7 @@ export default function App() {
               triggerToast={triggerToast}
               getSeverityBadgeClass={getSeverityBadgeClass}
               getStatusBadgeClass={getStatusBadgeClass}
-              teamMembers={TEAM_MEMBERS}
+              teamMembers={teamMembers}
               user={user}
             />
           )}
@@ -1250,7 +1307,7 @@ export default function App() {
               workloadFilterTab={workloadFilterTab}
               setWorkloadFilterTab={setWorkloadFilterTab}
               workloadMemberBugs={workloadMemberBugs}
-              teamMembers={TEAM_MEMBERS}
+              teamMembers={teamMembers}
               getSeverityBadgeClass={getSeverityBadgeClass}
               getStatusBadgeClass={getStatusBadgeClass}
               handleLinkToBug={handleLinkToBug}
@@ -1328,6 +1385,38 @@ export default function App() {
               PROJECT_MODULES={projectModules}
               MODULE_SUBMODULES={moduleSubmodules}
               onAddProject={handleAddProject}
+              teamMembers={teamMembers}
+            />
+          )}
+
+          {activeTab === 'My Assigned Bugs' && (
+            <MyAssignedBugsView 
+              bugs={bugs}
+              user={user}
+              onSelectBug={(bugId) => {
+                setExpandedBugId(bugId);
+                setActiveTab('Bug Detail');
+              }}
+              getSeverityBadgeClass={getSeverityBadgeClass}
+              getPriorityBadgeClass={getPriorityBadgeClass}
+              getStatusBadgeClass={getStatusBadgeClass}
+            />
+          )}
+
+          {activeTab === 'Bug Detail' && (
+            <BugDetailView 
+              bugId={expandedBugId}
+              bugs={bugs}
+              setBugs={setBugs}
+              activities={activities}
+              setActivities={setActivities}
+              user={user}
+              triggerToast={triggerToast}
+              setActiveTab={setActiveTab}
+              getSeverityBadgeClass={getSeverityBadgeClass}
+              getPriorityBadgeClass={getPriorityBadgeClass}
+              getStatusBadgeClass={getStatusBadgeClass}
+              teamMembers={teamMembers}
             />
           )}
         </main>
@@ -1455,6 +1544,7 @@ function LoginView({ onLogin }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [selectedRole, setSelectedRole] = useState('QA Engineer');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -1486,7 +1576,7 @@ function LoginView({ onLogin }) {
     }
 
     setError('');
-    onLogin(email, password, username, fullName);
+    onLogin(email, password, username, fullName, selectedRole);
   };
 
   const handleQuickAccess = (type) => {
@@ -1495,11 +1585,13 @@ function LoginView({ onLogin }) {
       setFullName('Priya Sharma');
       setEmail('priya@qamind.io');
       setPassword('1234');
+      setSelectedRole('QA Engineer');
     } else {
       setUsername('rahul');
       setFullName('Rahul Verma');
       setEmail('rahul@qamind.io');
       setPassword('5678');
+      setSelectedRole('Developer');
     }
     setError('');
   };
@@ -1614,6 +1706,35 @@ function LoginView({ onLogin }) {
                 <span>{error}</span>
               </div>
             )}
+
+            {/* Role Selection Segmented Control */}
+            <div className="flex flex-col gap-2">
+              <label className="text-base font-bold text-[#475569] pl-1">Select workspace role</label>
+              <div className="flex bg-[#F0F7FF] p-1.5 rounded-2xl border border-[#D2E4FA] gap-1 relative select-none">
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('QA Engineer')}
+                  className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 cursor-pointer ${
+                    selectedRole === 'QA Engineer'
+                      ? 'bg-[#38BDF8] text-white shadow-md shadow-[#38BDF8]/20 font-extrabold'
+                      : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#EEF6FF]/60'
+                  }`}
+                >
+                  QA Engineer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('Developer')}
+                  className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 cursor-pointer ${
+                    selectedRole === 'Developer'
+                      ? 'bg-[#38BDF8] text-white shadow-md shadow-[#38BDF8]/20 font-extrabold'
+                      : 'text-[#475569] hover:text-[#0F172A] hover:bg-[#EEF6FF]/60'
+                  }`}
+                >
+                  Developer
+                </button>
+              </div>
+            </div>
 
             {/* Username Field */}
             <div className="flex flex-col gap-2">
@@ -1738,7 +1859,7 @@ function LoginView({ onLogin }) {
               <button 
                 type="button" 
                 onClick={() => handleQuickAccess('priya')}
-                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm"
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm bg-transparent border-none p-0"
               >
                 priya@qamind.io
               </button>{" "}
@@ -1746,7 +1867,7 @@ function LoginView({ onLogin }) {
               <button 
                 type="button" 
                 onClick={() => handleQuickAccess('rahul')}
-                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm"
+                className="font-bold text-[#0072FF] hover:underline cursor-pointer focus:outline-none text-sm bg-transparent border-none p-0"
               >
                 rahul@qamind.io
               </button>
@@ -1761,9 +1882,6 @@ function LoginView({ onLogin }) {
   );
 }
 
-// --------------------------------
-// DASHBOARD VIEW COMPONENT
-// --------------------------------
 function DashboardView({ 
   bugs, 
   metrics, 
@@ -1778,18 +1896,21 @@ function DashboardView({
   filteredBugs,
   getSeverityBadgeClass,
   getStatusBadgeClass,
+  getPriorityBadgeClass,
   teamMembers,
   onSelectDeveloper,
   onLinkToBug,
   PROJECT_MODULES,
-  MODULE_SUBMODULES
+  MODULE_SUBMODULES,
+  user,
+  setActiveTab
 }) {
   
   // Custom Donut Chart Arc Segment Generator
   const donutData = useMemo(() => {
-    const open = bugs.filter(b => b.testerStatus === 'Open').length;
+    const open = bugs.filter(b => b.testerStatus === 'Open' || b.testerStatus === 'Assigned' || b.testerStatus === 'Reassigned').length;
     const inProgress = bugs.filter(b => b.devStatus === 'In Progress' && b.testerStatus !== 'Closed').length;
-    const retest = bugs.filter(b => b.testerStatus === 'Retest').length;
+    const retest = bugs.filter(b => b.testerStatus === 'Retesting' || b.testerStatus === 'Retest').length;
     const closed = bugs.filter(b => b.testerStatus === 'Closed').length;
     
     const total = open + inProgress + retest + closed;
@@ -1828,6 +1949,8 @@ function DashboardView({
     toFix: 'M0,15 C15,18 30,25 45,10 C60,2 75,18 90,8 C95,5 100,5 100,5',
     closed: 'M0,28 C15,25 30,12 45,28 C60,22 75,8 90,4 C95,2 100,2 100,2'
   };
+
+  const isDev = user && user.userRole === 'Developer';
 
   return (
     <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container">
@@ -1892,131 +2015,259 @@ function DashboardView({
 
       {/* TOP ANALTICS CARDS */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        
-        {/* Total Active Bugs */}
-        <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
-          {/* Card Hover Glow effect */}
-          <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-red-500/10 transition-all" />
-          <AlertCircle size={80} className="absolute right-[-10px] bottom-[-15px] text-red-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Total Active Bugs</span>
-              <span className="text-[9px] text-red-500 font-bold uppercase tracking-wide">QA Backlog</span>
+        {isDev ? (
+          <>
+            {/* Developer Card 1: My Open Bugs */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-sky-500/10 transition-all" />
+              <AlertCircle size={80} className="absolute right-[-10px] bottom-[-15px] text-[#38BDF8]/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">My Open Bugs</span>
+                  <span className="text-[9px] text-[#38BDF8] font-bold uppercase tracking-wide font-mono">Assigned backlog</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-500 text-white flex items-center justify-center shadow-md shadow-sky-500/20">
+                  <AlertCircle size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.open}</span>
+                  <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                    <span>Active Queue</span>
+                  </span>
+                </div>
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-sky-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.toFix} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Bugs assigned to you awaiting analysis</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-500 to-orange-500 text-white flex items-center justify-center shadow-md shadow-red-500/20">
-              <AlertCircle size={17} />
-            </div>
-          </div>
-          <div className="flex items-baseline justify-between mt-2">
-            <div className="flex flex-col">
-              <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.active}</span>
-              <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
-                <span>↑ 18.2%</span> <span className="text-[#94A3B8] font-medium">from last sprint</span>
-              </span>
-            </div>
-            {/* Sparkline */}
-            <div className="w-20 h-8 select-none">
-              <svg viewBox="0 0 100 30" className="w-full h-full stroke-red-500 fill-none" strokeWidth="2" strokeLinecap="round">
-                <path d={sparklineData.active} />
-              </svg>
-            </div>
-          </div>
-          <div className="h-px bg-[#BFDBFE]/60 my-1" />
-          <span className="text-[10px] text-[#94A3B8] font-medium">Total active bugs unresolved in dev backlog</span>
-        </div>
 
-        {/* Retest Pending */}
-        <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/10 transition-all" />
-          <Clock size={80} className="absolute right-[-10px] bottom-[-15px] text-indigo-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Retest Pending</span>
-              <span className="text-[9px] text-indigo-500 font-bold uppercase tracking-wide font-mono">Verification queue</span>
+            {/* Developer Card 2: In Progress */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/10 transition-all" />
+              <Clock size={80} className="absolute right-[-10px] bottom-[-15px] text-indigo-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">In Progress</span>
+                  <span className="text-[9px] text-[#818cf8] font-bold uppercase tracking-wide font-mono">Working state</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
+                  <Clock size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.inProgress}</span>
+                  <span className="text-[10px] text-[#818cf8] font-bold flex items-center gap-1 mt-1">
+                    <span>Under Fix</span>
+                  </span>
+                </div>
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-indigo-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.active} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Defects currently in development fix lifecycle</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
-              <Clock size={17} />
-            </div>
-          </div>
-          <div className="flex items-baseline justify-between mt-2">
-            <div className="flex flex-col">
-              <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.retest}</span>
-              <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
-                <span>↑ 9.4%</span> <span className="text-[#94A3B8] font-medium">from last week</span>
-              </span>
-            </div>
-            {/* Sparkline */}
-            <div className="w-20 h-8 select-none">
-              <svg viewBox="0 0 100 30" className="w-full h-full stroke-indigo-500 fill-none" strokeWidth="2" strokeLinecap="round">
-                <path d={sparklineData.retest} />
-              </svg>
-            </div>
-          </div>
-          <div className="h-px bg-[#BFDBFE]/60 my-1" />
-          <span className="text-[10px] text-[#94A3B8] font-medium">Fixed defects waiting for QA verification</span>
-        </div>
 
-        {/* To Fix by Dev */}
-        <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-sky-500/10 transition-all" />
-          <Terminal size={80} className="absolute right-[-10px] bottom-[-15px] text-[#38BDF8]/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-bold text-[#475569] tracking-wider uppercase">To Fix by Dev</span>
-              <span className="text-[9px] text-[#38BDF8] font-bold uppercase tracking-wide font-mono">Active sprint workload</span>
+            {/* Developer Card 3: Fixed Bugs */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all" />
+              <CheckCircle2 size={80} className="absolute right-[-10px] bottom-[-15px] text-emerald-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Fixed Bugs</span>
+                  <span className="text-[9px] text-emerald-600 font-bold uppercase tracking-wide font-mono">Retesting Queue</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#11998e] to-[#38ef7d] text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
+                  <CheckCircle2 size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.fixed}</span>
+                  <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                    <span>Awaiting QA</span>
+                  </span>
+                </div>
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-emerald-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.closed} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Bugs resolved and moved to retesting</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38bdf8] to-[#7dd3fc] text-[#0F172A] flex items-center justify-center shadow-md shadow-sky-500/20">
-              <Terminal size={17} />
-            </div>
-          </div>
-          <div className="flex items-baseline justify-between mt-2">
-            <div className="flex flex-col">
-              <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.toFix}</span>
-              <span className="text-[10px] text-red-500 font-bold flex items-center gap-1 mt-1">
-                <span>↓ 4.6%</span> <span className="text-[#94A3B8] font-medium">from last sprint</span>
-              </span>
-            </div>
-            {/* Sparkline */}
-            <div className="w-20 h-8 select-none">
-              <svg viewBox="0 0 100 30" className="w-full h-full stroke-[#38bdf8] fill-none" strokeWidth="2" strokeLinecap="round">
-                <path d={sparklineData.toFix} />
-              </svg>
-            </div>
-          </div>
-          <div className="h-px bg-[#BFDBFE]/60 my-1" />
-          <span className="text-[10px] text-[#94A3B8] font-medium">Open/In-progress dev assigned issues</span>
-        </div>
 
-        {/* Closed Bugs */}
-        <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all" />
-          <CheckCircle2 size={80} className="absolute right-[-10px] bottom-[-15px] text-emerald-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Closed Bugs</span>
-              <span className="text-[9px] text-emerald-600 font-bold uppercase tracking-wide font-mono">Archive Resolved</span>
+            {/* Developer Card 4: Critical Bugs */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-red-500/10 transition-all" />
+              <AlertOctagon size={80} className="absolute right-[-10px] bottom-[-15px] text-red-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Critical Bugs</span>
+                  <span className="text-[9px] text-red-500 font-bold uppercase tracking-wide font-mono">P1 / Blocker</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-500 to-rose-600 text-white flex items-center justify-center shadow-md shadow-red-500/20">
+                  <AlertOctagon size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.critical}</span>
+                  <span className="text-[10px] text-red-500 font-bold flex items-center gap-1 mt-1">
+                    <span>High Priority</span>
+                  </span>
+                </div>
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-red-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.retest} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Critical or Blocker defects assigned to you</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#11998e] to-[#38ef7d] text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
-              <CheckCircle2 size={17} />
+          </>
+        ) : (
+          <>
+            {/* Total Active Bugs */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              {/* Card Hover Glow effect */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-red-500/10 transition-all" />
+              <AlertCircle size={80} className="absolute right-[-10px] bottom-[-15px] text-red-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Total Active Bugs</span>
+                  <span className="text-[9px] text-red-500 font-bold uppercase tracking-wide">QA Backlog</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-500 to-orange-500 text-white flex items-center justify-center shadow-md shadow-red-500/20">
+                  <AlertCircle size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.active}</span>
+                  <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                    <span>↑ 18.2%</span> <span className="text-[#94A3B8] font-medium">from last sprint</span>
+                  </span>
+                </div>
+                {/* Sparkline */}
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-red-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.active} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Total active bugs unresolved in dev backlog</span>
             </div>
-          </div>
-          <div className="flex items-baseline justify-between mt-2">
-            <div className="flex flex-col">
-              <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.closed}</span>
-              <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
-                <span>↑ 24.1%</span> <span className="text-[#94A3B8] font-medium">cumulative close factor</span>
-              </span>
+
+            {/* Retest Pending */}
+            <div 
+              onClick={() => setActiveTab('Retesting')}
+              className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group cursor-pointer"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/10 transition-all" />
+              <Clock size={80} className="absolute right-[-10px] bottom-[-15px] text-indigo-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Retest Pending</span>
+                  <span className="text-[9px] text-[#818cf8] font-bold uppercase tracking-wide font-mono">Verification queue (Click to view)</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38bdf8] to-[#0072ff] text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
+                  <Clock size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.retest}</span>
+                  <span className="text-[10px] text-[#38BDF8] font-bold flex items-center gap-1 mt-1">
+                    <span>Awaiting Retest</span>
+                  </span>
+                </div>
+                {/* Sparkline */}
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-indigo-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.retest} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Fixed defects waiting for QA verification</span>
             </div>
-            {/* Sparkline */}
-            <div className="w-20 h-8 select-none">
-              <svg viewBox="0 0 100 30" className="w-full h-full stroke-emerald-500 fill-none" strokeWidth="2" strokeLinecap="round">
-                <path d={sparklineData.closed} />
-              </svg>
+
+            {/* To Fix by Dev */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-sky-500/10 transition-all" />
+              <Terminal size={80} className="absolute right-[-10px] bottom-[-15px] text-[#38BDF8]/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] tracking-wider uppercase">To Fix by Dev</span>
+                  <span className="text-[9px] text-[#38BDF8] font-bold uppercase tracking-wide font-mono">Active sprint workload</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#38bdf8] to-[#7dd3fc] text-[#0F172A] flex items-center justify-center shadow-md shadow-sky-500/20">
+                  <Terminal size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.toFix}</span>
+                  <span className="text-[10px] text-red-500 font-bold flex items-center gap-1 mt-1">
+                    <span>↓ 4.6%</span> <span className="text-[#94A3B8] font-medium">from last sprint</span>
+                  </span>
+                </div>
+                {/* Sparkline */}
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-[#38bdf8] fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.toFix} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Open/In-progress dev assigned issues</span>
             </div>
-          </div>
-          <div className="h-px bg-[#BFDBFE]/60 my-1" />
-          <span className="text-[10px] text-[#94A3B8] font-medium">Defects resolved and passed testing verification</span>
-        </div>
+
+            {/* Closed Bugs */}
+            <div className="p-6 rounded-2xl glass-card glass-card-hover flex flex-col gap-3 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all" />
+              <CheckCircle2 size={80} className="absolute right-[-10px] bottom-[-15px] text-emerald-500/5 pointer-events-none select-none group-hover:scale-110 transition-transform duration-300" />
+              <div className="flex justify-between items-start">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Closed Bugs</span>
+                  <span className="text-[9px] text-emerald-600 font-bold uppercase tracking-wide font-mono">Archive Resolved</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#11998e] to-[#38ef7d] text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
+                  <CheckCircle2 size={17} />
+                </div>
+              </div>
+              <div className="flex items-baseline justify-between mt-2">
+                <div className="flex flex-col">
+                  <span className="text-3.5xl font-extrabold text-[#0F172A] leading-tight font-title">{metrics.closed}</span>
+                  <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
+                    <span>↑ 24.1%</span> <span className="text-[#94A3B8] font-medium">cumulative close factor</span>
+                  </span>
+                </div>
+                {/* Sparkline */}
+                <div className="w-20 h-8 select-none">
+                  <svg viewBox="0 0 100 30" className="w-full h-full stroke-emerald-500 fill-none" strokeWidth="2" strokeLinecap="round">
+                    <path d={sparklineData.closed} />
+                  </svg>
+                </div>
+              </div>
+              <div className="h-px bg-[#BFDBFE]/60 my-1" />
+              <span className="text-[10px] text-[#94A3B8] font-medium">Defects resolved and passed testing verification</span>
+            </div>
+          </>
+        )}
       </section>
 
       {/* CHARTS AND TIMELINES SECTIONS */}
@@ -2522,7 +2773,6 @@ function BugsView({
 
 // --------------------------------
 // RETESTING VIEW COMPONENT
-// --------------------------------
 function RetestingView({ 
   bugs, 
   setBugs, 
@@ -2539,7 +2789,7 @@ function RetestingView({
 
   // Filter only bugs waiting for retest
   const retestBugs = useMemo(() => {
-    return bugs.filter(b => b.testerStatus === 'Retest' || b.devStatus === 'Fixed');
+    return bugs.filter(b => b.testerStatus === 'Retesting');
   }, [bugs]);
 
   const selectedBug = useMemo(() => {
@@ -2576,11 +2826,11 @@ function RetestingView({
     setSelectedBugId(null);
   };
 
-  // Fail Retest / Reopen Bug
-  const handleFailRetest = (e, bugId) => {
+  // Reassign Bug
+  const handleReassignBug = (e, bugId) => {
     e.preventDefault();
     if (!testerComment.trim()) {
-      alert('Please provide failure notes describing why retest failed.');
+      alert('Please provide comments explaining why the bug is being reassigned.');
       return;
     }
 
@@ -2589,12 +2839,12 @@ function RetestingView({
         const updatedComments = [...b.comments];
         updatedComments.push({
           author: user.name,
-          text: `RETEST FAILED: ${testerComment.trim()}`,
+          text: `REASSIGNED: ${testerComment.trim()}`,
           date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
         });
         return {
           ...b,
-          testerStatus: 'Open',
+          testerStatus: 'Reassigned',
           devStatus: 'Open',
           comments: updatedComments,
           updatedTime: 'Just now'
@@ -2607,15 +2857,15 @@ function RetestingView({
     const newActivity = {
       id: Date.now(),
       user: user.name,
-      action: `retest FAILED - defect reopened`,
+      action: `reassigned defect`,
       bugId: bugId,
       timestamp: 'Just now',
-      status: 'Open',
+      status: 'Reassigned',
       avatarType: 'sync'
     };
     setActivities([newActivity, ...activities]);
 
-    triggerToast(`Retest failed. Defect ${bugId} reopened & returned to Developer queue.`);
+    triggerToast(`Defect ${bugId} has been reassigned to Developer.`);
     setTesterComment('');
     setSelectedBugId(null);
   };
@@ -2627,7 +2877,7 @@ function RetestingView({
       {/* Left side list of bugs needing retest (Spans 5 columns) */}
       <div className="lg:col-span-5 p-6 rounded-2xl glass-card flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
         <div className="pb-2 border-b border-white/5 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-white font-title">QA Verification Queue</h2>
+          <h2 className="text-sm font-bold text-white font-title">QA Retesting Queue</h2>
           <span className="text-[10px] font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/25">{retestBugs.length} pending</span>
         </div>
 
@@ -2670,7 +2920,7 @@ function RetestingView({
             })
           ) : (
             <div className="py-12 text-center text-slate-500 font-bold bg-white/[0.01] rounded-xl border border-white/5">
-              Verification queue empty. All fixed bugs checked.
+              Retesting queue empty. All fixed bugs checked.
             </div>
           )}
         </div>
@@ -2721,7 +2971,7 @@ function RetestingView({
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-500 italic">No developer comments recorded for this ticket.</p>
+                <p className="text-slate-550 italic pl-1">No developer comments recorded for this ticket.</p>
               )}
             </div>
 
@@ -2733,7 +2983,7 @@ function RetestingView({
                 {/* PASS RETEST */}
                 <button 
                   onClick={() => handlePassRetest(selectedBug.id)}
-                  className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs hover:brightness-110 shadow-lg shadow-emerald-600/10 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs hover:brightness-110 shadow-lg shadow-emerald-600/10 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <CheckCircle2 size={14} />
                   <span>Pass & Close Defect</span>
@@ -2742,21 +2992,21 @@ function RetestingView({
 
               <div className="my-6 h-px bg-white/5" />
 
-              {/* FAIL RETEST FORM */}
-              <form onSubmit={(e) => handleFailRetest(e, selectedBug.id)} className="flex flex-col gap-3">
-                <label className="text-sm font-semibold text-slate-400">Reopen Reason / Failure Notes</label>
+              {/* REASSIGN BUG FORM */}
+              <form onSubmit={(e) => handleReassignBug(e, selectedBug.id)} className="flex flex-col gap-3">
+                <label className="text-sm font-semibold text-slate-400">Reassignment Notes / Reason</label>
                 <textarea 
                   value={testerComment}
                   onChange={(e) => setTesterComment(e.target.value)}
-                  placeholder="Explain exactly why verification failed, logs collected, or reproduction details..."
+                  placeholder="Explain exactly why this bug is being reassigned back to the developer..."
                   className="w-full h-24 p-3 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-200 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
                 />
                 <button 
                   type="submit"
-                  className="py-3 px-4 rounded-xl border border-red-500/20 hover:border-red-500/35 bg-red-500/10 text-red-400 hover:text-red-300 text-sm font-bold transition-all flex items-center justify-center gap-2"
+                  className="py-3 px-4 rounded-xl border border-[#fb923c]/20 hover:border-[#fb923c]/35 bg-[#fb923c]/10 text-[#fb923c] hover:text-[#fdba74] text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <AlertCircle size={14} />
-                  <span>Fail Retest & Reopen Ticket</span>
+                  <RefreshCw size={14} />
+                  <span>Mark as Reassigned</span>
                 </button>
               </form>
             </div>
@@ -2765,7 +3015,401 @@ function RetestingView({
           <div className="py-20 text-center text-slate-500 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center p-6">
             <Sliders size={32} className="text-slate-600 mb-2" />
             <h3 className="font-bold text-white font-title">Select verification target</h3>
-            <p className="text-xs text-slate-450 mt-1 max-w-xs">Select a defect from the pending verification queue on the left to pass or reopen.</p>
+            <p className="text-xs text-slate-450 mt-1 max-w-xs">Select a defect from the pending verification queue on the left to pass or reassign.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --------------------------------
+// BUG DETAIL VIEW COMPONENT
+// --------------------------------
+function BugDetailView({
+  bugId,
+  bugs,
+  setBugs,
+  activities,
+  setActivities,
+  user,
+  triggerToast,
+  setActiveTab,
+  getSeverityBadgeClass,
+  getPriorityBadgeClass,
+  getStatusBadgeClass,
+  teamMembers
+}) {
+  const bug = useMemo(() => {
+    return bugs.find(b => b.id === bugId) || null;
+  }, [bugs, bugId]);
+
+  const [editDevStatus, setEditDevStatus] = useState('');
+  const [editComment, setEditComment] = useState('');
+
+  // Update form fields when bug changes
+  React.useEffect(() => {
+    if (bug) {
+      setEditDevStatus(bug.devStatus);
+      setEditComment('');
+    }
+  }, [bug]);
+
+  if (!bug) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center text-[#475569] bg-white border border-[#BFDBFE] rounded-3xl p-8 animate-fade-in">
+        <AlertCircle size={40} className="text-slate-400 mb-3" />
+        <h3 className="text-lg font-bold text-[#0F172A] font-title">Bug Not Found</h3>
+        <p className="text-xs text-[#94A3B8] mt-1 max-w-xs">The requested defect details could not be loaded. It may have been deleted or does not exist.</p>
+        <button 
+          onClick={() => setActiveTab('My Assigned Bugs')}
+          className="mt-5 py-2 px-4 rounded-xl bg-[#0284c7] hover:bg-[#0284c7]/90 text-white text-xs font-bold transition-all cursor-pointer"
+        >
+          Back to My Assigned Bugs
+        </button>
+      </div>
+    );
+  }
+
+  const handleSaveUpdate = (e) => {
+    e.preventDefault();
+    
+    setBugs(bugs.map(b => {
+      if (b.id === bug.id) {
+        const updatedComments = [...b.comments];
+        if (editComment.trim()) {
+          updatedComments.push({
+            author: user.name,
+            text: editComment.trim(),
+            date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          });
+        }
+        
+        let newTesterStatus = b.testerStatus;
+        let newFixedDate = b.fixedDate;
+        
+        if (editDevStatus === 'Fixed') {
+          newTesterStatus = 'Retesting';
+          newFixedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        } else {
+          newTesterStatus = 'Assigned';
+        }
+
+        return {
+          ...b,
+          devStatus: editDevStatus,
+          testerStatus: newTesterStatus,
+          fixedDate: newFixedDate,
+          comments: updatedComments,
+          updatedTime: 'Just now'
+        };
+      }
+      return b;
+    }));
+
+    // Add activity
+    const newActivity = {
+      id: Date.now(),
+      user: user.name,
+      action: `updated Developer Status to "${editDevStatus}"`,
+      bugId: bug.id,
+      timestamp: 'Just now',
+      status: editDevStatus === 'Fixed' ? 'Fixed' : editDevStatus === 'In Progress' ? 'In Progress' : 'Open',
+      avatarType: editDevStatus === 'Fixed' ? 'check' : 'user'
+    };
+    setActivities([newActivity, ...activities]);
+
+    triggerToast(`Successfully updated developer status for ${bug.id}`);
+    setEditComment('');
+    setActiveTab('My Assigned Bugs');
+  };
+
+  return (
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container pb-10">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80")' }} />
+      
+      {/* Header with Title and Breadcrumb */}
+      <div className="flex justify-between items-start flex-wrap gap-4 border-b border-[#BFDBFE]/60 pb-5">
+        <div className="flex flex-col gap-2 min-w-0">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs font-bold text-[#0284c7] bg-[#E0F2FE] border border-[#BFDBFE] px-2.5 py-1 rounded">
+              {bug.id}
+            </span>
+            <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
+              Priority: {bug.priority}
+            </span>
+            <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono ${getSeverityBadgeClass(bug.severity)}`}>
+              Severity: {bug.severity}
+            </span>
+          </div>
+          <h2 className="text-3xl font-extrabold text-[#0F172A] font-title mt-1 leading-tight break-words" title={bug.title}>
+            {bug.title}
+          </h2>
+          <div className="flex items-center gap-2 text-xs text-[#64748B] font-semibold mt-1">
+            <Briefcase size={12} />
+            <span>{bug.project}</span>
+            <span>•</span>
+            <Folder size={12} />
+            <span>{bug.module}</span>
+            {bug.subModule && (
+              <>
+                <span>•</span>
+                <span>{bug.subModule}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <button 
+          onClick={() => setActiveTab('My Assigned Bugs')}
+          className="py-2.5 px-4 rounded-xl border border-[#BFDBFE] hover:border-[#38BDF8] bg-white text-[#475569] hover:text-[#0284c7] text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
+        >
+          <span>← Back to Assigned Bugs</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-scale-up">
+        {/* Left Column: Bug Information (Spans 7 columns) */}
+        <div className="lg:col-span-7 flex flex-col gap-6">
+          
+          {/* Description Section */}
+          <div className="p-6 rounded-3xl bg-white border border-[#BFDBFE] shadow-sm flex flex-col gap-4">
+            <h3 className="text-sm font-extrabold text-[#0F172A] uppercase tracking-wider font-title flex items-center gap-2">
+              <FileText size={16} className="text-[#38BDF8]" />
+              <span>Description</span>
+            </h3>
+            <div className="text-sm text-[#475569] leading-relaxed whitespace-pre-wrap bg-[#F8FAFC] p-4 rounded-2xl border border-[#E2E8F0]">
+              {bug.description || "No description provided."}
+            </div>
+          </div>
+
+          {/* Screenshot Preview Card */}
+          {bug.screenshotUrl && (
+            <div className="p-6 rounded-3xl bg-white border border-[#BFDBFE] shadow-sm flex flex-col gap-4">
+              <h3 className="text-sm font-extrabold text-[#0F172A] uppercase tracking-wider font-title flex items-center gap-2">
+                <Sparkles size={16} className="text-[#38BDF8]" />
+                <span>Attached Screenshot</span>
+              </h3>
+              <div className="rounded-2xl overflow-hidden border border-[#BFDBFE] bg-slate-50 relative group">
+                <img 
+                  src={bug.screenshotUrl} 
+                  alt="Defect Attachment" 
+                  className="w-full object-cover max-h-[350px] transition-transform duration-500 group-hover:scale-[1.01]" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+              </div>
+            </div>
+          )}
+
+          {/* Timeline & Comments Thread */}
+          <div className="p-6 rounded-3xl bg-white border border-[#BFDBFE] shadow-sm flex flex-col gap-5">
+            <h3 className="text-sm font-extrabold text-[#0F172A] uppercase tracking-wider font-title flex items-center gap-2">
+              <MessageSquare size={16} className="text-[#38BDF8]" />
+              <span>Resolution Comments Thread</span>
+            </h3>
+            
+            <div className="flex flex-col gap-4">
+              {bug.comments && bug.comments.length > 0 ? (
+                bug.comments.map((comm, idx) => {
+                  const authorInfo = teamMembers[comm.author] || { initials: comm.author ? comm.author.charAt(0) : '?', color: '#64748B' };
+                  return (
+                    <div key={idx} className="flex gap-3 items-start bg-slate-50 border border-[#E2E8F0] p-4 rounded-2xl">
+                      <div 
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs text-white font-bold shrink-0" 
+                        style={{ backgroundColor: authorInfo.color }}
+                      >
+                        {authorInfo.initials}
+                      </div>
+                      <div className="flex flex-col gap-1 min-w-0 flex-1">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="font-bold text-[#0F172A]">{comm.author}</span>
+                          <span className="text-[#94A3B8] font-mono">{comm.date}</span>
+                        </div>
+                        <p className="text-xs text-[#475569] leading-relaxed mt-1 whitespace-pre-wrap">{comm.text}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-8 text-xs text-[#94A3B8] italic bg-slate-50 border border-dashed border-[#BFDBFE] rounded-2xl">
+                  No resolution notes or developer comments have been posted yet.
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right Column: Developer Actions Card (Spans 5 columns) */}
+        <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="p-6 rounded-3xl bg-white border border-[#BFDBFE] shadow-sm flex flex-col gap-6 sticky top-6">
+            <div className="border-b border-[#BFDBFE]/60 pb-4">
+              <h3 className="text-lg font-extrabold text-[#0F172A] font-title flex items-center gap-2">
+                <Sliders size={18} className="text-[#38BDF8]" />
+                <span>Developer Actions</span>
+              </h3>
+              <p className="text-xs text-[#64748B] mt-1">Resolve this defect or update progress status metrics.</p>
+            </div>
+
+            <form onSubmit={handleSaveUpdate} className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-[#475569] uppercase tracking-wider">Developer Status</label>
+                <select 
+                  value={editDevStatus}
+                  onChange={(e) => setEditDevStatus(e.target.value)}
+                  className="w-full h-11 px-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none cursor-pointer transition-all"
+                >
+                  <option value="Open">Open</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Invalid">Invalid</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-[#475569] uppercase tracking-wider">Fix Notes / Comments</label>
+                <textarea 
+                  value={editComment}
+                  onChange={(e) => setEditComment(e.target.value)}
+                  placeholder="Provide detailed fix information, troubleshooting steps, or explanation of status updates..."
+                  className="w-full min-h-[140px] p-4 text-xs rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all resize-none"
+                />
+              </div>
+
+              <div className="h-px bg-[#BFDBFE]/40 my-1" />
+
+              <div className="flex gap-3">
+                <button 
+                  type="button"
+                  onClick={() => setActiveTab('My Assigned Bugs')}
+                  className="flex-1 h-11 rounded-xl text-[#475569] font-bold border border-[#BFDBFE] hover:bg-slate-50 transition-all text-xs cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  className="flex-1 h-11 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#22d3ee] text-black font-bold hover:brightness-105 transition-all text-xs shadow-md shadow-sky-600/10 cursor-pointer"
+                >
+                  Save Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --------------------------------
+// MY ASSIGNED BUGS VIEW COMPONENT
+// --------------------------------
+function MyAssignedBugsView({ 
+  bugs, 
+  user,
+  onSelectBug,
+  getSeverityBadgeClass,
+  getPriorityBadgeClass,
+  getStatusBadgeClass
+}) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filter bugs for the logged in developer
+  const myBugs = useMemo(() => {
+    return bugs.filter(b => b.assignedTo === user.name);
+  }, [bugs, user.name]);
+
+  // Filter based on search query
+  const filteredBugs = useMemo(() => {
+    return myBugs.filter(bug => {
+      const q = searchQuery.toLowerCase();
+      return (
+        bug.id.toLowerCase().includes(q) ||
+        (bug.title && bug.title.toLowerCase().includes(q)) ||
+        bug.project.toLowerCase().includes(q) ||
+        bug.module.toLowerCase().includes(q) ||
+        (bug.subModule && bug.subModule.toLowerCase().includes(q)) ||
+        bug.description.toLowerCase().includes(q)
+      );
+    });
+  }, [myBugs, searchQuery]);
+
+  return (
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container pb-10">
+      <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80")' }} />
+      
+      {/* Header and Search */}
+      <div className="flex justify-between items-center flex-wrap gap-4 border-b border-[#BFDBFE]/60 pb-5">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-3xl font-extrabold text-[#0F172A] font-title">My Assigned Defects</h2>
+          <p className="text-sm text-[#475569] mt-1">Track and resolve bugs allocated directly to you.</p>
+        </div>
+        
+        {/* Search */}
+        <div className="relative w-80">
+          <Search size={14} className="absolute left-4 top-3.5 text-[#94A3B8]" />
+          <input 
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search assigned bugs..."
+            className="w-full h-10 pl-11 pr-4 rounded-xl bg-white border border-[#BFDBFE] text-xs text-[#0F172A] placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-all"
+          />
+        </div>
+      </div>
+
+      {/* Grid Layout of cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-scale-up">
+        {filteredBugs.length > 0 ? (
+          filteredBugs.map(bug => (
+            <div 
+              key={bug.id}
+              onClick={() => onSelectBug(bug.id)}
+              className="p-6 rounded-3xl bg-white border border-[#BFDBFE] hover:border-[#38BDF8] shadow-sm hover:shadow-[#38BDF8]/10 hover:scale-[1.02] transition-all cursor-pointer flex flex-col justify-between gap-5 relative overflow-hidden group min-h-[220px]"
+            >
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold text-[#0284c7] bg-[#E0F2FE] border border-[#BFDBFE] px-2 py-0.5 rounded">
+                      {bug.id}
+                    </span>
+                    <span className={`px-2.5 py-0.5 rounded text-[9px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
+                      {bug.priority}
+                    </span>
+                  </div>
+                  <span className="font-extrabold text-[#0F172A] text-lg font-title mt-2 truncate group-hover:text-[#0284c7] transition-colors" title={bug.title}>
+                    {bug.title || bug.project}
+                  </span>
+                  <p className="text-xs text-[#475569] font-bold uppercase tracking-wider font-mono mt-1">
+                    {bug.project} • {bug.module} {bug.subModule && `• ${bug.subModule}`}
+                  </p>
+                </div>
+              </div>
+
+              <div className="h-px bg-[#BFDBFE]/40 my-1" />
+
+              <div className="flex items-center justify-between gap-3 text-xs flex-wrap">
+                {/* Severity Badge */}
+                <span className={`badge px-2.5 py-0.5 rounded-full font-bold text-[10px] ${getSeverityBadgeClass(bug.severity)}`}>
+                  {bug.severity}
+                </span>
+
+                {/* Status Badges */}
+                <div className="flex gap-1.5">
+                  <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(bug.devStatus)}`} title="Developer Status">
+                    Dev: {bug.devStatus}
+                  </span>
+                  <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(bug.testerStatus)}`} title="Tester Status">
+                    QA: {bug.testerStatus}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full py-16 text-center text-slate-500 bg-white border border-[#BFDBFE] rounded-2xl w-full">
+            <AlertOctagon size={24} className="mx-auto text-slate-400 mb-2" />
+            <p className="font-bold">No assigned bugs found matching search criteria.</p>
           </div>
         )}
       </div>
@@ -3904,7 +4548,8 @@ function CreateBugView({
   onCancel,
   PROJECT_MODULES,
   MODULE_SUBMODULES,
-  onAddProject
+  onAddProject,
+  teamMembers
 }) {
   const fileInputRef = React.useRef(null);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
@@ -3916,89 +4561,138 @@ function CreateBugView({
   const [aiSuggestedSeverity, setAiSuggestedSeverity] = useState(null);
   const [aiSuggestedPriority, setAiSuggestedPriority] = useState(null);
 
-  const analyzeBug = (description) => {
-    const descLower = description.toLowerCase();
-    
-    // Indicator words for critical/high priority issues
-    const criticalKeywords = [
-      'crash', 'freeze', 'hang', 'fatal', 'blocker', 'leak', 'security', 'vulnerability', 
-      'login', 'log in', 'checkout', 'payment', 'transaction', 'gateway', 'charge', 
-      'auth', 'authenticate', 'unusable', 'broken', 'not working', 'down', 'fail', 'error 500'
-    ];
-    
-    // Indicator words for minor/low priority issues
-    const minorKeywords = [
-      'alignment', 'misaligned', 'typo', 'spelling', 'grammar', 'overflow', 'color', 
-      'ui', 'visual', 'icon', 'margin', 'padding', 'border', 'spacing', 'overlap', 
-      'footer', 'header', 'text', 'font', 'dark mode', 'theme', 'cosmetic', 'glitch'
-    ];
-    
-    let severity = 'Major';
-    let priority = 'Medium';
-    
-    const hasCritical = criticalKeywords.some(keyword => descLower.includes(keyword));
-    const hasMinor = minorKeywords.some(keyword => descLower.includes(keyword));
-    
-    if (hasCritical) {
-      severity = 'Critical';
-      priority = 'High';
-    } else if (hasMinor) {
-      severity = 'Minor';
-      priority = 'Low';
-    }
-    
-    return { severity, priority };
-  };
+  const developers = useMemo(() => {
+    return Object.entries(teamMembers || {})
+      .filter(([name, member]) => {
+        const role = (member.role || '').toLowerCase();
+        return role.includes('dev') || role.includes('developer') || role.includes('full stack') || role.includes('software');
+      })
+      .map(([name]) => name);
+  }, [teamMembers]);
 
   const handleEnhanceDescription = () => {
-    if (!formDescription.trim()) {
-      setValidationError("Please enter a bug description first.");
+    const titleVal = formTitle.trim();
+    const descVal = formDescription.trim();
+
+    if (!titleVal && !descVal) {
+      setValidationError("Please enter a bug title or description first.");
       return;
     }
+
     setIsEnhancing(true);
+
     setTimeout(() => {
-      let text = formDescription.trim();
-      let enhanced = text;
-      const normalizedInput = text.toLowerCase().replace(/[\s\.\,\-\_]+/g, ' ').trim();
-      if (normalizedInput === "user click login button but page not redirect and error not showing") {
-        enhanced = "The Login button does not redirect the user after being clicked. The page remains on the same screen, and no error message is displayed.";
-      } else if (normalizedInput === "login button not working user cant login" || normalizedInput === "login button not working user can t login" || normalizedInput === "login button not working user cant log in" || normalizedInput === "login button not working user can t log in") {
-        enhanced = "The Login button is not functioning as expected. Users are unable to log in after clicking the Login button.";
+      const spellingCorrections = {
+        "issu": "issue",
+        "mesage": "message",
+        "insted": "instead",
+        "succes": "success",
+        "sucess": "success",
+        "logut": "logout",
+        "eror": "error",
+        "db": "database"
+      };
+
+      const correctSpelling = (str) => {
+        if (!str) return "";
+        return str.split(/\b/).map(word => {
+          const lower = word.toLowerCase();
+          if (spellingCorrections[lower]) {
+            const correction = spellingCorrections[lower];
+            if (word.charAt(0) === word.charAt(0).toUpperCase()) {
+              return correction.charAt(0).toUpperCase() + correction.slice(1);
+            }
+            return correction;
+          }
+          return word;
+        }).join('');
+      };
+
+      const correctedTitle = correctSpelling(titleVal);
+      const correctedDesc = correctSpelling(descVal);
+
+      let finalTitle = correctedTitle;
+      let finalDesc = correctedDesc;
+      let severity = "Major";
+      let priority = "Medium";
+
+      const titleLower = correctedTitle.toLowerCase();
+      const descLower = correctedDesc.toLowerCase();
+      const combined = `${titleLower} ${descLower}`;
+
+      // Analyze and rewrite specific scenarios
+      if (combined.includes('login') && combined.includes('logout')) {
+        finalTitle = "Incorrect Logout Message Displayed After Successful Login";
+        finalDesc = "Issue Summary:\nAfter a successful login, the application displays a logout message instead of a login success message.";
+        severity = "Major";
+        priority = "High";
+      } else if (combined.includes('login') || combined.includes('log in') || combined.includes('signin') || combined.includes('sign in')) {
+        if (combined.includes('fail') || combined.includes('error') || combined.includes('not working') || combined.includes('cannot') || combined.includes('cant')) {
+          finalTitle = "User Login Authentication Failure";
+          finalDesc = "Issue Summary:\nThe application fails to authenticate user credentials during login, preventing access to the system.";
+          severity = "Critical";
+          priority = "High";
+        } else {
+          finalTitle = "Incorrect Authentication State After Session Initiation";
+          finalDesc = "Issue Summary:\nAn incorrect application state or message is observed during user authentication.";
+          severity = "Major";
+          priority = "Medium";
+        }
+      } else if (combined.includes('pay') || combined.includes('upi') || combined.includes('billing') || combined.includes('charge') || combined.includes('transaction')) {
+        if (combined.includes('fail') || combined.includes('early') || combined.includes('incorrect') || combined.includes('error')) {
+          finalTitle = "Payment Gateway Transaction Processing Failure";
+          finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "A transaction processing error occurs during payment gateway communication."}`;
+          severity = "Critical";
+          priority = "High";
+        } else {
+          finalTitle = "Billing Reconciliation Process Discrepancy";
+          finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "A data discrepancy is detected in the billing gateway validation."}`;
+          severity = "Major";
+          priority = "High";
+        }
+      } else if (combined.includes('crash') || combined.includes('freeze') || combined.includes('hang') || combined.includes('fatal') || combined.includes('null pointer')) {
+        finalTitle = "Application Exception and Process Crash Event";
+        finalDesc = `Issue Summary:\nThe application encounters a fatal runtime exception and terminates abruptly.\n\nDescription details: ${correctedDesc || "Fatal termination observed on user interaction."}`;
+        severity = "Critical";
+        priority = "High";
+      } else if (combined.includes('typo') || combined.includes('spelling') || combined.includes('misalign') || combined.includes('alignment') || combined.includes('font') || combined.includes('color')) {
+        finalTitle = "UI Layout Discrepancy and Cosmetic Font Misalignment";
+        finalDesc = `Issue Summary:\nVisual element misalignment or typographical error observed in the user interface component layout.\n\nDiscrepancy: ${correctedDesc || "Cosmetic layout issues present on screen elements."}`;
+        severity = "Minor";
+        priority = "Low";
       } else {
-        let rules = [
-          { pattern: /user click (\w+)/i, replacement: "the user clicks the $1 button" },
-          { pattern: /click (\w+)/i, replacement: "clicking the $1 button" },
-          { pattern: /button not work/i, replacement: "button does not function as expected" },
-          { pattern: /page not redirect/i, replacement: "the page fails to redirect" },
-          { pattern: /error not showing/i, replacement: "no error message is displayed" },
-          { pattern: /api error/i, replacement: "an API response error occurs" },
-          { pattern: /app crash/i, replacement: "the application crashes unexpectedly" },
-          { pattern: /page crash/i, replacement: "the page crashes unexpectedly" },
-          { pattern: /auth fail/i, replacement: "authentication fails" },
-          { pattern: /login fail/i, replacement: "login attempt fails" },
-          { pattern: /not loading/i, replacement: "fails to load correctly" }
-        ];
-        rules.forEach(rule => {
-          enhanced = enhanced.replace(rule.pattern, rule.replacement);
-        });
-        enhanced = enhanced.split(/[.!?]\s+/).map(sentence => {
-          let s = sentence.trim();
-          if (!s) return "";
-          s = s.charAt(0).toUpperCase() + s.slice(1);
-          return s;
-        }).join(". ");
-        if (enhanced && !/[.!?]$/.test(enhanced)) {
-          enhanced += ".";
+        // Fallback: general grammatical capitalization and structure
+        finalTitle = correctedTitle.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        if (finalTitle.length < 10 && correctedDesc) {
+          finalTitle = correctedDesc.split('. ')[0].substring(0, 50);
+          if (finalTitle.length >= 50) finalTitle += "...";
+          finalTitle = finalTitle.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+        
+        finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "No description provided."}`;
+        
+        const criticalKeywords = ['fail', 'error', 'vulnerability', 'leak', 'auth', 'fatal', 'blocker'];
+        const minorKeywords = ['typo', 'cosmetic', 'alignment', 'color', 'spacing', 'padding'];
+        
+        if (criticalKeywords.some(kw => descLower.includes(kw))) {
+          severity = "Critical";
+          priority = "High";
+        } else if (minorKeywords.some(kw => descLower.includes(kw))) {
+          severity = "Minor";
+          priority = "Low";
+        } else {
+          severity = "Major";
+          priority = "Medium";
         }
       }
-      setFormDescription(enhanced);
-      
-      const analysis = analyzeBug(text);
-      setFormSeverity(analysis.severity);
-      setFormPriority(analysis.priority);
-      setAiSuggestedSeverity(analysis.severity);
-      setAiSuggestedPriority(analysis.priority);
-      
+
+      setFormTitle(finalTitle);
+      setFormDescription(finalDesc);
+      setFormSeverity(severity);
+      setFormPriority(priority);
+      setAiSuggestedSeverity(severity);
+      setAiSuggestedPriority(priority);
+
       setValidationError('');
       setIsEnhancing(false);
     }, 1200);
@@ -4270,7 +4964,7 @@ function CreateBugView({
                 <div className="flex flex-col gap-1.5">
                   <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
                     <span>Severity <span className="text-red-500">*</span></span>
-                    {formSeverity === aiSuggestedSeverity && (
+                    {formSeverity === aiSuggestedSeverity && aiSuggestedSeverity !== null && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E0F2FE] text-[#0369a1] border border-[#38bdf8]/30 shadow-sm animate-fade-in">
                         <Sparkles size={11} className="text-[#38bdf8] fill-[#38bdf8]/20" />
                         AI Suggested
@@ -4293,7 +4987,7 @@ function CreateBugView({
                 <div className="flex flex-col gap-1.5">
                   <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
                     <span>Priority <span className="text-red-500">*</span></span>
-                    {formPriority === aiSuggestedPriority && (
+                    {formPriority === aiSuggestedPriority && aiSuggestedPriority !== null && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#E0F2FE] text-[#0369a1] border border-[#38bdf8]/30 shadow-sm animate-fade-in">
                         <Sparkles size={11} className="text-[#38bdf8] fill-[#38bdf8]/20" />
                         AI Suggested
@@ -4358,14 +5052,19 @@ function CreateBugView({
                   <label className="text-base font-bold text-[#475569]">
                     Assigned To <span className="text-red-500">*</span>
                   </label>
-                  <input 
-                    type="text" 
+                  <select 
                     value={formAssignedTo}
                     onChange={(e) => setFormAssignedTo(e.target.value)}
-                    placeholder="Enter developer's full name (e.g. Rahul Verma)"
-                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold placeholder-[#94A3B8] focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors"
+                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] text-base font-semibold focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 outline-none transition-colors cursor-pointer"
                     required
-                  />
+                  >
+                    <option value="" disabled className="text-[#94A3B8]">Select developer...</option>
+                    {developers.map(devName => (
+                      <option key={devName} value={devName}>
+                        {devName} ({teamMembers[devName]?.username || devName.toLowerCase().replace(/\s/g, '')})
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
