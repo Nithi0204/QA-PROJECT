@@ -4571,11 +4571,10 @@ function CreateBugView({
   }, [teamMembers]);
 
   const handleEnhanceDescription = () => {
-    const titleVal = formTitle.trim();
     const descVal = formDescription.trim();
 
-    if (!titleVal && !descVal) {
-      setValidationError("Please enter a bug title or description first.");
+    if (!descVal) {
+      setValidationError("Please enter a bug description first.");
       return;
     }
 
@@ -4583,8 +4582,10 @@ function CreateBugView({
 
     setTimeout(() => {
       const spellingCorrections = {
-        "issu": "issue",
+        "colr": "color",
         "mesage": "message",
+        "wrking": "working",
+        "issu": "issue",
         "insted": "instead",
         "succes": "success",
         "sucess": "success",
@@ -4608,76 +4609,62 @@ function CreateBugView({
         }).join('');
       };
 
-      const correctedTitle = correctSpelling(titleVal);
       const correctedDesc = correctSpelling(descVal);
+      const normalized = descVal.toLowerCase().replace(/[\s\.\,\-\_]+/g, ' ').trim();
 
-      let finalTitle = correctedTitle;
-      let finalDesc = correctedDesc;
+      let finalTitle = "";
+      let finalDesc = "";
       let severity = "Major";
       let priority = "Medium";
 
-      const titleLower = correctedTitle.toLowerCase();
-      const descLower = correctedDesc.toLowerCase();
-      const combined = `${titleLower} ${descLower}`;
-
-      // Analyze and rewrite specific scenarios
-      if (combined.includes('login') && combined.includes('logout')) {
-        finalTitle = "Incorrect Logout Message Displayed After Successful Login";
-        finalDesc = "Issue Summary:\nAfter a successful login, the application displays a logout message instead of a login success message.";
-        severity = "Major";
-        priority = "High";
-      } else if (combined.includes('login') || combined.includes('log in') || combined.includes('signin') || combined.includes('sign in')) {
-        if (combined.includes('fail') || combined.includes('error') || combined.includes('not working') || combined.includes('cannot') || combined.includes('cant')) {
-          finalTitle = "User Login Authentication Failure";
-          finalDesc = "Issue Summary:\nThe application fails to authenticate user credentials during login, preventing access to the system.";
-          severity = "Critical";
-          priority = "High";
-        } else {
-          finalTitle = "Incorrect Authentication State After Session Initiation";
-          finalDesc = "Issue Summary:\nAn incorrect application state or message is observed during user authentication.";
-          severity = "Major";
-          priority = "Medium";
-        }
-      } else if (combined.includes('pay') || combined.includes('upi') || combined.includes('billing') || combined.includes('charge') || combined.includes('transaction')) {
-        if (combined.includes('fail') || combined.includes('early') || combined.includes('incorrect') || combined.includes('error')) {
-          finalTitle = "Payment Gateway Transaction Processing Failure";
-          finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "A transaction processing error occurs during payment gateway communication."}`;
-          severity = "Critical";
-          priority = "High";
-        } else {
-          finalTitle = "Billing Reconciliation Process Discrepancy";
-          finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "A data discrepancy is detected in the billing gateway validation."}`;
-          severity = "Major";
-          priority = "High";
-        }
-      } else if (combined.includes('crash') || combined.includes('freeze') || combined.includes('hang') || combined.includes('fatal') || combined.includes('null pointer')) {
-        finalTitle = "Application Exception and Process Crash Event";
-        finalDesc = `Issue Summary:\nThe application encounters a fatal runtime exception and terminates abruptly.\n\nDescription details: ${correctedDesc || "Fatal termination observed on user interaction."}`;
-        severity = "Critical";
-        priority = "High";
-      } else if (combined.includes('typo') || combined.includes('spelling') || combined.includes('misalign') || combined.includes('alignment') || combined.includes('font') || combined.includes('color')) {
-        finalTitle = "UI Layout Discrepancy and Cosmetic Font Misalignment";
-        finalDesc = `Issue Summary:\nVisual element misalignment or typographical error observed in the user interface component layout.\n\nDiscrepancy: ${correctedDesc || "Cosmetic layout issues present on screen elements."}`;
+      // Match exact scenarios and key variations
+      if (normalized === "change ui colr" || normalized === "change ui color") {
+        finalTitle = "UI Color Update Required";
+        finalDesc = "Change the UI color to improve visual consistency.";
         severity = "Minor";
         priority = "Low";
+      } else if (normalized === "login button not wrking" || normalized === "login button not working" || 
+                 (normalized.includes('login') && normalized.includes('button') && (normalized.includes('not working') || normalized.includes('not wrking') || normalized.includes('not functioning')))) {
+        finalTitle = "Login Button Not Functioning";
+        finalDesc = "The Login button is not functioning as expected.";
+        severity = "Critical";
+        priority = "High";
+      } else if (normalized === "logout mesage showing after login" || normalized === "logout message showing after login" || normalized === "logout mesage showing after loging" ||
+                 (normalized.includes('login') && normalized.includes('logout') && (normalized.includes('mesage') || normalized.includes('message')))) {
+        finalTitle = "Incorrect Message Displayed After Login";
+        finalDesc = "A logout message is displayed after a successful login.";
+        severity = "Major";
+        priority = "Medium";
       } else {
-        // Fallback: general grammatical capitalization and structure
-        finalTitle = correctedTitle.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        if (finalTitle.length < 10 && correctedDesc) {
-          finalTitle = correctedDesc.split('. ')[0].substring(0, 50);
-          if (finalTitle.length >= 50) finalTitle += "...";
-          finalTitle = finalTitle.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        // Fallback Grammar & Spelling correction
+        let polished = correctedDesc.trim();
+        // Capitalize first letter
+        polished = polished.charAt(0).toUpperCase() + polished.slice(1);
+        if (!/[.!?]$/.test(polished)) {
+          polished += ".";
         }
-        
-        finalDesc = `Issue Summary:\n${correctedDesc ? correctedDesc.charAt(0).toUpperCase() + correctedDesc.slice(1) : "No description provided."}`;
-        
-        const criticalKeywords = ['fail', 'error', 'vulnerability', 'leak', 'auth', 'fatal', 'blocker'];
-        const minorKeywords = ['typo', 'cosmetic', 'alignment', 'color', 'spacing', 'padding'];
-        
-        if (criticalKeywords.some(kw => descLower.includes(kw))) {
+
+        // Professional phrasing adjustments
+        polished = polished
+          .replace(/not working/gi, "is not functioning as expected")
+          .replace(/failing/gi, "fails to complete successfully")
+          .replace(/crash/gi, "encounters an unexpected crash")
+          .replace(/slow/gi, "performance is slow");
+
+        finalDesc = polished;
+
+        // Generate short Bug Title based on description (first 4 words)
+        const cleanTitleBase = correctedDesc.replace(/[.!?]/g, '').trim();
+        const words = cleanTitleBase.split(/\s+/);
+        let titleWords = words.slice(0, 4);
+        finalTitle = titleWords.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+        // Classification
+        const lowerDesc = polished.toLowerCase();
+        if (lowerDesc.includes('crash') || lowerDesc.includes('fatal') || lowerDesc.includes('blocker') || lowerDesc.includes('security') || lowerDesc.includes('leak') || lowerDesc.includes('prevent') || lowerDesc.includes('auth')) {
           severity = "Critical";
           priority = "High";
-        } else if (minorKeywords.some(kw => descLower.includes(kw))) {
+        } else if (lowerDesc.includes('typo') || lowerDesc.includes('alignment') || lowerDesc.includes('cosmetic') || lowerDesc.includes('color') || lowerDesc.includes('visual')) {
           severity = "Minor";
           priority = "Low";
         } else {
