@@ -1113,26 +1113,40 @@ export default function App() {
               <span className="text-[#475569] hover:text-[#0F172A] transition-colors cursor-pointer" onClick={() => setActiveTab('Dashboard')}>QA MIND</span>
               <span className="text-[#BFDBFE]">/</span>
               <span className="text-[#0F172A] font-bold">{activeTab}</span>
-              {activeTab === 'Projects' && projectTabProject && (
+              {activeTab === 'Projects' && (
                 <>
+                  {projectTabProject && (
+                    <>
+                      <span className="text-[#BFDBFE]">/</span>
+                      <button 
+                        onClick={() => {
+                          if (projectTabSubModule) {
+                            setProjectTabSubModule(null);
+                          } else if (projectTabModule) {
+                            setProjectTabModule(null);
+                          } else if (projectTabProject) {
+                            setProjectTabProject(null);
+                          }
+                        }}
+                        className="w-8 h-8 rounded-full bg-[#0072FF] text-white flex items-center justify-center hover:bg-[#0072FF]/90 transition-all cursor-pointer shadow-[0_2px_8px_rgba(0,114,255,0.2)] ml-2"
+                        title="Back to previous level"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                      </button>
+                    </>
+                  )}
                   <span className="text-[#BFDBFE]">/</span>
                   <button 
-                    onClick={() => {
-                      if (projectTabSubModule) {
-                        setProjectTabSubModule(null);
-                      } else if (projectTabModule) {
-                        setProjectTabModule(null);
-                      } else if (projectTabProject) {
-                        setProjectTabProject(null);
-                      }
-                    }}
-                    className="ml-2 px-2.5 py-1 rounded-lg bg-[#E0F2FE] border border-[#BFDBFE] text-[10px] text-[#38BDF8] hover:text-[#0F172A] hover:bg-[#E0F2FE]/80 transition-all font-bold uppercase tracking-wider cursor-pointer"
+                    onClick={() => setActiveTab('Dashboard')}
+                    className="ml-2 px-4 py-1.5 rounded-full border border-[#0072FF] text-[10px] text-[#0072FF] hover:bg-[#0072FF]/5 hover:text-[#0072FF]/90 transition-all font-extrabold uppercase tracking-wider cursor-pointer bg-white"
                   >
-                    ← Back
+                    Back to Dashboard
                   </button>
                 </>
               )}
-              {activeTab !== 'Dashboard' && activeTab !== 'Create Bug' && activeTab !== 'My Assigned Bugs' && activeTab !== 'Settings' && (
+              {activeTab !== 'Dashboard' && activeTab !== 'Create Bug' && activeTab !== 'My Assigned Bugs' && activeTab !== 'Settings' && activeTab !== 'Projects' && (
                 <>
                   <span className="text-[#BFDBFE]">/</span>
                   <button 
