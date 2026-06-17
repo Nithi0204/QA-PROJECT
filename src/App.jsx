@@ -25,6 +25,7 @@ import {
   AlertOctagon,
   Users,
   ChevronRight,
+  ChevronLeft,
   RefreshCw,
   Terminal,
   MoreVertical,
@@ -870,39 +871,39 @@ export default function App() {
     setActiveTab('Bugs');
   };
 
-  // Visual severity class configurations matching dark neon colors
+  // Visual severity class configurations matching light theme
   const getSeverityBadgeClass = (severity) => {
     switch(severity) {
-      case 'Blocker': return 'bg-rose-500/25 text-rose-500 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.18)] font-black uppercase tracking-wider';
-      case 'Critical': return 'bg-red-500/10 text-red-400 border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
-      case 'Major': return 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_10px_rgba(249,115,22,0.1)]';
-      case 'Minor': return 'bg-slate-500/10 text-slate-400 border border-slate-500/20';
+      case 'Blocker': return 'bg-rose-50 text-rose-600 border border-rose-200 shadow-[0_2px_8px_rgba(244,63,94,0.06)] font-bold uppercase tracking-wider';
+      case 'Critical': return 'bg-red-50 text-red-600 border border-red-200';
+      case 'Major': return 'bg-orange-50 text-orange-600 border border-orange-200';
+      case 'Minor': return 'bg-slate-100 text-slate-600 border border-slate-200';
       // Legacy compatibility mappings
-      case 'High': return 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_10px_rgba(249,115,22,0.1)]';
-      case 'Medium': return 'bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]';
-      case 'Low': return 'bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_10px_rgba(59,130,246,0.1)]';
-      default: return 'bg-slate-500/10 text-slate-400 border border-slate-500/20';
+      case 'High': return 'bg-orange-50 text-orange-600 border border-orange-200';
+      case 'Medium': return 'bg-amber-50 text-amber-600 border border-amber-200';
+      case 'Low': return 'bg-blue-50 text-blue-600 border border-blue-200';
+      default: return 'bg-slate-100 text-slate-600 border border-slate-200';
     }
   };
 
   const getPriorityBadgeClass = (priority) => {
     switch(priority) {
-      case 'High': case 'P1': return 'bg-red-500/15 text-red-400 border border-red-500/25';
-      case 'Medium': case 'P2': return 'bg-orange-500/15 text-orange-400 border border-orange-500/25';
-      case 'Low': case 'P3': return 'bg-blue-500/15 text-blue-400 border border-blue-500/25';
-      case 'P4': return 'bg-slate-500/15 text-slate-400 border border-slate-500/25';
-      default: return 'bg-slate-800 text-slate-400 border border-slate-700';
+      case 'High': case 'P1': return 'bg-red-50 text-red-600 border border-red-200';
+      case 'Medium': case 'P2': return 'bg-orange-50 text-orange-600 border border-orange-200';
+      case 'Low': case 'P3': return 'bg-blue-50 text-blue-600 border border-blue-200';
+      case 'P4': return 'bg-slate-100 text-slate-600 border border-slate-200';
+      default: return 'bg-slate-100 text-slate-600 border border-slate-200';
     }
   };
 
   const getStatusBadgeClass = (status) => {
     switch(status) {
-      case 'Open': return 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
-      case 'In Progress': return 'bg-blue-500/10 text-blue-450 border border-blue-500/20';
-      case 'Fixed': return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-      case 'Retest': return 'bg-orange-500/10 text-orange-450 border border-orange-500/20';
-      case 'Closed': return 'bg-slate-500/10 text-slate-400 border border-slate-500/20';
-      default: return 'bg-slate-800 text-slate-400';
+      case 'Open': return 'bg-purple-50 text-purple-600 border border-purple-200';
+      case 'In Progress': return 'bg-blue-50 text-blue-600 border border-blue-200';
+      case 'Fixed': return 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+      case 'Retest': return 'bg-orange-50 text-orange-600 border border-orange-200';
+      case 'Closed': return 'bg-slate-100 text-slate-600 border border-slate-200';
+      default: return 'bg-slate-100 text-slate-600 border border-slate-200';
     }
   };
 
@@ -1282,6 +1283,7 @@ export default function App() {
           {activeTab === 'Bugs' && (
             <BugsView 
               bugs={operationsFilteredBugs}
+              allBugs={bugs}
               search={boardSearch}
               setSearch={setBoardSearch}
               priorityFilter={boardPriorityFilter}
@@ -1443,21 +1445,21 @@ export default function App() {
             className="absolute inset-0"
             onClick={() => setUpdateBugId(null)}
           />
-          <div className="relative w-[600px] h-full shadow-2xl bg-[#0b0e1f]/95 border-l border-white/10 flex flex-col justify-between py-8 px-6 animate-slide-in overflow-y-auto">
+          <div className="relative w-[600px] h-full shadow-2xl bg-white border-l border-[#BFDBFE] flex flex-col justify-between py-8 px-6 animate-slide-in overflow-y-auto">
             <div className="flex flex-col gap-6">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2 font-title">
+                  <h2 className="text-xl font-bold text-[#0F172A] flex items-center gap-2 font-title">
                     <span>Update Status</span>
-                    <span className="font-mono text-xs font-semibold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                    <span className="font-mono text-xs font-semibold text-[#0284c7] bg-[#0284c7]/10 px-2 py-0.5 rounded border border-[#0284c7]/20">
                       {updateBugId}
                     </span>
                   </h2>
-                  <p className="text-sm text-slate-400 mt-1">Set Developer resolution metrics and comments.</p>
+                  <p className="text-sm text-[#475569] mt-1">Set Developer resolution metrics and comments.</p>
                 </div>
                 <button 
                   onClick={() => setUpdateBugId(null)}
-                  className="p-2 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all border border-white/5"
+                  className="p-2 rounded-xl text-[#475569] hover:bg-[#E0F2FE]/50 hover:text-[#0F172A] transition-all border border-[#BFDBFE]/60"
                 >
                   <X size={15} />
                 </button>
@@ -1468,32 +1470,32 @@ export default function App() {
                 const b = bugs.find(x => x.id === updateBugId);
                 if (!b) return null;
                 return (
-                  <div className="flex flex-col gap-4 border-y border-white/5 py-4">
+                  <div className="flex flex-col gap-4 border-y border-[#BFDBFE]/60 py-4">
                     <div className="grid grid-cols-2 gap-y-3 gap-x-4 text-xs">
                       <div>
-                        <span className="text-slate-500 block font-medium">Project</span>
-                        <span className="text-slate-200 font-bold block truncate mt-0.5">{b.project}</span>
+                        <span className="text-[#475569] block font-medium">Project</span>
+                        <span className="text-[#0F172A] font-bold block truncate mt-0.5">{b.project}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block font-medium">Module / Sub Module</span>
-                        <span className="text-slate-200 font-bold block truncate mt-0.5">{b.module} • {b.subModule}</span>
+                        <span className="text-[#475569] block font-medium">Module / Sub Module</span>
+                        <span className="text-[#0F172A] font-bold block truncate mt-0.5">{b.module} • {b.subModule}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block font-medium">Severity</span>
+                        <span className="text-[#475569] block font-medium">Severity</span>
                         <span className={`badge px-2 py-0.5 text-[9.5px] mt-1 inline-block rounded font-bold ${getSeverityBadgeClass(b.severity)}`}>
                           {b.severity}
                         </span>
                       </div>
                       <div>
-                        <span className="text-slate-500 block font-medium">Tester Status</span>
+                        <span className="text-[#475569] block font-medium">Tester Status</span>
                         <span className={`badge px-2 py-0.5 text-[9.5px] mt-1 inline-block rounded font-bold ${getStatusBadgeClass(b.testerStatus)}`}>
                           {b.testerStatus}
                         </span>
                       </div>
                     </div>
-                    <div className="bg-white/5 p-3 rounded-lg border border-white/5">
-                      <span className="text-[9px] text-slate-550 uppercase font-bold font-mono tracking-wider block mb-1">Description</span>
-                      <p className="text-xs text-slate-300 leading-relaxed max-h-24 overflow-y-auto">{b.description}</p>
+                    <div className="bg-[#F8FBFF] p-3 rounded-lg border border-[#BFDBFE]">
+                      <span className="text-[9px] text-[#475569] uppercase font-bold font-mono tracking-wider block mb-1">Description</span>
+                      <p className="text-xs text-[#0F172A] leading-relaxed max-h-24 overflow-y-auto">{b.description}</p>
                     </div>
                   </div>
                 );
@@ -1502,35 +1504,35 @@ export default function App() {
               {/* Input section */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-slate-400">Developer Status</label>
+                  <label className="text-sm font-semibold text-[#475569]">Developer Status</label>
                   <select 
                     value={editDevStatus}
                     onChange={(e) => setEditDevStatus(e.target.value)}
-                    className="w-full h-11 px-4 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-200 cursor-pointer focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                    className="w-full h-11 px-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] cursor-pointer focus:bg-[#F8FBFF] focus:border-[#38bdf8] outline-none"
                   >
-                    <option value="Open" className="bg-[#111827]">Open</option>
-                    <option value="In Progress" className="bg-[#111827]">In Progress</option>
-                    <option value="Fixed" className="bg-[#111827]">Fixed</option>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Fixed">Fixed</option>
                   </select>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-slate-400">Comment / Resolution Notes</label>
+                  <label className="text-sm font-semibold text-[#475569]">Comment / Resolution Notes</label>
                   <textarea 
                     value={editComment}
                     onChange={(e) => setEditComment(e.target.value)}
                     placeholder="Provide details on the fix, troubleshooting, or current blocker status..."
-                    className="w-full min-h-[120px] max-h-[160px] p-4 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-255 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                    className="w-full min-h-[120px] max-h-[160px] p-4 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:bg-[#F8FBFF] focus:border-[#38bdf8] outline-none"
                   />
                 </div>
               </div>
             </div>
 
             {/* Save Buttons */}
-            <div className="flex gap-3 pt-6 border-t border-white/5">
+            <div className="flex gap-3 pt-6 border-t border-[#BFDBFE]/60">
               <button 
                 onClick={() => setUpdateBugId(null)}
-                className="flex-1 h-12 rounded-xl text-slate-400 font-bold border border-white/5 hover:bg-white/5 hover:text-white transition-all text-sm"
+                className="flex-1 h-12 rounded-xl text-[#475569] font-bold border border-[#BFDBFE] hover:bg-[#E0F2FE]/50 hover:text-[#0F172A] transition-all text-sm"
               >
                 Cancel
               </button>
@@ -1538,7 +1540,7 @@ export default function App() {
                 onClick={handleSaveStatusUpdate}
                 className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#22d3ee] text-black font-bold hover:brightness-110 transition-all text-sm shadow-lg shadow-sky-600/20"
               >
-                Save Update
+                Save Status Update
               </button>
             </div>
           </div>
@@ -2570,6 +2572,7 @@ function DashboardView({
 // --------------------------------
 function BugsView({ 
   bugs, 
+  allBugs,
   search, 
   setSearch, 
   priorityFilter, 
@@ -2584,6 +2587,10 @@ function BugsView({
   getStatusBadgeClass,
   teamMembers
 }) {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [sortBy, setSortBy] = React.useState('Latest');
+
   const toggleRow = (bugId) => {
     if (expandedBugId === bugId) {
       setExpandedBugId(null);
@@ -2592,195 +2599,446 @@ function BugsView({
     }
   };
 
+  // Calculate dynamic metrics from unfiltered database
+  const totalCount = allBugs.length;
+  const openCount = allBugs.filter(b => b.devStatus === 'Open').length;
+  const inProgressCount = allBugs.filter(b => b.devStatus === 'In Progress').length;
+  const fixedCount = allBugs.filter(b => b.devStatus === 'Fixed').length;
+  const closedCount = allBugs.filter(b => b.testerStatus === 'Closed').length;
+
+  // Visual color configuration helper for left accent border
+  const getLeftBorderColor = (severity, devStatus) => {
+    if (devStatus === 'Fixed' || devStatus === 'Closed') {
+      return 'border-l-[5px] border-l-emerald-500';
+    }
+    switch(severity) {
+      case 'Blocker':
+      case 'Critical':
+        return 'border-l-[5px] border-l-red-500';
+      case 'Major':
+      case 'High':
+        return 'border-l-[5px] border-l-orange-500';
+      case 'Medium':
+        return 'border-l-[5px] border-l-amber-500';
+      case 'Minor':
+      case 'Low':
+        return 'border-l-[5px] border-l-emerald-500';
+      default:
+        return 'border-l-[5px] border-l-slate-300';
+    }
+  };
+
+  // Apply sorting
+  const sortedBugs = React.useMemo(() => {
+    const list = [...bugs];
+    if (sortBy === 'Latest') {
+      return list.sort((a, b) => {
+        const numA = parseInt(a.id.split('-')[1]);
+        const numB = parseInt(b.id.split('-')[1]);
+        return numB - numA;
+      });
+    } else {
+      return list.sort((a, b) => {
+        const numA = parseInt(a.id.split('-')[1]);
+        const numB = parseInt(b.id.split('-')[1]);
+        return numA - numB;
+      });
+    }
+  }, [bugs, sortBy]);
+
+  // Apply pagination
+  const totalFiltered = sortedBugs.length;
+  const totalPages = Math.max(1, Math.ceil(totalFiltered / rowsPerPage));
+  
+  React.useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [totalFiltered, totalPages, currentPage]);
+
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const paginatedBugs = React.useMemo(() => {
+    return sortedBugs.slice(startIndex, startIndex + rowsPerPage);
+  }, [sortedBugs, startIndex, rowsPerPage]);
+
   return (
-    <div className="flex flex-col gap-6 animate-fade-in text-slate-300 module-bg-container">
+    <div className="flex flex-col gap-6 animate-fade-in text-[#475569] module-bg-container pb-10">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80")' }} />
-      {/* Search and Filter Panel */}
-      <section className="p-4 px-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-wrap gap-4 items-center justify-between shadow-sm">
-        {/* Search */}
-        <div className="relative w-80">
-          <Search size={14} className="absolute left-4 top-3.5 text-slate-400" />
-          <input 
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search Bug ID, module, description..."
-            className="w-full h-10 pl-11 pr-4 rounded-xl bg-white/5 border border-white/5 text-xs text-slate-200 placeholder-slate-500 outline-none focus:bg-[#121630] focus:border-sky-500/30"
-          />
+      
+      {/* Metrics Cards Grid */}
+      <section className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Total Bugs */}
+        <div className="p-4 rounded-2xl bg-white border border-[#BFDBFE] flex items-center gap-3.5 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0284c7] flex items-center justify-center flex-shrink-0">
+            <Bug size={18} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Total Defects</span>
+            <span className="text-xl font-extrabold text-[#0F172A] mt-0.5">{totalCount}</span>
+          </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-slate-550 font-bold">Priority:</span>
-            <select 
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              className="h-9 px-3 rounded-lg bg-white/5 border border-white/5 text-slate-300 font-semibold cursor-pointer outline-none focus:border-sky-500/30"
-            >
-              <option value="All" className="bg-[#111827]">All</option>
-              <option value="P1" className="bg-[#111827]">P1</option>
-              <option value="P2" className="bg-[#111827]">P2</option>
-              <option value="P3" className="bg-[#111827]">P3</option>
-              <option value="P4" className="bg-[#111827]">P4</option>
-            </select>
+        {/* Open */}
+        <div className="p-4 rounded-2xl bg-white border border-[#BFDBFE] flex items-center gap-3.5 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+            <Folder size={18} />
           </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Open</span>
+            <span className="text-xl font-extrabold text-[#0F172A] mt-0.5">{openCount}</span>
+          </div>
+        </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-slate-550 font-bold">Severity:</span>
-            <select 
-              value={severityFilter}
-              onChange={(e) => setSeverityFilter(e.target.value)}
-              className="h-9 px-3 rounded-lg bg-white/5 border border-white/5 text-slate-300 font-semibold cursor-pointer outline-none focus:border-sky-500/30"
-            >
-              <option value="All" className="bg-[#111827]">All</option>
-              <option value="Critical" className="bg-[#111827]">Critical</option>
-              <option value="High" className="bg-[#111827]">High</option>
-              <option value="Medium" className="bg-[#111827]">Medium</option>
-              <option value="Low" className="bg-[#111827]">Low</option>
-            </select>
+        {/* In Progress */}
+        <div className="p-4 rounded-2xl bg-white border border-[#BFDBFE] flex items-center gap-3.5 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#38BDF8] flex items-center justify-center flex-shrink-0">
+            <Activity size={18} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">In Progress</span>
+            <span className="text-xl font-extrabold text-[#0F172A] mt-0.5">{inProgressCount}</span>
+          </div>
+        </div>
+
+        {/* Fixed */}
+        <div className="p-4 rounded-2xl bg-white border border-[#BFDBFE] flex items-center gap-3.5 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+            <CheckCircle2 size={18} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Fixed</span>
+            <span className="text-xl font-extrabold text-[#0F172A] mt-0.5">{fixedCount}</span>
+          </div>
+        </div>
+
+        {/* Closed */}
+        <div className="p-4 rounded-2xl bg-white border border-[#BFDBFE] flex items-center gap-3.5 shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+            <CheckSquare size={18} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Closed</span>
+            <span className="text-xl font-extrabold text-[#0F172A] mt-0.5">{closedCount}</span>
           </div>
         </div>
       </section>
 
-      {/* Modern Table-Card Hybrid list */}
-      <section className="flex flex-col gap-3">
-        {bugs.length > 0 ? (
-          bugs.map((bug) => {
-            const isExpanded = expandedBugId === bug.id;
-            const assignedUser = teamMembers[bug.assignedTo] || { initials: '?', color: '#4b5563' };
-            
-            return (
-              <div 
-                key={bug.id} 
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                  isExpanded 
-                    ? 'border-sky-500/30 bg-[#111827]/65 shadow-[0_0_20px_rgba(56,189,248,0.08)]' 
-                    : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10'
-                }`}
-              >
-                {/* Header row content */}
-                <div 
-                  onClick={() => toggleRow(bug.id)}
-                  className="p-5 flex items-center justify-between cursor-pointer select-none"
-                >
-                  <div className="flex items-center gap-4 flex-1 min-w-0">
-                    <span className="font-mono text-xs font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">
-                      {bug.id}
-                    </span>
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-bold text-white text-sm truncate font-title" title={bug.title || bug.project}>{bug.title || bug.project}</span>
-                      <span className="text-xs text-slate-400 truncate font-semibold mt-0.5">{bug.module} • {bug.subModule}</span>
-                    </div>
-                  </div>
+      {/* Search, Filter, and Sort Panel */}
+      <section className="p-4 px-6 rounded-2xl bg-white border border-[#BFDBFE] backdrop-blur-md flex flex-wrap gap-4 items-center justify-between shadow-sm">
+        <div className="flex items-center gap-4 flex-wrap">
+          {/* Search */}
+          <div className="relative w-80">
+            <Search size={14} className="absolute left-4 top-3.5 text-[#94A3B8]" />
+            <input 
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search Bug ID, module, description..."
+              className="w-full h-10 pl-11 pr-4 rounded-xl bg-[#F8FBFF] border border-[#BFDBFE] text-xs text-[#0F172A] placeholder-[#94A3B8] outline-none focus:bg-white focus:border-[#38BDF8]"
+            />
+          </div>
 
-                  <div className="flex items-center gap-6 flex-shrink-0">
-                    {/* Priority badge */}
-                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
-                      {bug.priority}
-                    </span>
+          {/* Filters */}
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-[#475569] font-bold">Priority:</span>
+            <select 
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              className="h-9 px-3 rounded-lg bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] font-semibold cursor-pointer outline-none focus:border-[#0284c7]"
+            >
+              <option value="All">All</option>
+              <option value="P1">P1</option>
+              <option value="P2">P2</option>
+              <option value="P3">P3</option>
+              <option value="P4">P4</option>
+            </select>
+          </div>
 
-                    {/* Severity badge */}
-                    <span className={`badge px-2.5 py-0.5 rounded-full font-bold text-[10px] ${getSeverityBadgeClass(bug.severity)}`}>
-                      {bug.severity}
-                    </span>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-[#475569] font-bold">Severity:</span>
+            <select 
+              value={severityFilter}
+              onChange={(e) => setSeverityFilter(e.target.value)}
+              className="h-9 px-3 rounded-lg bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] font-semibold cursor-pointer outline-none focus:border-[#0284c7]"
+            >
+              <option value="All">All</option>
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
 
-                    {/* Assigned Dev */}
-                    <div className="flex items-center gap-2 w-36">
-                      <div 
-                        className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] text-white shadow-sm"
-                        style={{ backgroundColor: assignedUser.color }}
+        {/* Sort option */}
+        <div className="flex items-center gap-2 text-xs font-semibold">
+          <span className="text-[#475569] font-bold">Sort by:</span>
+          <select 
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="h-9 px-3 rounded-lg bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] font-semibold cursor-pointer outline-none focus:border-[#0284c7]"
+          >
+            <option value="Latest">Latest</option>
+            <option value="Oldest">Oldest</option>
+          </select>
+        </div>
+      </section>
+
+      {/* Modern Table Layout */}
+      <section className="glass-card rounded-2xl p-4 md:p-6 bg-white border border-[#BFDBFE] shadow-sm overflow-hidden animate-scale-up">
+        {paginatedBugs.length > 0 ? (
+          <div className="w-full overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-[#BFDBFE]/60 text-[#475569] text-xs font-extrabold font-title bg-slate-50/50">
+                  <th className="py-3.5 px-4 font-extrabold">Bug ID</th>
+                  <th className="py-3.5 px-4 font-extrabold">Title & Breadcrumbs</th>
+                  <th className="py-3.5 px-4 font-extrabold">Severity</th>
+                  <th className="py-3.5 px-4 font-extrabold">Priority</th>
+                  <th className="py-3.5 px-4 font-extrabold">Assignee</th>
+                  <th className="py-3.5 px-4 font-extrabold">Created On</th>
+                  <th className="py-3.5 px-4 font-extrabold">Status</th>
+                  <th className="py-3.5 px-4 font-extrabold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedBugs.map((bug) => {
+                  const isExpanded = expandedBugId === bug.id;
+                  const assignedUser = teamMembers[bug.assignedTo] || { initials: '?', color: '#4b5563' };
+                  
+                  return (
+                    <React.Fragment key={bug.id}>
+                      {/* Main row */}
+                      <tr 
+                        onClick={() => toggleRow(bug.id)}
+                        className={`border-b border-[#BFDBFE]/30 hover:bg-[#EEF6FF]/20 transition-colors text-xs text-[#475569] font-semibold cursor-pointer ${
+                          isExpanded ? 'bg-[#EEF6FF]/10' : ''
+                        }`}
                       >
-                        {assignedUser.initials}
-                      </div>
-                      <span className="text-slate-350 text-xs font-bold truncate">{bug.assignedTo}</span>
-                    </div>
-
-                    {/* Status */}
-                    <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadgeClass(bug.devStatus)}`}>
-                      {bug.devStatus}
-                    </span>
-
-                    {/* Expand Arrow */}
-                    <div className="text-slate-400">
-                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Expandable description + comments */}
-                {isExpanded && (
-                  <div className="px-6 pb-6 pt-2 border-t border-white/5 bg-[#0a0d20]/50 flex flex-col gap-5 animate-fade-in">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs border-b border-white/5 pb-4 mt-2 font-mono">
-                      <div>
-                        <span className="text-slate-500 block font-bold uppercase tracking-wider">Sub Module</span>
-                        <span className="text-slate-300 font-bold block mt-1">{bug.subModule}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block font-bold uppercase tracking-wider">Reported By</span>
-                        <span className="text-slate-300 font-bold block mt-1">{bug.assignedBy}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block font-bold uppercase tracking-wider">Logged Date</span>
-                        <span className="text-slate-300 font-bold block mt-1">{bug.assignedDate}</span>
-                      </div>
-                      <div>
-                        <span className="text-slate-500 block font-bold uppercase tracking-wider">Fixed Date</span>
-                        <span className="text-slate-300 font-bold block mt-1">{bug.fixedDate || '—'}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">Description & Steps:</span>
-                      <p className="text-xs text-slate-300 leading-relaxed bg-[#111531]/40 p-4 rounded-xl border border-white/5">
-                        {bug.description}
-                      </p>
-                    </div>
-
-                    {/* Comments thread */}
-                    <div className="flex flex-col gap-2.5">
-                      <span className="text-slate-400 font-bold text-xs flex items-center gap-1.5">
-                        <MessageSquare size={13} className="text-indigo-400" />
-                        <span>Resolution Thread ({bug.comments.length})</span>
-                      </span>
-                      {bug.comments.length > 0 ? (
-                        <div className="flex flex-col gap-2">
-                          {bug.comments.map((comm, idx) => (
-                            <div key={idx} className="bg-[#111531]/30 p-3 rounded-lg border border-white/5 text-xs">
-                              <div className="flex justify-between items-center mb-1 text-[9px] text-slate-500">
-                                <span className="font-bold text-slate-350">{comm.author}</span>
-                                <span className="font-mono">{comm.date}</span>
-                              </div>
-                              <p className="text-slate-300 font-medium">{comm.text}</p>
+                        {/* Bug ID column - decorated with left accent border */}
+                        <td className={`py-4 px-4 font-bold font-mono rounded-l-xl ${getLeftBorderColor(bug.severity, bug.devStatus)}`}>
+                          <span className="font-mono text-xs font-extrabold text-[#0284c7] bg-[#0284c7]/10 border border-[#0284c7]/20 px-3 py-1 rounded-lg block text-center">
+                            {bug.id}
+                          </span>
+                        </td>
+                        
+                        {/* Title and Path column */}
+                        <td className="py-4 px-4">
+                          <span className="font-bold text-[#0F172A] text-sm block truncate max-w-xs font-title" title={bug.title}>
+                            {bug.title}
+                          </span>
+                          <span className="text-[11px] text-slate-400 font-semibold mt-1 block truncate">
+                            {bug.project} &gt; {bug.module} &gt; {bug.subModule}
+                          </span>
+                        </td>
+                        
+                        {/* Severity badge column */}
+                        <td className="py-4 px-4">
+                          <span className={`badge px-2 py-0.5 rounded font-bold text-[10px] inline-block ${getSeverityBadgeClass(bug.severity)}`}>
+                            {bug.severity}
+                          </span>
+                        </td>
+                        
+                        {/* Priority badge column */}
+                        <td className="py-4 px-4">
+                          <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono inline-block ${getPriorityBadgeClass(bug.priority)}`}>
+                            {bug.priority}
+                          </span>
+                        </td>
+                        
+                        {/* Assignee column */}
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <div 
+                              className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px] text-white shadow-sm flex-shrink-0"
+                              style={{ backgroundColor: assignedUser.color }}
+                            >
+                              {assignedUser.initials}
                             </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-slate-550 text-xs italic pl-1">No comments documented yet.</p>
-                      )}
-                    </div>
+                            <span className="text-[#475569] text-xs font-bold truncate max-w-[100px]">{bug.assignedTo}</span>
+                          </div>
+                        </td>
+                        
+                        {/* Created On date column */}
+                        <td className="py-4 px-4 font-mono text-[11px] text-[#475569]">{bug.assignedDate}</td>
+                        
+                        {/* Status column */}
+                        <td className="py-4 px-4">
+                          <span className={`badge px-2.5 py-0.5 rounded text-[10px] font-bold inline-block ${getStatusBadgeClass(bug.devStatus)}`}>
+                            {bug.devStatus}
+                          </span>
+                        </td>
+                        
+                        {/* Actions column */}
+                        <td className="py-4 px-4 text-right rounded-r-xl">
+                          <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                            <button 
+                              onClick={() => onUpdateStatus(bug)}
+                              className="p-1.5 text-slate-400 hover:text-[#0F172A] hover:bg-[#E0F2FE]/50 rounded-lg transition-all"
+                              title="Update defect status"
+                            >
+                              <MoreVertical size={16} />
+                            </button>
+                            <button 
+                              onClick={() => toggleRow(bug.id)}
+                              className="p-1.5 text-slate-400 hover:text-[#0F172A]"
+                            >
+                              {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      
+                      {/* Expanded detail row */}
+                      {isExpanded && (
+                        <tr className="bg-[#F8FBFF]/50 border-b border-[#BFDBFE]/30">
+                          <td colSpan={8} className="p-6 rounded-b-xl">
+                            <div className="flex flex-col gap-5 animate-fade-in text-left">
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs border-b border-[#BFDBFE]/50 pb-4 font-mono">
+                                <div>
+                                  <span className="text-[#94A3B8] block font-bold uppercase tracking-wider">Sub Module</span>
+                                  <span className="text-[#0F172A] font-bold block mt-1">{bug.subModule}</span>
+                                </div>
+                                <div>
+                                  <span className="text-[#94A3B8] block font-bold uppercase tracking-wider">Reported By</span>
+                                  <span className="text-[#0F172A] font-bold block mt-1">{bug.assignedBy}</span>
+                                </div>
+                                <div>
+                                  <span className="text-[#94A3B8] block font-bold uppercase tracking-wider">Logged Date</span>
+                                  <span className="text-[#0F172A] font-bold block mt-1">{bug.assignedDate}</span>
+                                </div>
+                                <div>
+                                  <span className="text-[#94A3B8] block font-bold uppercase tracking-wider">Fixed Date</span>
+                                  <span className="text-[#0F172A] font-bold block mt-1">{bug.fixedDate || '—'}</span>
+                                </div>
+                              </div>
 
-                    {/* Action buttons */}
-                    <div className="flex justify-end gap-3 pt-3 border-t border-white/5 mt-1">
-                      <button 
-                        onClick={() => onUpdateStatus(bug)}
-                        className="h-10 px-5 rounded-xl bg-indigo-650 text-white text-xs font-bold hover:bg-indigo-600 shadow-md shadow-indigo-600/10 transition-all border border-indigo-500/20"
-                      >
-                        Update Defect Status
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
+                              <div className="flex flex-col gap-1.5">
+                                <span className="text-[#475569] font-bold text-xs uppercase tracking-wider">Description & Steps:</span>
+                                <p className="text-xs text-[#0F172A] leading-relaxed bg-white p-4 rounded-xl border border-[#BFDBFE]">
+                                  {bug.description}
+                                </p>
+                              </div>
+
+                              {/* Comments thread */}
+                              <div className="flex flex-col gap-2.5">
+                                <span className="text-[#475569] font-bold text-xs flex items-center gap-1.5">
+                                  <MessageSquare size={13} className="text-[#38BDF8]" />
+                                  <span>Resolution Thread ({bug.comments.length})</span>
+                                </span>
+                                {bug.comments.length > 0 ? (
+                                  <div className="flex flex-col gap-2">
+                                    {bug.comments.map((comm, idx) => (
+                                      <div key={idx} className="bg-white p-3 rounded-lg border border-[#BFDBFE] text-xs">
+                                        <div className="flex justify-between items-center mb-1 text-[9px] text-[#94A3B8]">
+                                          <span className="font-bold text-[#0F172A]">{comm.author}</span>
+                                          <span className="font-mono">{comm.date}</span>
+                                        </div>
+                                        <p className="text-[#475569] font-medium">{comm.text}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-[#94A3B8] text-xs italic pl-1">No comments documented yet.</p>
+                                )}
+                              </div>
+
+                              {/* Action buttons */}
+                              <div className="flex justify-end gap-3 pt-3 border-t border-[#BFDBFE]/60 mt-1">
+                                <button 
+                                  onClick={() => onUpdateStatus(bug)}
+                                  className="h-10 px-5 rounded-xl bg-gradient-to-r from-[#38bdf8] to-[#0284c7] hover:brightness-110 text-white text-xs font-bold transition-all border border-[#38bdf8]/20 shadow-md shadow-sky-400/20"
+                                >
+                                  Update Defect Status
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         ) : (
-          <div className="py-16 text-center text-slate-500 bg-white/[0.02] rounded-2xl border border-white/5">
-            <AlertOctagon size={24} className="mx-auto text-slate-600 mb-2" />
+          <div className="py-16 text-center text-[#475569] bg-white rounded-2xl border border-[#BFDBFE]">
+            <AlertOctagon size={24} className="mx-auto text-[#94A3B8] mb-2" />
             <p className="font-bold">No results match your defect search filters.</p>
           </div>
         )}
       </section>
+
+      {/* Pagination Footer */}
+      {totalFiltered > 0 && (
+        <section className="p-4 px-6 rounded-2xl bg-white border border-[#BFDBFE] flex items-center justify-between flex-wrap gap-4 shadow-sm mt-2">
+          <div className="text-xs text-[#475569] font-semibold">
+            Showing <span className="font-bold text-[#0F172A]">{startIndex + 1}</span> to{' '}
+            <span className="font-bold text-[#0F172A]">
+              {Math.min(startIndex + rowsPerPage, totalFiltered)}
+            </span>{' '}
+            of <span className="font-bold text-[#0F172A]">{totalFiltered}</span> defects
+          </div>
+
+          <div className="flex items-center gap-6 flex-wrap">
+            {/* Rows Per Page dropdown */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#475569]">
+              <span>Rows per page:</span>
+              <select 
+                value={rowsPerPage}
+                onChange={(e) => {
+                  setRowsPerPage(parseInt(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="h-8 px-2 rounded-lg bg-[#F8FBFF] border border-[#BFDBFE] text-[#0F172A] font-bold outline-none cursor-pointer"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+              </select>
+            </div>
+
+            {/* Nav Pages buttons */}
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="w-8 h-8 rounded-lg border border-[#BFDBFE] bg-[#F8FBFF] text-[#475569] disabled:opacity-40 disabled:hover:bg-[#F8FBFF] hover:bg-[#E0F2FE]/50 transition-all flex items-center justify-center cursor-pointer"
+              >
+                <ChevronLeft size={14} />
+              </button>
+
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                const isActive = currentPage === pageNum;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center cursor-pointer ${
+                      isActive 
+                        ? 'bg-[#0284c7] text-white shadow-md shadow-sky-600/10' 
+                        : 'text-[#475569] border border-transparent hover:bg-[#E0F2FE]/50 hover:text-[#0F172A]'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="w-8 h-8 rounded-lg border border-[#BFDBFE] bg-[#F8FBFF] text-[#475569] disabled:opacity-40 disabled:hover:bg-[#F8FBFF] hover:bg-[#E0F2FE]/50 transition-all flex items-center justify-center cursor-pointer"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
@@ -2885,14 +3143,14 @@ function RetestingView({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in text-slate-300 module-bg-container">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in text-[#475569] module-bg-container">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Left side list of bugs needing retest (Spans 5 columns) */}
       <div className="lg:col-span-5 p-6 rounded-2xl glass-card flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
-        <div className="pb-2 border-b border-white/5 flex items-center justify-between">
-          <h2 className="text-sm font-bold text-white font-title">QA Retesting Queue</h2>
-          <span className="text-[10px] font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/25">{retestBugs.length} pending</span>
+        <div className="pb-2 border-b border-[#BFDBFE]/60 flex items-center justify-between">
+          <h2 className="text-sm font-bold text-[#0F172A] font-title">QA Retesting Queue</h2>
+          <span className="text-[10px] font-bold text-sky-600 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/25">{retestBugs.length} pending</span>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -2907,20 +3165,20 @@ function RetestingView({
                   onClick={() => setSelectedBugId(bug.id)}
                   className={`p-4 rounded-xl border cursor-pointer transition-all ${
                     isSelected 
-                      ? 'bg-sky-500/10 border-sky-400/30 shadow-[0_0_15px_rgba(56,189,248,0.1)]' 
-                      : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04]'
+                      ? 'border-[#38BDF8] bg-white shadow-[0_8px_30px_rgba(56,189,248,0.08)]' 
+                      : 'bg-[#F8FBFF] border border-[#BFDBFE] hover:bg-[#E0F2FE]/50 hover:border-[#38BDF8]'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3 mb-2">
-                    <span className="font-mono text-xs font-bold text-indigo-400">{bug.id}</span>
+                    <span className="font-mono text-xs font-bold text-[#0284c7]">{bug.id}</span>
                     <span className={`badge px-2 py-0.5 rounded text-[8.5px] font-bold ${getSeverityBadgeClass(bug.severity)}`}>
                       {bug.severity}
                     </span>
                   </div>
-                  <h3 className="text-xs font-bold text-white font-title truncate">{bug.project}</h3>
-                  <p className="text-[10px] text-slate-400 truncate mt-0.5">{bug.module} • {bug.subModule}</p>
+                  <h3 className="text-xs font-bold text-[#0F172A] font-title truncate">{bug.project}</h3>
+                  <p className="text-[10px] text-[#475569] truncate mt-0.5">{bug.module} • {bug.subModule}</p>
                   
-                  <div className="flex items-center justify-between mt-3 border-t border-white/5 pt-2 text-[10px] text-slate-500">
+                  <div className="flex items-center justify-between mt-3 border-t border-[#BFDBFE]/50 pt-2 text-[10px] text-[#94A3B8]">
                     <div className="flex items-center gap-1.5">
                       <div className="w-4 h-4 rounded-full flex items-center justify-center text-[7.5px] text-white" style={{ backgroundColor: assignedUser.color }}>
                         {assignedUser.initials}
@@ -2933,7 +3191,7 @@ function RetestingView({
               );
             })
           ) : (
-            <div className="py-12 text-center text-slate-500 font-bold bg-white/[0.01] rounded-xl border border-white/5">
+            <div className="py-12 text-center text-[#475569] bg-[#F8FBFF] rounded-xl border border-[#BFDBFE] font-bold">
               Retesting queue empty. All fixed bugs checked.
             </div>
           )}
@@ -2944,15 +3202,15 @@ function RetestingView({
       <div className="lg:col-span-7 flex flex-col gap-6">
         {selectedBug ? (
           <div className="p-6 rounded-2xl glass-card flex flex-col gap-5 animate-scale-up">
-            <div className="flex justify-between items-start border-b border-white/5 pb-4">
+            <div className="flex justify-between items-start border-b border-[#BFDBFE]/60 pb-4">
               <div>
-                <h2 className="text-base font-bold text-white flex items-center gap-2 font-title">
+                <h2 className="text-base font-bold text-[#0F172A] flex items-center gap-2 font-title">
                   <span>Verify Defect</span>
-                  <span className="font-mono text-xs font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">
+                  <span className="font-mono text-xs font-semibold text-[#0284c7] bg-[#0284c7]/10 border border-[#0284c7]/20 px-2 py-0.5 rounded">
                     {selectedBug.id}
                   </span>
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">{selectedBug.project} • {selectedBug.module}</p>
+                <p className="text-xs text-[#475569] mt-1">{selectedBug.project} • {selectedBug.module}</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`badge px-2 py-0.5 rounded-full font-bold text-[9px] ${getSeverityBadgeClass(selectedBug.severity)}`}>
@@ -2964,34 +3222,34 @@ function RetestingView({
               </div>
             </div>
 
-            <div className="bg-[#0f1b31]/40 p-4 rounded-xl border border-white/5 flex flex-col gap-2.5">
-              <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest font-mono">Original Description</span>
-              <p className="text-xs text-slate-300 leading-relaxed font-semibold">{selectedBug.description}</p>
+            <div className="bg-[#F8FBFF] p-4 rounded-xl border border-[#BFDBFE] flex flex-col gap-2.5">
+              <span className="text-[10px] text-[#475569] uppercase font-bold tracking-widest font-mono">Original Description</span>
+              <p className="text-xs text-[#0F172A] leading-relaxed font-semibold">{selectedBug.description}</p>
             </div>
 
             {/* Developer resolution comments */}
             <div className="flex flex-col gap-2 text-xs">
-              <span className="text-slate-500 font-bold uppercase tracking-wider">Developer Resolution Thread</span>
+              <span className="text-[#475569] font-bold uppercase tracking-wider">Developer Resolution Thread</span>
               {selectedBug.comments.length > 0 ? (
                 <div className="flex flex-col gap-2">
                   {selectedBug.comments.map((comm, idx) => (
-                    <div key={idx} className="bg-white/5 p-3 rounded-lg border border-white/5">
-                      <div className="flex justify-between items-center mb-1 text-[9px] text-slate-500">
-                        <span className="font-bold text-slate-300">{comm.author}</span>
+                    <div key={idx} className="bg-white p-3 rounded-lg border border-[#BFDBFE]">
+                      <div className="flex justify-between items-center mb-1 text-[9px] text-[#94A3B8]">
+                        <span className="font-bold text-[#0F172A]">{comm.author}</span>
                         <span>{comm.date}</span>
                       </div>
-                      <p className="text-slate-300">{comm.text}</p>
+                      <p className="text-[#475569]">{comm.text}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-550 italic pl-1">No developer comments recorded for this ticket.</p>
+                <p className="text-[#94A3B8] italic pl-1">No developer comments recorded for this ticket.</p>
               )}
             </div>
 
             {/* QA Testing Operations buttons */}
-            <div className="border-t border-white/5 pt-5 mt-2">
-              <h3 className="text-xs font-bold text-white mb-3 font-title">Tester Verification Actions</h3>
+            <div className="border-t border-[#BFDBFE]/60 pt-5 mt-2">
+              <h3 className="text-xs font-bold text-[#0F172A] mb-3 font-title">Tester Verification Actions</h3>
               
               <div className="flex gap-4">
                 {/* PASS RETEST */}
@@ -3004,16 +3262,16 @@ function RetestingView({
                 </button>
               </div>
 
-              <div className="my-6 h-px bg-white/5" />
+              <div className="my-6 h-px bg-[#BFDBFE]/60" />
 
               {/* REASSIGN BUG FORM */}
               <form onSubmit={(e) => handleReassignBug(e, selectedBug.id)} className="flex flex-col gap-3">
-                <label className="text-sm font-semibold text-slate-400">Reassignment Notes / Reason</label>
+                <label className="text-sm font-semibold text-[#475569]">Reassignment Notes / Reason</label>
                 <textarea 
                   value={testerComment}
                   onChange={(e) => setTesterComment(e.target.value)}
                   placeholder="Explain exactly why this bug is being reassigned back to the developer..."
-                  className="w-full h-24 p-3 text-sm rounded-xl bg-white/5 border border-white/5 text-slate-200 placeholder-slate-500 focus:bg-[#121630] focus:border-indigo-500/30 outline-none"
+                  className="w-full h-24 p-3 text-sm rounded-xl bg-white border border-[#BFDBFE] text-[#0F172A] placeholder-[#94A3B8] focus:bg-[#F8FBFF] focus:border-[#38bdf8] outline-none"
                 />
                 <button 
                   type="submit"
@@ -3026,10 +3284,10 @@ function RetestingView({
             </div>
           </div>
         ) : (
-          <div className="py-20 text-center text-slate-500 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center p-6">
-            <Sliders size={32} className="text-slate-600 mb-2" />
-            <h3 className="font-bold text-white font-title">Select verification target</h3>
-            <p className="text-xs text-slate-450 mt-1 max-w-xs">Select a defect from the pending verification queue on the left to pass or reassign.</p>
+          <div className="py-20 text-center text-[#475569] bg-[#F8FBFF] border border-[#BFDBFE] rounded-2xl flex flex-col items-center justify-center p-6">
+            <Sliders size={32} className="text-[#94A3B8] mb-2" />
+            <h3 className="font-bold text-[#0F172A] font-title">Select verification target</h3>
+            <p className="text-xs text-[#475569] mt-1 max-w-xs">Select a defect from the pending verification queue on the left to pass or reassign.</p>
           </div>
         )}
       </div>
@@ -3448,7 +3706,7 @@ function DevelopersView({
   handleLinkToBug
 }) {
   return (
-    <div className="flex flex-col gap-8 animate-fade-in text-slate-300 module-bg-container">
+    <div className="flex flex-col gap-8 animate-fade-in text-[#475569] module-bg-container">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Dev Team cards Grid */}
@@ -3467,8 +3725,8 @@ function DevelopersView({
               }}
               className={`p-5 rounded-2xl border cursor-pointer transition-all flex flex-col gap-4 relative overflow-hidden group ${
                 isSelected 
-                  ? 'bg-indigo-500/10 border-indigo-400/30 shadow-lg' 
-                  : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04]'
+                  ? 'border-[#38BDF8] bg-white shadow-[0_8px_30px_rgba(56,189,248,0.08)]' 
+                  : 'glass-card glass-card-hover hover:border-[#38BDF8]'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -3479,35 +3737,35 @@ function DevelopersView({
                   {profile.initials}
                 </div>
                 <div>
-                  <h3 className="font-bold text-white font-title text-sm">{dev.name}</h3>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{profile.role}</span>
+                  <h3 className="font-bold text-[#0F172A] font-title text-sm">{dev.name}</h3>
+                  <span className="text-[10px] text-[#475569] font-bold uppercase tracking-wider">{profile.role}</span>
                 </div>
               </div>
 
               {/* Progress workload bar */}
-              <div className="flex flex-col gap-1 text-[10px] text-slate-450">
+              <div className="flex flex-col gap-1 text-[10px] text-[#475569]">
                 <div className="flex justify-between items-center font-medium">
                   <span>Workload Index</span>
-                  <span className="font-mono font-bold text-white">{activePercent}%</span>
+                  <span className="font-mono font-bold text-[#0F172A]">{activePercent}%</span>
                 </div>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[#EEF6FF] border border-[#BFDBFE]/50 rounded-full overflow-hidden">
                   <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500" style={{ width: `${Math.min(100, activePercent)}%` }} />
                 </div>
               </div>
 
               {/* Counts stats grid */}
-              <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-3 text-center text-xs">
+              <div className="grid grid-cols-3 gap-2 border-t border-[#BFDBFE]/60 pt-3 text-center text-xs">
                 <div>
-                  <span className="text-[9px] text-slate-500 block font-semibold uppercase">Active</span>
-                  <span className="text-white font-extrabold block mt-0.5">{dev.active}</span>
+                  <span className="text-[9px] text-[#475569] block font-semibold uppercase">Active</span>
+                  <span className="text-[#0F172A] font-extrabold block mt-0.5">{dev.active}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-slate-500 block font-semibold uppercase">To Fix</span>
-                  <span className="text-indigo-400 font-extrabold block mt-0.5">{dev.toFix}</span>
+                  <span className="text-[9px] text-[#475569] block font-semibold uppercase">To Fix</span>
+                  <span className="text-[#0284c7] font-extrabold block mt-0.5">{dev.toFix}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-slate-500 block font-semibold uppercase">Closed</span>
-                  <span className="text-emerald-400 font-extrabold block mt-0.5">{dev.closed}</span>
+                  <span className="text-[9px] text-[#475569] block font-semibold uppercase">Closed</span>
+                  <span className="text-emerald-600 font-extrabold block mt-0.5">{dev.closed}</span>
                 </div>
               </div>
             </div>
@@ -3519,7 +3777,7 @@ function DevelopersView({
       <section className="flex flex-col gap-4">
         {selectedWorkloadMember ? (
           <div className="p-6 rounded-2xl glass-card flex flex-col gap-5 animate-scale-up">
-            <div className="flex justify-between items-start border-b border-white/5 pb-4">
+            <div className="flex justify-between items-start border-b border-[#BFDBFE]/60 pb-4">
               <div className="flex items-center gap-3">
                 <div 
                   className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white select-none text-xs"
@@ -3528,13 +3786,13 @@ function DevelopersView({
                   {teamMembers[selectedWorkloadMember]?.initials}
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-white font-title">{selectedWorkloadMember}'s Ticket Board</h2>
-                  <p className="text-xs text-slate-400 font-mono mt-0.5">{teamMembers[selectedWorkloadMember]?.email}</p>
+                  <h2 className="text-base font-bold text-[#0F172A] font-title">{selectedWorkloadMember}'s Ticket Board</h2>
+                  <p className="text-xs text-[#475569] font-mono mt-0.5">{teamMembers[selectedWorkloadMember]?.email}</p>
                 </div>
               </div>
               
               {/* Internal metrics categories tab selector */}
-              <div className="flex gap-1.5 bg-white/5 p-1 rounded-xl border border-white/5">
+              <div className="flex gap-1.5 bg-[#F8FBFF] p-1 rounded-xl border border-[#BFDBFE]">
                 {[
                   { id: 'All', label: 'All' },
                   { id: 'Active', label: 'Active' },
@@ -3548,8 +3806,8 @@ function DevelopersView({
                     onClick={() => setWorkloadFilterTab(tab.id)}
                     className={`px-3 py-1.5 text-[10px] font-bold rounded-lg uppercase tracking-wider transition-all ${
                       workloadFilterTab === tab.id 
-                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#22d3ee] text-black shadow' 
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-gradient-to-r from-[#38bdf8] to-[#0284c7] text-white shadow-md shadow-sky-400/10' 
+                        : 'text-[#475569] hover:text-[#0F172A]'
                     }`}
                   >
                     {tab.label}
@@ -3565,16 +3823,16 @@ function DevelopersView({
                   <div 
                     key={bug.id}
                     onClick={() => handleLinkToBug(bug.id)}
-                    className="p-4 rounded-xl bg-white/[0.01] border border-white/5 hover:bg-white/[0.03] hover:border-white/10 transition-all cursor-pointer flex flex-col justify-between gap-3 group"
+                    className="p-4 rounded-xl bg-[#F8FBFF] border border-[#BFDBFE] hover:bg-[#E0F2FE]/50 hover:border-[#38BDF8] transition-all cursor-pointer flex flex-col justify-between gap-3 group shadow-sm"
                   >
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex items-center gap-2.5">
-                        <span className="font-mono text-xs font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">
+                        <span className="font-mono text-xs font-bold text-[#0284c7] bg-[#0284c7]/10 border border-[#0284c7]/20 px-2 py-0.5 rounded">
                           {bug.id}
                         </span>
                         <div>
-                          <span className="text-xs font-bold text-slate-200 block truncate max-w-[150px]" title={bug.title || bug.project}>{bug.title || bug.project}</span>
-                          <span className="text-[10px] text-slate-450 block truncate max-w-[150px] mt-0.5">{bug.module}</span>
+                          <span className="text-xs font-bold text-[#0F172A] block truncate max-w-[150px]" title={bug.title || bug.project}>{bug.title || bug.project}</span>
+                          <span className="text-[10px] text-[#475569] block truncate max-w-[150px] mt-0.5">{bug.module}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -3586,12 +3844,12 @@ function DevelopersView({
                         </span>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-350 leading-relaxed font-medium truncate group-hover:text-slate-200 transition-colors">
+                    <p className="text-xs text-[#475569] leading-relaxed font-medium truncate group-hover:text-[#0F172A] transition-colors">
                       {bug.description}
                     </p>
-                    <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-white/5 pt-2 mt-1 font-bold">
+                    <div className="flex justify-between items-center text-[9px] text-[#94A3B8] border-t border-[#BFDBFE]/50 pt-2 mt-1 font-bold">
                       <span>Logged: {bug.assignedDate}</span>
-                      <span className="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                      <span className="text-[#0284c7] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                         <span>Open details</span>
                         <ArrowRight size={10} />
                       </span>
@@ -3599,17 +3857,17 @@ function DevelopersView({
                   </div>
                 ))
               ) : (
-                <div className="col-span-2 py-10 text-center text-slate-500 font-bold bg-white/[0.01] border border-white/5 rounded-xl">
+                <div className="col-span-2 py-10 text-center text-[#475569] font-bold bg-[#F8FBFF] border border-[#BFDBFE] rounded-xl">
                   No tickets match this category in the developer's assignment queue.
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="py-16 text-center text-slate-500 bg-white/[0.02] border border-white/5 rounded-2xl flex flex-col items-center justify-center p-6">
-            <Users size={30} className="text-slate-600 mb-2" />
-            <h3 className="font-bold text-white font-title">Select Team Member</h3>
-            <p className="text-xs text-slate-450 mt-1">Select any developer card above to explore their active workload and resolved logs.</p>
+          <div className="py-16 text-center text-[#475569] bg-[#F8FBFF] border border-[#BFDBFE] rounded-2xl flex flex-col items-center justify-center p-6">
+            <Users size={30} className="text-[#94A3B8] mb-2" />
+            <h3 className="font-bold text-[#0F172A] font-title">Select Team Member</h3>
+            <p className="text-xs text-[#475569] mt-1">Select any developer card above to explore their active workload and resolved logs.</p>
           </div>
         )}
       </section>
@@ -4029,20 +4287,27 @@ function ProjectsView({
             <div className="w-full overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#BFDBFE]/60 text-[#475569] text-xs font-bold font-title bg-slate-50/50">
-                    <th className="py-3.5 px-4">Bug ID</th>
-                    <th className="py-3.5 px-4">Title</th>
-                    <th className="py-3.5 px-4">Severity</th>
-                    <th className="py-3.5 px-4">Priority</th>
-                    <th className="py-3.5 px-4">Assigned To</th>
-                    <th className="py-3.5 px-4">Dev Status</th>
-                    <th className="py-3.5 px-4">Tester Status</th>
-                    <th className="py-3.5 px-4">Assigned Date</th>
+                  <tr className="border-b border-[#BFDBFE]/60 text-[#475569] text-xs font-extrabold font-title bg-slate-50/50">
+                    <th className="py-3.5 px-4 font-extrabold">Bug ID</th>
+                    <th className="py-3.5 px-4 font-extrabold">Title</th>
+                    <th className="py-3.5 px-4 font-extrabold">Severity</th>
+                    <th className="py-3.5 px-4 font-extrabold">Priority</th>
+                    <th className="py-3.5 px-4 font-extrabold">Assigned To</th>
+                    <th className="py-3.5 px-4 font-extrabold">Dev Status</th>
+                    <th className="py-3.5 px-4 font-extrabold">Tester Status</th>
+                    <th className="py-3.5 px-4 font-extrabold">Assigned Date</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedBugsList.map(bug => (
-                    <tr key={bug.id} className="border-b border-[#BFDBFE]/30 hover:bg-[#EEF6FF]/20 transition-colors text-xs text-[#475569] font-semibold">
+                  {selectedBugsList.map((bug, index) => (
+                    <tr 
+                      key={bug.id} 
+                      className={`border-b border-[#BFDBFE]/30 hover:bg-[#EEF6FF]/20 transition-colors text-xs ${
+                        index === 0 
+                          ? 'text-[#0F172A] font-bold bg-[#E0F2FE]/20' 
+                          : 'text-[#475569] font-semibold'
+                      }`}
+                    >
                       <td className="py-4 px-4 font-bold font-mono">
                         <button 
                           onClick={() => onLinkToBug(bug.id)}
@@ -4213,7 +4478,7 @@ function ReportsView({ bugs, metrics }) {
   }, [bugs]);
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-slate-300 module-bg-container">
+    <div className="flex flex-col gap-6 md:gap-8 animate-fade-in text-[#475569] module-bg-container">
       <div className="module-bg-overlay" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80")' }} />
       
       {/* Analytics Summary */}
@@ -4222,13 +4487,13 @@ function ReportsView({ bugs, metrics }) {
         {/* Resolve rate Ring gauge */}
         <div className="p-6 rounded-2xl glass-card flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <span className="text-xs font-bold text-slate-450 uppercase tracking-wider">Defect Resolve Rate</span>
-            <span className="text-3.5xl font-extrabold text-white font-title mt-1">{resolveRate}%</span>
-            <span className="text-[10px] text-slate-500 mt-1 font-bold">Passed verification QA</span>
+            <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Defect Resolve Rate</span>
+            <span className="text-3.5xl font-extrabold text-[#0F172A] font-title mt-1">{resolveRate}%</span>
+            <span className="text-[10px] text-[#475569] mt-1 font-bold">Passed verification QA</span>
           </div>
           <div className="relative w-16 h-16 select-none flex-shrink-0 flex items-center justify-center">
             <svg className="w-16 h-16 transform -rotate-90">
-              <circle cx="32" cy="32" r="26" className="stroke-white/5" strokeWidth="5" fill="transparent" />
+              <circle cx="32" cy="32" r="26" className="stroke-[#BFDBFE]/40" strokeWidth="5" fill="transparent" />
               <circle 
                 cx="32" 
                 cy="32" 
@@ -4242,15 +4507,15 @@ function ReportsView({ bugs, metrics }) {
                 style={{ filter: 'drop-shadow(0 0 4px rgba(139, 92, 246, 0.4))' }}
               />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold font-mono text-indigo-400">{resolveRate}%</span>
+            <span className="absolute inset-0 flex items-center justify-center text-[10px] font-extrabold font-mono text-[#0284c7]">{resolveRate}%</span>
           </div>
         </div>
 
         {/* Backlog size widget */}
         <div className="p-6 rounded-2xl glass-card flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <span className="text-xs font-bold text-slate-455 uppercase tracking-wider">Backlog Defect Volume</span>
-            <span className="text-3.5xl font-extrabold text-white font-title mt-1">{metrics.active}</span>
+            <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Backlog Defect Volume</span>
+            <span className="text-3.5xl font-extrabold text-[#0F172A] font-title mt-1">{metrics.active}</span>
             <span className="text-[10px] text-orange-400 font-semibold mt-1">Requiring QA action</span>
           </div>
           <div className="w-11 h-11 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/5">
@@ -4261,9 +4526,9 @@ function ReportsView({ bugs, metrics }) {
         {/* Avg cycle SLA widget */}
         <div className="p-6 rounded-2xl glass-card flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <span className="text-xs font-bold text-slate-455 uppercase tracking-wider">Avg Resolution Cycle</span>
-            <span className="text-3.5xl font-extrabold text-white font-title mt-1">1.8d</span>
-            <span className="text-[10px] text-emerald-450 font-semibold mt-1">Pipeline health normal</span>
+            <span className="text-xs font-bold text-[#475569] uppercase tracking-wider">Avg Resolution Cycle</span>
+            <span className="text-3.5xl font-extrabold text-[#0F172A] font-title mt-1">1.8d</span>
+            <span className="text-[10px] text-emerald-600 font-semibold mt-1">Pipeline health normal</span>
           </div>
           <div className="w-11 h-11 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/5">
             <CheckCircle2 size={20} />
@@ -4277,11 +4542,11 @@ function ReportsView({ bugs, metrics }) {
         {/* Severity Bar Chart */}
         <div className="p-6 rounded-2xl glass-card flex flex-col gap-5">
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-title">Severity Allocation</h3>
-            <p className="text-xs text-slate-450 mt-0.5">Critical defects vs visual alerts index.</p>
+            <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider font-title">Severity Allocation</h3>
+            <p className="text-xs text-[#475569] mt-0.5">Critical defects vs visual alerts index.</p>
           </div>
 
-          <div className="flex-1 min-h-[220px] flex items-end justify-around border-b border-white/5 pb-4 relative mt-2">
+          <div className="flex-1 min-h-[220px] flex items-end justify-around border-b border-[#BFDBFE]/60 pb-4 relative mt-2">
             {severityBreakdown.map((item, idx) => {
               const maxVal = Math.max(...severityBreakdown.map(s => s.count)) || 1;
               const barHt = Math.max(15, (item.count / maxVal) * 160);
@@ -4301,14 +4566,14 @@ function ReportsView({ bugs, metrics }) {
 
               return (
                 <div key={idx} className="flex flex-col items-center gap-3 w-16 group">
-                  <span className="text-[10px] font-bold text-white font-mono bg-white/5 border border-white/5 px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-[10px] font-bold text-[#0F172A] font-mono bg-white border border-[#BFDBFE] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
                     {item.count}
                   </span>
                   <div 
                     className={`w-9 bg-gradient-to-t ${barColor} rounded-t-lg transition-all duration-500`}
                     style={{ height: `${barHt}px`, filter: `drop-shadow(0 0 6px ${shadowColor})` }}
                   />
-                  <span className="text-[10px] font-bold text-slate-500 uppercase mt-1 tracking-wider">{item.severity}</span>
+                  <span className="text-[10px] font-bold text-[#475569] uppercase mt-1 tracking-wider">{item.severity}</span>
                 </div>
               );
             })}
@@ -4318,8 +4583,8 @@ function ReportsView({ bugs, metrics }) {
         {/* Project workloads distribution list */}
         <div className="p-6 rounded-2xl glass-card flex flex-col gap-5">
           <div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-title">Workspace Defect Load</h3>
-            <p className="text-xs text-slate-450 mt-0.5">Resolved vs unresolved active volume.</p>
+            <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider font-title">Workspace Defect Load</h3>
+            <p className="text-xs text-[#475569] mt-0.5">Resolved vs unresolved active volume.</p>
           </div>
 
           <div className="flex flex-col gap-4 mt-2">
@@ -4327,13 +4592,13 @@ function ReportsView({ bugs, metrics }) {
               const rate = item.total === 0 ? 0 : Math.round((item.resolved / item.total) * 100);
               return (
                 <div key={idx} className="flex flex-col gap-1.5 text-xs">
-                  <div className="flex justify-between items-center text-slate-400 font-medium">
-                    <span className="font-bold text-slate-200">{item.project}</span>
+                  <div className="flex justify-between items-center text-[#475569] font-medium">
+                    <span className="font-bold text-[#0F172A]">{item.project}</span>
                     <span className="font-mono">
-                      {item.resolved} fixed / {item.total} total <span className="text-indigo-400 ml-2 font-bold">{rate}%</span>
+                      {item.resolved} fixed / {item.total} total <span className="text-[#0284c7] ml-2 font-bold">{rate}%</span>
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-[#EEF6FF] border border-[#BFDBFE]/50 rounded-full overflow-hidden">
                     <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-indigo-500" style={{ width: `${rate}%` }} />
                   </div>
                 </div>
