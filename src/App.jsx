@@ -874,25 +874,24 @@ export default function App() {
   // Visual severity class configurations matching light theme
   const getSeverityBadgeClass = (severity) => {
     switch(severity) {
-      case 'Blocker': return 'bg-rose-50 text-rose-600 border border-rose-200 shadow-[0_2px_8px_rgba(244,63,94,0.06)] font-bold uppercase tracking-wider';
-      case 'Critical': return 'bg-red-50 text-red-600 border border-red-200';
-      case 'Major': return 'bg-orange-50 text-orange-600 border border-orange-200';
-      case 'Minor': return 'bg-slate-100 text-slate-600 border border-slate-200';
+      case 'Blocker': return 'bg-[#FEE2E2] text-[#991B1B] border border-[#FECACA] rounded-full shadow-[0_2px_8px_rgba(153,27,27,0.06)] font-bold uppercase tracking-wider';
+      case 'Critical': return 'bg-[#FED7AA] text-[#C2410C] border border-[#FDBA74] rounded-full';
+      case 'Major': return 'bg-[#FECACA] text-[#DC2626] border border-[#FCA5A5] rounded-full';
+      case 'Minor': return 'bg-[#FEF9C3] text-[#CA8A04] border border-[#FEF08A] rounded-full';
       // Legacy compatibility mappings
-      case 'High': return 'bg-orange-50 text-orange-600 border border-orange-200';
-      case 'Medium': return 'bg-amber-50 text-amber-600 border border-amber-200';
-      case 'Low': return 'bg-blue-50 text-blue-600 border border-blue-200';
-      default: return 'bg-slate-100 text-slate-600 border border-slate-200';
+      case 'High': return 'bg-[#FECACA] text-[#DC2626] border border-[#FCA5A5] rounded-full';
+      case 'Medium': return 'bg-[#DBEAFE] text-[#2563EB] border border-[#BFDBFE] rounded-full';
+      case 'Low': return 'bg-[#DCFCE7] text-[#16A34A] border border-[#BBF7D0] rounded-full';
+      default: return 'bg-slate-100 text-slate-600 border border-slate-200 rounded-full';
     }
   };
 
   const getPriorityBadgeClass = (priority) => {
     switch(priority) {
-      case 'High': case 'P1': return 'bg-red-50 text-red-600 border border-red-200';
-      case 'Medium': case 'P2': return 'bg-orange-50 text-orange-600 border border-orange-200';
-      case 'Low': case 'P3': return 'bg-blue-50 text-blue-600 border border-blue-200';
-      case 'P4': return 'bg-slate-100 text-slate-600 border border-slate-200';
-      default: return 'bg-slate-100 text-slate-600 border border-slate-200';
+      case 'High': case 'P1': return 'bg-[#FCE7F3] text-[#DB2777] border border-[#FBCFE8] rounded-full';
+      case 'Medium': case 'P2': return 'bg-[#DBEAFE] text-[#2563EB] border border-[#BFDBFE] rounded-full';
+      case 'Low': case 'P3': case 'P4': return 'bg-[#DCFCE7] text-[#16A34A] border border-[#BBF7D0] rounded-full';
+      default: return 'bg-slate-100 text-slate-600 border border-slate-200 rounded-full';
     }
   };
 
@@ -1402,6 +1401,8 @@ export default function App() {
               MODULE_SUBMODULES={moduleSubmodules}
               onAddProject={handleAddProject}
               teamMembers={teamMembers}
+              getSeverityBadgeClass={getSeverityBadgeClass}
+              getPriorityBadgeClass={getPriorityBadgeClass}
             />
           )}
 
@@ -1482,7 +1483,7 @@ export default function App() {
                       </div>
                       <div>
                         <span className="text-[#475569] block font-medium">Severity</span>
-                        <span className={`badge px-2 py-0.5 text-[9.5px] mt-1 inline-block rounded font-bold ${getSeverityBadgeClass(b.severity)}`}>
+                        <span className={`badge px-2 py-0.5 text-[9.5px] mt-1 inline-block rounded-full font-bold ${getSeverityBadgeClass(b.severity)}`}>
                           {b.severity}
                         </span>
                       </div>
@@ -2744,13 +2745,17 @@ function BugsView({
             <select 
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="h-9 px-3 rounded-lg bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] font-semibold cursor-pointer outline-none focus:border-[#0284c7]"
+              className={`h-9 px-3 outline-none cursor-pointer transition-all font-bold ${
+                priorityFilter === 'All' 
+                  ? 'bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] rounded-lg' 
+                  : getPriorityBadgeClass(priorityFilter)
+              }`}
             >
-              <option value="All">All</option>
-              <option value="P1">P1</option>
-              <option value="P2">P2</option>
-              <option value="P3">P3</option>
-              <option value="P4">P4</option>
+              <option value="All" style={{ backgroundColor: '#FFFFFF', color: '#0369a1' }}>All</option>
+              <option value="P1" style={{ backgroundColor: '#FFFFFF', color: '#DB2777', fontWeight: 'bold' }}>P1</option>
+              <option value="P2" style={{ backgroundColor: '#FFFFFF', color: '#2563EB', fontWeight: 'bold' }}>P2</option>
+              <option value="P3" style={{ backgroundColor: '#FFFFFF', color: '#16A34A', fontWeight: 'bold' }}>P3</option>
+              <option value="P4" style={{ backgroundColor: '#FFFFFF', color: '#16A34A', fontWeight: 'bold' }}>P4</option>
             </select>
           </div>
 
@@ -2759,13 +2764,17 @@ function BugsView({
             <select 
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value)}
-              className="h-9 px-3 rounded-lg bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] font-semibold cursor-pointer outline-none focus:border-[#0284c7]"
+              className={`h-9 px-3 outline-none cursor-pointer transition-all font-bold ${
+                severityFilter === 'All' 
+                  ? 'bg-[#F0F9FF] border border-[#38bdf8] text-[#0369a1] rounded-lg' 
+                  : getSeverityBadgeClass(severityFilter)
+              }`}
             >
-              <option value="All">All</option>
-              <option value="Critical">Critical</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option value="All" style={{ backgroundColor: '#FFFFFF', color: '#0369a1' }}>All</option>
+              <option value="Critical" style={{ backgroundColor: '#FFFFFF', color: '#C2410C', fontWeight: 'bold' }}>Critical</option>
+              <option value="High" style={{ backgroundColor: '#FFFFFF', color: '#DC2626', fontWeight: 'bold' }}>High</option>
+              <option value="Medium" style={{ backgroundColor: '#FFFFFF', color: '#2563EB', fontWeight: 'bold' }}>Medium</option>
+              <option value="Low" style={{ backgroundColor: '#FFFFFF', color: '#16A34A', fontWeight: 'bold' }}>Low</option>
             </select>
           </div>
         </div>
@@ -2834,14 +2843,14 @@ function BugsView({
                         
                         {/* Severity badge column */}
                         <td className="py-4 px-4">
-                          <span className={`badge px-2 py-0.5 rounded font-bold text-[10px] inline-block ${getSeverityBadgeClass(bug.severity)}`}>
+                          <span className={`badge px-2 py-0.5 rounded-full font-bold text-[10px] inline-block ${getSeverityBadgeClass(bug.severity)}`}>
                             {bug.severity}
                           </span>
                         </td>
                         
                         {/* Priority badge column */}
                         <td className="py-4 px-4">
-                          <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono inline-block ${getPriorityBadgeClass(bug.priority)}`}>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono inline-block ${getPriorityBadgeClass(bug.priority)}`}>
                             {bug.priority}
                           </span>
                         </td>
@@ -3171,7 +3180,7 @@ function RetestingView({
                 >
                   <div className="flex items-center justify-between gap-3 mb-2">
                     <span className="font-mono text-xs font-bold text-[#0284c7]">{bug.id}</span>
-                    <span className={`badge px-2 py-0.5 rounded text-[8.5px] font-bold ${getSeverityBadgeClass(bug.severity)}`}>
+                    <span className={`badge px-2 py-0.5 rounded-full text-[8.5px] font-bold ${getSeverityBadgeClass(bug.severity)}`}>
                       {bug.severity}
                     </span>
                   </div>
@@ -3407,10 +3416,10 @@ function BugDetailView({
             <span className="font-mono text-xs font-bold text-[#0284c7] bg-[#E0F2FE] border border-[#BFDBFE] px-2.5 py-1 rounded">
               {bug.id}
             </span>
-            <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
               Priority: {bug.priority}
             </span>
-            <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold font-mono ${getSeverityBadgeClass(bug.severity)}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${getSeverityBadgeClass(bug.severity)}`}>
               Severity: {bug.severity}
             </span>
           </div>
@@ -3645,7 +3654,7 @@ function MyAssignedBugsView({
                     <span className="font-mono text-xs font-bold text-[#0284c7] bg-[#E0F2FE] border border-[#BFDBFE] px-2 py-0.5 rounded">
                       {bug.id}
                     </span>
-                    <span className={`px-2.5 py-0.5 rounded text-[9px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold font-mono ${getPriorityBadgeClass(bug.priority)}`}>
                       {bug.priority}
                     </span>
                   </div>
@@ -4828,7 +4837,9 @@ function CreateBugView({
   PROJECT_MODULES,
   MODULE_SUBMODULES,
   onAddProject,
-  teamMembers
+  teamMembers,
+  getSeverityBadgeClass,
+  getPriorityBadgeClass
 }) {
   const fileInputRef = React.useRef(null);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
@@ -5227,7 +5238,7 @@ function CreateBugView({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Severity */}
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5 w-full max-w-[160px]">
                   <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
                     <span>Severity <span className="text-red-500">*</span></span>
                     {formSeverity === aiSuggestedSeverity && aiSuggestedSeverity !== null && (
@@ -5240,17 +5251,18 @@ function CreateBugView({
                   <select 
                     value={formSeverity}
                     onChange={(e) => setFormSeverity(e.target.value)}
-                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-base text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className={`h-9 px-4 cursor-pointer outline-none transition-all text-sm shadow-sm w-full max-w-[160px] ${getSeverityBadgeClass(formSeverity)}`}
+                    style={{ color: '#000000', fontWeight: 'bold' }}
                   >
-                    <option value="Blocker">Blocker</option>
-                    <option value="Critical">Critical</option>
-                    <option value="Major">Major</option>
-                    <option value="Minor">Minor</option>
+                    <option value="Blocker" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Blocker</option>
+                    <option value="Critical" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Critical</option>
+                    <option value="Major" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Major</option>
+                    <option value="Minor" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Minor</option>
                   </select>
                 </div>
 
                 {/* Priority */}
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1.5 w-full max-w-[160px]">
                   <label className="text-base font-bold text-[#475569] flex items-center justify-between w-full">
                     <span>Priority <span className="text-red-500">*</span></span>
                     {formPriority === aiSuggestedPriority && aiSuggestedPriority !== null && (
@@ -5263,11 +5275,12 @@ function CreateBugView({
                   <select 
                     value={formPriority}
                     onChange={(e) => setFormPriority(e.target.value)}
-                    className="h-14 px-5 rounded-xl bg-white border border-[#BFDBFE] text-base text-[#0F172A] font-semibold cursor-pointer outline-none focus:border-[#38BDF8] focus:ring-2 focus:ring-[#38BDF8]/20 transition-colors"
+                    className={`h-9 px-4 cursor-pointer outline-none transition-all text-sm shadow-sm w-full max-w-[160px] ${getPriorityBadgeClass(formPriority)}`}
+                    style={{ color: '#000000', fontWeight: 'bold' }}
                   >
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Low">Low</option>
+                    <option value="High" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>High</option>
+                    <option value="Medium" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Medium</option>
+                    <option value="Low" style={{ backgroundColor: '#FFFFFF', color: '#000000', fontWeight: 'bold' }}>Low</option>
                   </select>
                 </div>
               </div>
